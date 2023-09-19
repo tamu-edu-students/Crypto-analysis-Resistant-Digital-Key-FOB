@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Digital Key FOB</string>
+    <string name="Add_Vehicle">Add Vehicle</string>
+
+    <string-array name="Select_Vehicles">
+        <item>Vehicle 1</item>
+        <item>Vehicle 2</item>
+        <item>Vehicle 3</item>
+        <item>Vehicle 4</item>
+    </string-array>
+</resources>
