@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
     <!-- This button will trigger new activity to create new profile    -->
     <Button
-        android:id="@+id/button"
+        android:id="@+id/AddProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/grey"
