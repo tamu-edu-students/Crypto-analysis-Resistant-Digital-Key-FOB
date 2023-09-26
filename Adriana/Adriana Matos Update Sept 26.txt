@@ -1,0 +1,3 @@
+-This week I will begin the microcontroller design and figuring out the specific parts I need to begin soldering
+-I will also begin to test out how the ESP32 works using the dev kit part that was ordered a week ago
+-I would like to continue microcontroller design for the next two weeks and then finalize the PCB design before the end of October
