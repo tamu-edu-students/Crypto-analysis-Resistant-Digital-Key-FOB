@@ -1,0 +1,5 @@
+September 19th, 2023
+During the last week I hashed out the final details of how the technology works from our sponser. I am going to start this week focusing in on the three algorithums and the specifics of how they work. The goal is by next Tuesday (start of lab) to have planned out the code for all three algorithums so I will be ready to start coding next week. I plan to code the Diffie-Hellman Key Exchange Protocol first, then the AES-256, and finally the SHA-256.
+
+September 26th, 2023
+During the last week I worked on planning my code and the FSR, ICD, schedule, and validation plan documents due this Thursday. I also have redefined the scope of my subsystem to instead of coding the three algorthums from scatch and designing the other parts of the registration and communication processes, I will use the pre-built libaries with the algorithums in them and focus on implementing other parts of the registration and communication processes. I am a little behind in my schedule as I am not done with my code planning but I hope to finish the last bit I need to do in lab today so I can start working on the coding and have some code to show next week in lab.
