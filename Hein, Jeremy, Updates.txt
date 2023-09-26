@@ -1,3 +1,7 @@
 Week Sept-17
 
 Created Android application template and began designing initial activity for the application. Worked on learning intent and linking activities together. Watched instructional videos for kotlin and java to prepare for more indepth app developement. Sent physical device specifications to sponsor for purchasing an in person device for testing purposes.
+
+Week Sept-24
+
+Created structure for android application with buttons to navigate in between them as needed. Added activities include the FAQ, Registration, and Command page. Buttons use intent to move in between activities.
