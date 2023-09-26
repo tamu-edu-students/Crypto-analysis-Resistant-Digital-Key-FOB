@@ -1,0 +1,3 @@
+-This week I ordered known parts needed for the microcontroller and CAN Bus integration.
+-My personal plan is to finish up research on how to make a microcontroller and begin designing the a microcontroller prototype.
+-Within the next 2 weeks I want to finish getting all the parts necessary to start soldering a prototype to test.

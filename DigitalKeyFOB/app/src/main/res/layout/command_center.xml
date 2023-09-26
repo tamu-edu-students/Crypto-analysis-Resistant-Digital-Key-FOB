@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".CommandCenter">
 
     <!--For visual appearance only-->
     <androidx.appcompat.widget.Toolbar
@@ -19,38 +18,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!-- This button will trigger new activity to create new profile    -->
+    <!-- This button will return to main activity   -->
+
     <Button
-        android:id="@+id/AddProfile"
+        android:id="@+id/back2main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/grey"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="@string/Add_Vehicle"
+        android:text="@string/Back"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/ProfileSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
-        android:background="@color/grey"
-        android:text="@string/Select"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/faqselect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/grey"
-        android:text="@string/FAQ"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
