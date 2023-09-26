@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Digital Key FOB</string>
     <string name="Add_Vehicle">Add Vehicle</string>
+    <string name="Back">Back</string>
+    <string name="Select">Select Profile</string>
+    <string name="FAQ">FAQ</string>
 
     <string-array name="Select_Vehicles">
         <item>Vehicle 1</item>

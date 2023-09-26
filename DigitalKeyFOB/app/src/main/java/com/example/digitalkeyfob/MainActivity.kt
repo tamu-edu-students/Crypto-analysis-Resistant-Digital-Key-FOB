@@ -14,9 +14,21 @@ class MainActivity : AppCompatActivity() {
 
         // Set a click listener for the button
         newprofileButton.setOnClickListener {
-            // Create an Intent to launch the SecondaryActivity
+            // Create an Intent to launch the New Profile
             val intent = Intent(this, NewProfileActivity::class.java)
+
             startActivity(intent)
         }
+
+        val commandcenterbutton = findViewById<Button>(R.id.ProfileSelect)
+
+        // Set a click listener for the button
+        commandcenterbutton.setOnClickListener {
+            // Create an Intent to launch the Command Center
+            val intent = Intent(this, CommandCenter::class.java)
+
+            startActivity(intent)
+        }
+
     }
 }
