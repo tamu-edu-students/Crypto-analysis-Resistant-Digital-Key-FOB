@@ -29,6 +29,16 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(intent)
         }
+        val faqpage = findViewById<Button>(R.id.faqselect)
+
+        // Set a click listener for the button
+        faqpage.setOnClickListener {
+            // Create an Intent to launch the Command Center
+            val intent = Intent(this, FAQactivity::class.java)
+
+            startActivity(intent)
+        }
+
 
     }
 }
