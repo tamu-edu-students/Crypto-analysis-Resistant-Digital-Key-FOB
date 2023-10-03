@@ -1,0 +1,3 @@
+-This week I am working on finishing up the Microcontroller Schematic, I have already finished the Buck Converter schematic and am currently working on the ESP32 schematic as well as the CAN transceiver schematic.
+-I will also be ordering a second round of parts that is known to be needed for chip programming, power adapting, and the buck converter circuit.
+-I am hoping to finish the schematic design by next Tuesday and begin PCB design to begin ordering it soon.
