@@ -10,9 +10,9 @@ class FAQactivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.faq) // Set the layout for the secondary activity
 
-        val backtomainfromfaq = findViewById<Button>(R.id.backmainfromfaq1)
+        val faqtomain = findViewById<Button>(R.id.btnfaqtomain)
         // Set a click listener for the button
-        backtomainfromfaq.setOnClickListener {
+        faqtomain.setOnClickListener {
             // Create an Intent to return to main
             val intent = Intent(this, MainActivity::class.java)
 

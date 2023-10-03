@@ -7,26 +7,71 @@
     android:layout_height="match_parent"
     tools:context=".NewProfileActivity">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/etprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="number"
-        android:contentDescription="@string/Add_Vehicle"
+        android:hint="Enter New Profile Name"
+        android:inputType="text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.438"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.653" />
+
+    <Button
+        android:id="@+id/btnprofiletomain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:text="@string/Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/backmainfromprofile"
+        android:id="@+id/btnaddprofile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey"
-        android:text="@string/Back"
+        android:layout_marginStart="4dp"
+        android:text="Add Profile"
+        app:layout_constraintBottom_toBottomOf="@+id/etprofile"
+        app:layout_constraintStart_toEndOf="@+id/etprofile"
+        app:layout_constraintTop_toTopOf="@+id/etprofile" />
+
+    <Button
+        android:id="@+id/btndeleteprofile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete Profile"
+        app:layout_constraintBottom_toBottomOf="@+id/etprofile"
+        app:layout_constraintStart_toEndOf="@+id/btnaddprofile"
+        app:layout_constraintTop_toTopOf="@+id/etprofile" />
+
+    <Spinner
+        android:id="@+id/spProfileList"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/etprofile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.432"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/btnprofiletomain"
+        app:layout_constraintVertical_bias="0.619" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
