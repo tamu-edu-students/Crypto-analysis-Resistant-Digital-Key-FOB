@@ -3,3 +3,6 @@ During the last week I hashed out the final details of how the technology works 
 
 September 26th, 2023
 During the last week I worked on planning my code and the FSR, ICD, schedule, and validation plan documents due this Thursday. I also have redefined the scope of my subsystem to instead of coding the three algorthums from scatch and designing the other parts of the registration and communication processes, I will use the pre-built libaries with the algorithums in them and focus on implementing other parts of the registration and communication processes. I am a little behind in my schedule as I am not done with my code planning but I hope to finish the last bit I need to do in lab today so I can start working on the coding and have some code to show next week in lab.
+
+October 3rd, 2023
+This past week I worked on finishing the FSR, ICD, schedule, and validation plan documents and getting ready for our introduction presentation this upcoming Wednesday (10/4). I also downloaded the needed software to be able to do the code for the device in Kotlin and the code for the vechile in C++. Lastly, I started working on the coding for the Diffie-Hellman Key Exchange protocol.
