@@ -6,6 +6,10 @@ Week Sept-24
 
 Created structure for android application with buttons to navigate in between them as needed. Added activities include the FAQ, Registration, and Command page. Buttons use intent to move in between activities.
 
-Week Sept-31
+Week Oct-1
 
 Implemented spinners for car profile selection and added buttons and toggle values for command center activity. Added More value sharing in between activities so when user selects profile, specific values such as profile name are shared to other activities.
+
+Week Oct-8
+
+Revamped android app design in figma for mroe modern look. Worked on implementing the android local storage for profile selection.
