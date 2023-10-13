@@ -6,3 +6,6 @@ During the last week I worked on planning my code and the FSR, ICD, schedule, an
 
 October 3rd, 2023
 This past week I worked on finishing the FSR, ICD, schedule, and validation plan documents and getting ready for our introduction presentation this upcoming Wednesday (10/4). I also downloaded the needed software to be able to do the code for the device in Kotlin and the code for the vechile in C++. Lastly, I started working on the coding for the Diffie-Hellman Key Exchange protocol.
+
+October 10th, 2023
+I am currently running behind schedule. I started working on the Diffie-Hellman Key Exchange protocol but I got stuck on the best method to create a random prime number and generator (primative root of the prime number). I have an idea on how to proceded but I am still doing research into it. I know how to code the rest of the protocol and once I get this resolved I expect for it to go smoothly. I hope to get back on track this week by having the Diffie-Hellman Key Exchange Protocol and AES 256 Encrpytion coding done by next Tuesday.

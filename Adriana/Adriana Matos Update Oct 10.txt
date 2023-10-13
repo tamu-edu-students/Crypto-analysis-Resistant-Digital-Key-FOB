@@ -1,0 +1,3 @@
+-This week I almost finished working on the MCU Schematic, I just needed to meet with Lusher to ask a few questions on connections
+-I will begin designing the PCB to hopefully get it ordered by next week's lab
+-I will attend the Blitz to finish up the PCB design and get help

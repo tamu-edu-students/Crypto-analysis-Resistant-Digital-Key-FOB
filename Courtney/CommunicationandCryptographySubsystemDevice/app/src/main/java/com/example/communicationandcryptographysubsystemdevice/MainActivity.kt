@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.communicationandcryptographysubsystemdevice.ui.theme.CommunicationAndCryptographySubsystemDeviceTheme
+import java.math.BigInteger
+import javax.crypto.Cipher
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +42,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DHKESetUp(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        val PublicKey: Int = 438
-        var PrivateKey: Int = 3
-        Text(text = "Vehicle DHKE Portion: $PublicKey", modifier = modifier.padding(12.dp))
+        val P = BigInteger("13397810928545909101")
+        val G = BigInteger("5667934")
+        Text(text = "Vehicle DHKE Portion: $G", modifier = modifier.padding(12.dp))
     }
 }
 
