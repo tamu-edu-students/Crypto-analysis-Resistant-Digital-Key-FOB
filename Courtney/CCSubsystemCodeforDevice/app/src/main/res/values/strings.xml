@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">C&amp;C Subsystem (Code for Device)</string>
+    <string name="title_activity_dynamic_digital_signature">DynamicDigitalSignature</string>
+    <string name="title_activity_zhardware_profile">ZHardwareProfile</string>
+    <string name="title_activity_advanced_encryption_standard">AdvancedEncryptionStandard</string>
+    <string name="title_activity_dhkept2">DHKEPt2</string>
+</resources>
