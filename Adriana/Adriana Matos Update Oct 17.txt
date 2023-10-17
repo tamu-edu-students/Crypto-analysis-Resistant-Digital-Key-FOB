@@ -1,0 +1,3 @@
+-Today I was working on replacing capacitor, resistor, and inductor parts on the completed schematic so I can transfer the parts easier to the PCB design from the Schematic
+-The PCB design has been started but routing has not been done just yet, which would be done within the next week
+-I am hoping to get the PCB design ordered by next week 
