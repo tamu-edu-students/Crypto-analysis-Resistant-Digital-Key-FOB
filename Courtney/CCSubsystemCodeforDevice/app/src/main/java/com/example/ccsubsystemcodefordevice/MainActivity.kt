@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DHKESetUp()
+                    DHKEBefore()
                 }
             }
         }
@@ -37,19 +37,18 @@ class MainActivity : ComponentActivity() {
 
 //DHKE Before Being Send to the Vehicle
 @Composable
-fun DHKESetUp(modifier: Modifier = Modifier) {
+fun DHKEBefore(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        //setting P and G:
-        val P = BigInteger("13397810928545909101")
-        val G = BigInteger("7")
+        //setting P and G
+        val P = BigInteger("1339781092854590957")
+        val G = BigInteger("5")
         //Creating the random A for the Vehicle
         val randInt = SecureRandom()
-        val A = randInt.nextInt(99)
+        val a = randInt.nextInt(99999)
         //Doing the Diffie-Hellman Process
-        var Aprime = BigInteger("2")
-        Aprime = (G.pow(A)) % P //mathematics
-
-        Text(text = "Testing: P = $P, G = $G, A Val = $A, Vehicle DHKE Portion = $Aprime", modifier = modifier.padding(12.dp))
+        var A = BigInteger("2")
+        A = (G.pow(a)) % P //mathematics
+        Text(text = "Before Vehicle: P = $P, G = $G, A Val = $a, Vehicle DHKE Portion = $A", modifier = modifier.padding(12.dp))
     }
 }
 
@@ -57,6 +56,6 @@ fun DHKESetUp(modifier: Modifier = Modifier) {
 @Composable
 fun DHKESetUpOutput() {
     CCSubsystemCodeForDeviceTheme {
-        DHKESetUp()
+        DHKEBefore()
     }
 }
