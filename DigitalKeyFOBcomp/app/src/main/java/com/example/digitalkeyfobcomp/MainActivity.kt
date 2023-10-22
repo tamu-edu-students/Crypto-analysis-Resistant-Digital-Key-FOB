@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 //                    color = MaterialTheme.colorScheme.background
 //                ) {
                     val state by viewModel.state.collectAsState()
-                    Navigation(state = state, onEvent = viewModel::onEvent)
+                    Navigation(state = state, onEvent = viewModel::onEvent, profileNamesFlow = viewModel.profileNames, viewModel = viewModel )
 //                }
             }
         }

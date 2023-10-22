@@ -1,6 +1,5 @@
 package com.example.digitalkeyfobcomp
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -10,15 +9,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "profiles")
 data class ProfileEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val name: String,
-    val locked: Boolean = false,
-    val engine: Boolean = false,
-    val address: Int,
-    val sigid: Long
+    val name: String, // Profile Name
+    val locked: Boolean = false, // Locked State
+    val engine: Boolean = false, // Engine State
+    val address: Int, // Bluetooth MAC address
+    val sigid: Long //signature id
     // Add other data points as needed
 )
 
@@ -31,7 +31,19 @@ interface ProfileDao {
     suspend fun deleteProfile(profile: ProfileEntity)
 
     @Query("SELECT * FROM profiles")
-    fun getAllProfiles(): LiveData<List<ProfileEntity>>
+    fun getAllProfiles(): Flow<List<ProfileEntity>>
+    @Query("SELECT name FROM profiles")
+    fun getAllNames(): Flow<List<String>>
+
+    @Query("DELETE FROM profiles WHERE name = :name")
+    suspend fun deleteByName(name: String)
+
+    @Query("DELETE FROM profiles")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM profiles WHERE name = :profileName LIMIT 1")
+    suspend fun getProfileByName(profileName: String): ProfileEntity
+
 }
 
 

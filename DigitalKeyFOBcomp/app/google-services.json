@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693950196022",
+    "project_id": "digital-key-fob-comp",
+    "storage_bucket": "digital-key-fob-comp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693950196022:android:657894d2a2c317139c6b97",
+        "android_client_info": {
+          "package_name": "com.example.digitalkeyfobcomp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDuBhDakjgaMIwYB1Ur0wTURgpA3c7BFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

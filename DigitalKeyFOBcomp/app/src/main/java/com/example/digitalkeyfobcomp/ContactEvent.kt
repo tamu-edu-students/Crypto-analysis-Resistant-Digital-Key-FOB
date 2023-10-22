@@ -1,8 +1,11 @@
 package com.example.digitalkeyfobcomp
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,6 +20,7 @@ sealed interface ProfileEvent{
     object ShowDialog: ProfileEvent
     object HideDialong: ProfileEvent
     data class DeleteProfile(val profile: ProfileEntity): ProfileEvent
+
 }
 
 data class ProfileState(
@@ -35,6 +39,47 @@ class ProfileViewModel(
 ): ViewModel(){
     private val _state = MutableStateFlow(ProfileState())
     val state = _state
+
+    val allprofiles = dao.getAllProfiles()
+
+    val profileNames = dao.getAllNames()
+
+    fun deleteProfileByName(name: String) {
+        viewModelScope.launch {
+            dao.deleteByName(name)
+        }
+    }
+    fun deleteAllProfiles() {
+        viewModelScope.launch {
+            dao.deleteAll()
+        }
+    }
+
+    suspend fun getProfileByName(profileName: String): ProfileEntity? {
+        return dao.getProfileByName(profileName)
+    }
+//    suspend fun getProfileByName(profileName: String): ProfileEntity {
+//        return dao.getProfileByName(profileName)
+//    }
+//    fun getProfileByName(profileName: String) {
+//        viewModelScope.launch {
+//            dao.getProfileByName(profileName)
+//        }
+//    }
+
+//    val profile = MutableLiveData<ProfileEntity>()
+//
+//    fun getProfileByName(profileName: String) {
+//        viewModelScope.launch {
+//            val result = dao.getProfileByName(profileName)
+//            profile.postValue(result)
+//        }
+//    }
+//    suspend fun fetchProfileDetails(profileName: String) {
+//        val profile = dao.getProfileByName(profileName)
+//        // Update the selectedProfile state with the fetched profile
+//        selectedProfile = profile
+//    }
 
     fun onEvent(event: ProfileEvent){
         when(event){

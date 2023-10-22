@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 //    id("com.google.devtools.ksp")
     id("org.jetbrains.kotlin.kapt")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -59,14 +61,16 @@ android {
 
 dependencies {
 
-//    def (room_version = "2.5.0")
+implementation("com.google.firebase:firebase-crashlytics:18.5.0")
+    implementation("com.google.firebase:firebase-analytics:21.4.0")
+    //    def (room_version = "2.5.0")
 //    implementation ("androidx.room:room-ktx:$room_version")
 //    kapt ("androidx.room:room-compiler:$room_version")
 
     kapt ("androidx.room:room-compiler:2.6.0")
 //    implementation ("androidx.room:room-ktx:2.6.0")
 //    ksp("androidx.room:room-compiler:2.6.0")
-
+    implementation ("com.google.code.gson:gson:2.9.0")
     implementation("androidx.room:room-testing:2.6.0")
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")

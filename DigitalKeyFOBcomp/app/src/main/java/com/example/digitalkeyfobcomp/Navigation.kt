@@ -14,20 +14,26 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
+import com.example.digitalkeyfobcomp.ProfileViewModel
 import com.example.digitalkeyfobcomp.R
 import com.example.digitalkeyfobcomp.screens.ControlScreen
 import com.example.digitalkeyfobcomp.screens.FaqScreen
 import com.example.digitalkeyfobcomp.screens.ProfileScreen
 import com.example.digitalkeyfobcomp.screens.StartScreen
+import kotlinx.coroutines.flow.Flow
 
 //
 @Composable
 fun Navigation(state: ProfileState,
-               onEvent:(ProfileEvent) -> Unit) {
+               onEvent:(ProfileEvent) -> Unit,
+               profileNamesFlow: Flow<List<String>>,
+               viewModel: ProfileViewModel
+) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Home") {
-        composable("Home") { StartScreen(navController) }
+        composable("Home") { StartScreen(navController,
+            state, onEvent, profileNamesFlow, viewModel ) }
         composable("Add") { ProfileScreen(navController,
            state, onEvent ) }
         composable("Controls") { ControlScreen(navController) }
