@@ -61,25 +61,34 @@ fun StartScreen(navController: NavController,
                 ) {
 //    var selectedProfile by remember { mutableStateOf<String?>(null) }
     val preferencesManager = PreferencesManager(LocalContext.current)
-
     var selectedProfile by remember { mutableStateOf<ProfileEntity?>(null) }
+    val context = LocalContext.current
+    val profileNames by profileNamesFlow.collectAsState(initial = emptyList())
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(profileNames.firstOrNull() ?: "") }
+    var rememberedProfile by remember { mutableStateOf("") }
+    val coroutineScope = rememberCoroutineScope()
 
-
+    LaunchedEffect(Unit) {
+        // This block of code is executed only once when the Composable is initially displayed
+        val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
+        retrievedProfile?.let { profile ->
+            rememberedProfile = profile.name
+        }
+        selectedText = rememberedProfile
+    }
     //added code to pull saved preferences profile into selected profile if activity restarts
-
     Scaffold(
         topBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.Blue, // Set the background color here
-
             ) {
                 TopAppBar(
                     title = {
                         Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
-
                 )
             }
         },
@@ -92,24 +101,6 @@ fun StartScreen(navController: NavController,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // The rest of your content
-
-
-                val context = LocalContext.current
-                val profileNames by profileNamesFlow.collectAsState(initial = emptyList())
-                var expanded by remember { mutableStateOf(false) }
-                var selectedText by remember { mutableStateOf(profileNames.firstOrNull() ?: "") }
-                var rememberedProfile by remember { mutableStateOf("") }
-                LaunchedEffect(Unit) {
-                    // This block of code is executed only once when the Composable is initially displayed
-                    val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
-                    retrievedProfile?.let { profile ->
-                        rememberedProfile = profile.name
-                    }
-                    selectedText = rememberedProfile
-                }
-
-
-
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -128,13 +119,10 @@ fun StartScreen(navController: NavController,
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                             modifier = Modifier.menuAnchor()
                         )
-
                         ExposedDropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false }
                         ) {
-
-
                             profileNames.forEach { item ->
                                 DropdownMenuItem(
                                     text = { Text(text = item) },
@@ -148,11 +136,6 @@ fun StartScreen(navController: NavController,
                         }
                     }
                 }
-
-
-
-                val coroutineScope = rememberCoroutineScope()
-
                 Row(){
                     OutlinedButton(
                         onClick = {
@@ -165,7 +148,6 @@ fun StartScreen(navController: NavController,
                                     selectedProfile?.let { profile -> preferencesManager.saveData("selectedProfile", profile) }
                                     Toast.makeText(context, "Profile selected $selectedText", Toast.LENGTH_SHORT).show()
                                 }
-
                         } else {
                             Toast.makeText(context, "No profile selected", Toast.LENGTH_SHORT).show()
                         } },
@@ -179,14 +161,12 @@ fun StartScreen(navController: NavController,
                     Spacer(modifier = Modifier.width(32.dp))
                     OutlinedButton(
                         onClick = {
-
                             if (selectedText.isNotBlank()) {
                                 // Call the deleteByName function to delete the selected profile
                                 viewModel.deleteProfileByName(selectedText)
                                 if(selectedText==rememberedProfile){
                                     preferencesManager.clearData()
                                 }
-
                             } else {
                                 Toast.makeText(context, "No profile selected for deletion", Toast.LENGTH_SHORT).show()
                             }

@@ -10,30 +10,52 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
+//private val DarkColorScheme = darkColorScheme(
+//    primary = Purple80,
+//    secondary = PurpleGrey80,
+//    tertiary = Pink80
+//)
+//
+//private val LightColorScheme = lightColorScheme(
+//    primary = Purple40,
+//    secondary = PurpleGrey40,
+//    tertiary = Pink40
+//
+//    /* Other default colors to override
+//    background = Color(0xFFFFFBFE),
+//    surface = Color(0xFFFFFBFE),
+//    onPrimary = Color.White,
+//    onSecondary = Color.White,
+//    onTertiary = Color.White,
+//    onBackground = Color(0xFF1C1B1F),
+//    onSurface = Color(0xFF1C1B1F),
+//    */
+//)
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Color(0xFF6200EE),        // Dark Purple
+    secondary = Color(0xFF03DAC6),      // Teal
+    tertiary = Color(0xFFFF0266)        // Pink
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Color(0xFF6200EE),        // Dark Purple
+    secondary = Color(0xFF03DAC6),      // Teal
+    tertiary = Color(0xFFFF0266)        // Pink
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
+    /* You can override other default colors if needed
+    background = Color.White,
+    surface = Color(0xFFF4F4F4),      // Light Gray
     onPrimary = Color.White,
-    onSecondary = Color.White,
+    onSecondary = Color(0xFF000000),  // Black
     onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
+    onBackground = Color(0xFF000000),  // Black
+    onSurface = Color(0xFF000000)      // Black
     */
 )
 
