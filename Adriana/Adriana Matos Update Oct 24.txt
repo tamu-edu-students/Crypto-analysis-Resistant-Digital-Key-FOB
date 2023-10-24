@@ -1,0 +1,3 @@
+-The PCB Design has been finalized and was ordered yesterday.
+-While waiting for the PCBs to come in, I will start on the code needed to program the ESP32
+-The (hopefully) Final round of parts has been ordered yesterday as well.
