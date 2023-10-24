@@ -13,3 +13,13 @@ Implemented spinners for car profile selection and added buttons and toggle valu
 Week Oct-8
 
 Revamped android app design in figma for mroe modern look. Worked on implementing the android local storage for profile selection.
+
+
+Week Oct-15
+
+--Redesigned code layout in new Jetpack Compose
+
+Week Oct-22
+
+Rebuilt app completely in Jetpack compose. Created local room database for app to store profiles. Added PreferenceManager to store state across activities. Used to save selected profile status event after app restart/close. Redesigned UI in Jetpack compose for ease and code flow.
+

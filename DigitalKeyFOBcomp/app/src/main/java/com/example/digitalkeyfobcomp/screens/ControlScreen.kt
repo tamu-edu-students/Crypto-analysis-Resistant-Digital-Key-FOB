@@ -65,8 +65,6 @@ fun ControlScreen(navController: NavController) {
             rememberedProfile = profile.name
         }
     }
-
-
     Scaffold(
         topBar = {
             Surface(
