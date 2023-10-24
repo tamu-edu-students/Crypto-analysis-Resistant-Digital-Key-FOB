@@ -13,3 +13,6 @@ I am currently running behind schedule. I started working on the Diffie-Hellman 
 
 October 17th, 2023
 After running into many, many issues, I have finally finished the Diffie-Hellman Key Exchange for the device (in Kotlin) and the vehicle (C++). I am now starting to work on the AES Encryption process for the device and the decryption process for the vehicle. I am still running behind but I am working very hard to get back on schedule.
+
+October 24th, 2023
+I found a major glitch in my DHKE so I fixed that this week. I also started working on the AES Encryption Algorithm. I am still running ~2 weeks behind but I am actively working to get back on schedule and I have ~2 buffer weeks.

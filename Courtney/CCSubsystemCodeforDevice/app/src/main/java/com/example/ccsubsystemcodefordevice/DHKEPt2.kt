@@ -37,9 +37,9 @@ class DHKEPt2 : ComponentActivity() {
 @Composable
 fun DHKEAfter(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        val P = BigInteger("1339781092854590957")
-        val a: Int = 45959
-        val B = BigInteger("71702249265423832172")
+        val P = BigInteger("947")
+        val a: Int = 3
+        val B = BigInteger("49")
         val sk = (B.pow(a) % P)
         Text(text = "Testing: Sk = $sk", modifier = modifier.padding(12.dp))
     }

@@ -1,24 +1,38 @@
 #include <iostream>
 #include <cmath>
 
+#define MOD 1000000007
+using namespace std;
+
+long long fast_power(long long base, long long power) {
+    long long result = 1;
+    while(power > 0){
+        if(power % 2 == 1) {
+            result = (result*base) % MOD;
+        }
+    base = (base * base) % MOD;
+    power = power / 2;
+    }
+return result;
+}
+
+
 int main(){
     //##### Diffie-Hellman Key Exchange Before Going to Device #####
     //initializing P and G
-    long long int P;
-    P = 1339781092854590957;
+    int P;
+    P = 947;
     int G;
-    G = 5;
+    G = 7;
     long long randInt;
 
     //Choosing a random number B
     srand((unsigned) time(NULL));
-    int b = 1 + (rand() % 20);
+    long long b = 1 + (rand() % 6);
 
     //Doing the Diffie-Hellman Mathematics
-    long long int Bpower;
-    Bpower = pow(G, b);
     long long Bprime;
-    Bprime = Bpower % P;
+    Bprime = static_cast<long long>(pow(G, b)) % P;
 
     //sending the value to the device
     std::cout << "B Value to Device: " << Bprime << "\n";
@@ -29,11 +43,9 @@ int main(){
     std::cout << "Type in A from Device: ";
     std::cin >> A;
 
-    long long sk1;
-    sk1 = lround(pow(A, b));
     long long sk;
-    sk = sk1 % P;
-    std::cout << "\n" << "Secret Key: " << sk;
+    sk = static_cast<long long>(pow(A, b)) % P;
+    std::cout << "Secret Key: " << sk << "\n";
 
     return 0;
 }

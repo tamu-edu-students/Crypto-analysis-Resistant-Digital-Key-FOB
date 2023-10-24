@@ -40,15 +40,15 @@ class MainActivity : ComponentActivity() {
 fun DHKEBefore(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //setting P and G
-        val P = BigInteger("1339781092854590957")
-        val G = BigInteger("5")
+        val P = BigInteger("947")
+        val G = BigInteger("7")
         //Creating the random A for the Vehicle
         val randInt = SecureRandom()
-        val a = randInt.nextInt(99999)
+        val a = randInt.nextInt(6)
         //Doing the Diffie-Hellman Process
         var A = BigInteger("2")
         A = (G.pow(a)) % P //mathematics
-        Text(text = "Before Vehicle: P = $P, G = $G, A Val = $a, Vehicle DHKE Portion = $A", modifier = modifier.padding(12.dp))
+        Text(text = "Before Vehicle: P = $P \n G = $G \n A Val = $a \n Vehicle DHKE Portion = $A", modifier = modifier.padding(12.dp))
     }
 }
 
