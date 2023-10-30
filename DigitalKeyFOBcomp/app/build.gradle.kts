@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -61,7 +62,14 @@ android {
 
 dependencies {
 
-implementation("com.google.firebase:firebase-crashlytics:18.5.0")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation ("com.google.dagger:hilt-android:2.48.1")
+    kapt ("com.google.dagger:hilt-android-compiler:2.48.1")
+    kapt ("androidx.hilt:hilt-compiler:1.0.0")
+
+
+
+    implementation("com.google.firebase:firebase-crashlytics:18.5.0")
     implementation("com.google.firebase:firebase-analytics:21.4.0")
     //    def (room_version = "2.5.0")
 //    implementation ("androidx.room:room-ktx:$room_version")
@@ -82,8 +90,8 @@ implementation("com.google.firebase:firebase-crashlytics:18.5.0")
 
     implementation ("se.warting.signature:signature-pad:0.1.2") // jetpack Compose views
     implementation ("androidx.navigation:navigation-compose:2.7.4")
-    implementation("androidx.compose.material3:material3:1.2.0-alpha09")
-    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha09")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha10")
+    implementation("androidx.compose.material3:material3-window-size-class:1.2.0-alpha10")
     implementation ("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")

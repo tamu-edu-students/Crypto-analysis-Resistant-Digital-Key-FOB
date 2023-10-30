@@ -1,6 +1,12 @@
 package com.example.digitalkeyfobcomp.screens
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -28,13 +34,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
+import com.example.digitalkeyfobcomp.bitmapToHash
 import com.example.digitalkeyfobcomp.components.BottomNavigation
 import se.warting.signaturepad.SignaturePadAdapter
 import se.warting.signaturepad.SignaturePadView
@@ -49,6 +59,16 @@ fun ProfileScreen(
     onEvent:(ProfileEvent) -> Unit
 
 ) {
+
+    val context = LocalContext.current
+//
+//    // Initialize BluetoothManager
+//    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+//    val bluetoothAdapter = bluetoothManager.adapter
+//
+//    if (bluetoothAdapter == null) {
+//        Toast.makeText(context, "Your Phone Can't Run this application", Toast.LENGTH_LONG).show()
+//    }
 
     Scaffold(
         topBar = {
@@ -74,7 +94,8 @@ fun ProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // The rest of your content
-
+                var currentbitmap: Bitmap? = null
+                var bitmapHash by remember { mutableStateOf("") }
                 var signaturePadAdapter: SignaturePadAdapter? = null
                 val mutableSvg = remember { mutableStateOf("") }
 
@@ -108,8 +129,18 @@ fun ProfileScreen(
                     Spacer(modifier = Modifier.width(32.dp))
 
                     OutlinedButton(onClick = {
-                        mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
+//                        mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
+
+                        currentbitmap = signaturePadAdapter?.getSignatureBitmap()
+
+                        if(currentbitmap!=null) {
+                            bitmapHash = bitmapToHash(currentbitmap!!)
+                            Toast.makeText(context, "Profile selected $bitmapHash", Toast.LENGTH_SHORT).show()
+
+                        }
                         onEvent(ProfileEvent.SaveProfile)
+
+
                     }) {
                         Text("Add Profile")
                     }

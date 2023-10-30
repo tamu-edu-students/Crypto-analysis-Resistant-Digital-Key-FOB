@@ -35,9 +35,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.digitalkeyfobcomp.PreferencesManager
@@ -88,7 +90,13 @@ fun ControlScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row{
-                    Text("Selected Profile: $rememberedProfile")
+                    Text("Selected Profile: $rememberedProfile",
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold, // You can adjust the font weight as needed
+                            fontSize = 18.sp, // Set the desired font size here
+                            color = Color.Black // You can set the text color'
+                        )
+                        )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 // Create LED-like indicators for unlocked/locked and engine on/off states
