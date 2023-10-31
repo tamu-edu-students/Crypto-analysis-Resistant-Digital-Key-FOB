@@ -16,7 +16,7 @@ sealed interface ProfileEvent{
     data class SetLocked(val locked: Boolean): ProfileEvent
     data class SetEngine(val engine: Boolean): ProfileEvent
     data class Setaddress(val address: Int): ProfileEvent
-    data class Setsigid(val sigid: Long): ProfileEvent
+    data class Setsigid(val sigid: String): ProfileEvent
     object ShowDialog: ProfileEvent
     object HideDialong: ProfileEvent
     data class DeleteProfile(val profile: ProfileEntity): ProfileEvent
@@ -29,7 +29,7 @@ data class ProfileState(
     val locked: Boolean = false,
     val engine: Boolean = false,
     val address: Int = 0,
-    val sigid: Long = 0,
+    val sigid: String = "",
     val isAddingProfile: Boolean = false,
 )
 
@@ -122,7 +122,7 @@ class ProfileViewModel(
                         locked = false,
                         engine= false,
                         address=0,
-                        sigid= 0,
+                        sigid= "",
 
                     )
                 }

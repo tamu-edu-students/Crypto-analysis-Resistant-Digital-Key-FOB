@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.bitmapToHash
 import com.example.digitalkeyfobcomp.components.BottomNavigation
+import kotlinx.coroutines.launch
 import se.warting.signaturepad.SignaturePadAdapter
 import se.warting.signaturepad.SignaturePadView
 
@@ -59,7 +61,7 @@ fun ProfileScreen(
     onEvent:(ProfileEvent) -> Unit
 
 ) {
-
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 //
 //    // Initialize BluetoothManager
@@ -98,7 +100,7 @@ fun ProfileScreen(
                 var bitmapHash by remember { mutableStateOf("") }
                 var signaturePadAdapter: SignaturePadAdapter? = null
                 val mutableSvg = remember { mutableStateOf("") }
-
+                var signatureSigned = false
                 OutlinedTextField(
                     value = state.name,
                     onValueChange = { onEvent(ProfileEvent.SetName(it)) },
@@ -113,9 +115,19 @@ fun ProfileScreen(
                         .border(width = 2.dp, color = Color.DarkGray),
                     contentAlignment = Alignment.Center
                 ){
-                    SignaturePadView(onReady = {
-                        signaturePadAdapter = it
-                    })
+                    SignaturePadView(
+                        onReady = {
+                            signaturePadAdapter = it
+                                  },
+//                        onSigned = {
+//                            signatureSigned = true
+//                                   },
+//                        onSigning = {
+//                            signatureSigned = true
+//                        }
+
+
+                    )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 Row {
@@ -130,16 +142,41 @@ fun ProfileScreen(
 
                     OutlinedButton(onClick = {
 //                        mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
+                        coroutineScope.launch {
+                            if (state.name != "") {
+                                currentbitmap = signaturePadAdapter?.getSignatureBitmap()
+                                signatureSigned = signaturePadAdapter?.isEmpty == false
 
-                        currentbitmap = signaturePadAdapter?.getSignatureBitmap()
+                                if (currentbitmap != null) {
+                                    bitmapHash = bitmapToHash(currentbitmap!!)
+                                    if(signatureSigned) {
+                                        onEvent(ProfileEvent.Setsigid(bitmapHash))
+                                        Toast.makeText(
+                                            context,
+                                            "Profile selected $bitmapHash",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        onEvent(ProfileEvent.SaveProfile)
+                                        signaturePadAdapter?.clear()
+                                        signatureSigned = false
+                                    }else{
+                                        Toast.makeText(
+                                            context,
+                                            "Please Sign Signature pad",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                }
 
-                        if(currentbitmap!=null) {
-                            bitmapHash = bitmapToHash(currentbitmap!!)
-                            Toast.makeText(context, "Profile selected $bitmapHash", Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(
+                                    context,
+                                    "Please Enter Profile Name",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
 
                         }
-                        onEvent(ProfileEvent.SaveProfile)
-
 
                     }) {
                         Text("Add Profile")

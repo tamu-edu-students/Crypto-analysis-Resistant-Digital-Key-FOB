@@ -18,7 +18,7 @@ data class ProfileEntity(
     val locked: Boolean = false, // Locked State
     val engine: Boolean = false, // Engine State
     val address: Int, // Bluetooth MAC address
-    val sigid: Long //signature id
+    val sigid: String //signature id
     // Add other data points as needed
 )
 
