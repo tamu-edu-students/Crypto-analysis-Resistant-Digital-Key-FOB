@@ -16,3 +16,6 @@ After running into many, many issues, I have finally finished the Diffie-Hellman
 
 October 24th, 2023
 I found a major glitch in my DHKE so I fixed that this week. I also started working on the AES Encryption Algorithm. I am still running ~2 weeks behind but I am actively working to get back on schedule and I have ~2 buffer weeks.
+
+October 31st, 2023
+This past week I worked more on the AES protocol. I decided what crpytography libary to use for the C++ vehicle code and I am working on figuring out what mode of AES to use. This week I plan to finish up the AES encryption and decryption protocol and maybe even start on the SHA-256 protocol.
