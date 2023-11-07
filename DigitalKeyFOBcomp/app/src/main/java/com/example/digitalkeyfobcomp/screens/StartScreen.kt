@@ -1,9 +1,9 @@
 package com.example.digitalkeyfobcomp.screens
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -30,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,26 +41,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothDevice
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
 import com.example.digitalkeyfobcomp.PreferencesManager
 import com.example.digitalkeyfobcomp.ProfileEntity
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.ProfileViewModel
 import com.example.digitalkeyfobcomp.components.BottomNavigation
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartScreen(navController: NavController,
-                state: ProfileState,
-                onEvent:(ProfileEvent) -> Unit,
-                profileNamesFlow: Flow<List<String>>,
-                viewModel: ProfileViewModel
+fun StartScreen(
+    navController: NavController,
+    state: ProfileState,
+    onEvent:(ProfileEvent) -> Unit,
+    profileNamesFlow: Flow<List<String>>,
+    viewModel: ProfileViewModel,
+    blueViewModel: BluetoothViewModel,
+    bluetoothState: BluetoothUiState
                 ) {
 //    var selectedProfile by remember { mutableStateOf<String?>(null) }
     val preferencesManager = PreferencesManager(LocalContext.current)
@@ -69,7 +77,7 @@ fun StartScreen(navController: NavController,
     var rememberedProfile by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit) {// reload selected profile when activity is launched
         // This block of code is executed only once when the Composable is initially displayed
         val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
         retrievedProfile?.let { profile ->
@@ -136,9 +144,13 @@ fun StartScreen(navController: NavController,
                         }
                     }
                 }
+
+                val openDialog = remember { mutableStateOf(false)  }
+
                 Row(){
                     OutlinedButton(
                         onClick = {
+                            openDialog.value = true
                             if (selectedText.isNotBlank()) {
                             // Call the deleteByName function to delete the selected profile
                                 preferencesManager.clearData()
@@ -158,24 +170,110 @@ fun StartScreen(navController: NavController,
 //                            Text(profile.name)
 //                        }
                     }
+
+
+                    if (openDialog.value) {
+
+                        AlertDialog(
+                            onDismissRequest = {
+                                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                                // button. If you want to disable that functionality, simply use an empty
+                                // onCloseRequest.
+//                                openDialog.value = false
+                            },
+                            title = {
+                                Text(text = "Dialog Title")
+                            },
+                            text = {
+                                BluetoothScreen(
+                                    state = bluetoothState ,
+                                    onStartScan = blueViewModel::startScan,
+                                    onStopScan = blueViewModel::stopScan,
+                                    onStartServer = blueViewModel::waitForIncomingConnections,
+                                    onDeviceClick = blueViewModel::connectToDevice
+                                )
+                            },
+                            confirmButton = {
+                                Button(
+
+                                    onClick = {
+                                        openDialog.value = false
+                                    }) {
+                                    Text("Confirm")
+                                }
+                            },
+                            dismissButton = {
+                                Button(
+
+                                    onClick = {
+                                        openDialog.value = false
+                                    }) {
+                                    Text("Dismiss")
+                                }
+                            }
+                        )
+                    }
                     Spacer(modifier = Modifier.width(32.dp))
+
+                    var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
+
+                    if (showDeleteConfirmationDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                showDeleteConfirmationDialog = false
+                            },
+                            title = {
+                                Text(text = "Confirm Deletion")
+                            },
+                            text = {
+                                Text("Are you sure you want to delete the selected profile?")
+                            },
+                            confirmButton = {
+                                Button(
+                                    onClick = {
+                                        // Call the deleteByName function to delete the selected profile
+                                        viewModel.deleteProfileByName(selectedText)
+                                        if (selectedText == rememberedProfile) {
+                                            preferencesManager.clearData()
+                                        }
+
+                                        // Show a Toast message to inform the user
+                                        Toast.makeText(context, "Profile deleted: $selectedText", Toast.LENGTH_SHORT).show()
+
+                                        selectedText = "" // Reset the selectedText
+
+                                        showDeleteConfirmationDialog = false // Close the dialog
+                                    }
+                                ) {
+                                    Text("Delete")
+                                }
+                            },
+                            dismissButton = {
+                                Button(
+                                    onClick = {
+                                        showDeleteConfirmationDialog = false // Close the dialog
+                                    }
+                                ) {
+                                    Text("Cancel")
+                                }
+                            }
+                        )
+                    }
+
                     OutlinedButton(
                         onClick = {
                             if (selectedText.isNotBlank()) {
-                                // Call the deleteByName function to delete the selected profile
-                                viewModel.deleteProfileByName(selectedText)
-                                if(selectedText==rememberedProfile){
-                                    preferencesManager.clearData()
-                                }
+                                // Show the delete confirmation dialog
+                                showDeleteConfirmationDialog = true
                             } else {
                                 Toast.makeText(context, "No profile selected for deletion", Toast.LENGTH_SHORT).show()
                             }
-                            selectedText = ""
-                             },
+                        }
                     ) {
                         Text("Delete Profile")
                     }
                 }
+
             }
         },
         bottomBar = {
@@ -184,7 +282,89 @@ fun StartScreen(navController: NavController,
     )
 }
 
+@Composable
+fun BluetoothScreen(
+    state: BluetoothUiState,
+    onStartScan: () -> Unit,
+    onStopScan: () -> Unit,
+    onStartServer: () -> Unit,
+    onDeviceClick: (BluetoothDevice) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        BluetoothDeviceList(
+            pairedDevices = state.pairedDevices,
+            scannedDevices = state.scannedDevices,
+            onClick = onDeviceClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(onClick = onStartScan) {
+                Text(text = "Start scan")
+            }
+            Button(onClick = onStopScan) {
+                Text(text = "Stop scan")
+            }
+            Button(onClick = onStartServer) {
+                Text(text = "Start server")
+            }
+        }
+    }
+}
+@Composable
+fun BluetoothDeviceList(
+    pairedDevices: List<BluetoothDevice>,
+    scannedDevices: List<BluetoothDevice>,
+    onClick: (BluetoothDevice) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        item {
+            Text(
+                text = "Paired Devices",
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+        items(pairedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onClick(device) }
+                    .padding(16.dp)
+            )
+        }
 
+        item {
+            Text(
+                text = "Scanned Devices",
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+        items(scannedDevices) { device ->
+            Text(
+                text = device.name ?: "(No name)",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onClick(device) }
+                    .padding(16.dp)
+            )
+        }
+    }
+}
 //@Preview
 //@Composable
 //fun StartScreenPreview(){

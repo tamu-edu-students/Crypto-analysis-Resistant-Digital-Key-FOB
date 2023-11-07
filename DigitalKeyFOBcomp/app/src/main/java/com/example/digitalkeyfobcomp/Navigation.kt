@@ -12,6 +12,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.ProfileViewModel
@@ -27,13 +29,16 @@ import kotlinx.coroutines.flow.Flow
 fun Navigation(state: ProfileState,
                onEvent:(ProfileEvent) -> Unit,
                profileNamesFlow: Flow<List<String>>,
-               viewModel: ProfileViewModel
+               viewModel: ProfileViewModel,
+               blueViewModel: BluetoothViewModel,
+               bluetoothState: BluetoothUiState
+
 ) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Home") {
         composable("Home") { StartScreen(navController,
-            state, onEvent, profileNamesFlow, viewModel ) }
+            state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState ) }
         composable("Add") { ProfileScreen(navController,
            state, onEvent ) }
         composable("Controls") { ControlScreen(navController) }

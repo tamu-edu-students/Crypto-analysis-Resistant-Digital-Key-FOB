@@ -61,16 +61,8 @@ fun ProfileScreen(
     onEvent:(ProfileEvent) -> Unit
 
 ) {
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-//
-//    // Initialize BluetoothManager
-//    val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-//    val bluetoothAdapter = bluetoothManager.adapter
-//
-//    if (bluetoothAdapter == null) {
-//        Toast.makeText(context, "Your Phone Can't Run this application", Toast.LENGTH_LONG).show()
-//    }
+    val coroutineScope = rememberCoroutineScope()  // use coroutine to perform logic outside of main UI thread
+    val context = LocalContext.current // use context to send toast messages to user
 
     Scaffold(
         topBar = {
@@ -95,44 +87,37 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // The rest of your content
-                var currentbitmap: Bitmap? = null
+
+                // initializing variables
+                var currentbitmap: Bitmap?
                 var bitmapHash by remember { mutableStateOf("") }
                 var signaturePadAdapter: SignaturePadAdapter? = null
                 val mutableSvg = remember { mutableStateOf("") }
-                var signatureSigned = false
-                OutlinedTextField(
+                var signatureSigned: Boolean
+
+                OutlinedTextField( // Profile text input
                     value = state.name,
                     onValueChange = { onEvent(ProfileEvent.SetName(it)) },
                     label = { Text("Enter New Profile Name") }
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-                Box (
+                Box ( // box to outline signature pad
 
                     modifier = Modifier
                         .size(300.dp,200.dp)
                         .border(width = 2.dp, color = Color.DarkGray),
                     contentAlignment = Alignment.Center
                 ){
-                    SignaturePadView(
+                    SignaturePadView( // signature pad call
                         onReady = {
                             signaturePadAdapter = it
                                   },
-//                        onSigned = {
-//                            signatureSigned = true
-//                                   },
-//                        onSigning = {
-//                            signatureSigned = true
-//                        }
-
-
                     )
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 Row {
-                    OutlinedButton(onClick = {
-
+                    OutlinedButton(onClick = { // clear signature button
                         signaturePadAdapter?.clear()
                     }) {
                         Text("Clear Signature")
@@ -140,27 +125,34 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.width(32.dp))
 
-                    OutlinedButton(onClick = {
+                    OutlinedButton(onClick = { // add profile button
 //                        mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
                         coroutineScope.launch {
                             if (state.name != "") {
-                                currentbitmap = signaturePadAdapter?.getSignatureBitmap()
-                                signatureSigned = signaturePadAdapter?.isEmpty == false
+                                currentbitmap = signaturePadAdapter?.getSignatureBitmap()  // saving bitmap value to variable to pass to hash function
 
-                                if (currentbitmap != null) {
-                                    bitmapHash = bitmapToHash(currentbitmap!!)
-                                    if(signatureSigned) {
-                                        onEvent(ProfileEvent.Setsigid(bitmapHash))
-                                        Toast.makeText(
+                                signatureSigned = signaturePadAdapter?.isEmpty == false // Check if signature pad is empty, default value = false
+
+                                if (currentbitmap != null) { // Comparing currentbitmap to null to make sure there is bitmaptype value
+
+                                    bitmapHash = bitmapToHash(currentbitmap!!) // Passing to hash function and checking if null
+
+                                    if(signatureSigned) { // Check for true/false signatureSigned
+
+                                        onEvent(ProfileEvent.Setsigid(bitmapHash)) // setting sigid to bitmaphash for profile creation
+
+                                        Toast.makeText( // Debugging
                                             context,
-                                            "Profile selected $bitmapHash",
+                                            "Profile created $bitmapHash",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                        onEvent(ProfileEvent.SaveProfile)
-                                        signaturePadAdapter?.clear()
-                                        signatureSigned = false
+
+                                        onEvent(ProfileEvent.SaveProfile) // Saving profile
+                                        signaturePadAdapter?.clear() // clearing signature pad
+                                        signatureSigned = false // resetting signature signed value
+
                                     }else{
-                                        Toast.makeText(
+                                        Toast.makeText( // user prompt for profile creation if missing signature
                                             context,
                                             "Please Sign Signature pad",
                                             Toast.LENGTH_LONG
@@ -169,7 +161,7 @@ fun ProfileScreen(
                                 }
 
                             }else{
-                                Toast.makeText(
+                                Toast.makeText( // user prompt for profile creation if missing profile text
                                     context,
                                     "Please Enter Profile Name",
                                     Toast.LENGTH_LONG
@@ -185,7 +177,7 @@ fun ProfileScreen(
             }
         },
         bottomBar = {
-            BottomNavigation(navController)
+            BottomNavigation(navController) // Navigation bar
         }
     )
 }

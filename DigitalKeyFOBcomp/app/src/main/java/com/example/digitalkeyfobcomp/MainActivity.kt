@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,17 +27,24 @@ import com.example.digitalkeyfobcomp.ui.theme.DigitalKeyFOBCompTheme
 import com.example.digitalkeyfobcomp.components.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+
+import androidx.compose.ui.Alignment
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val db by lazy{
+    private val db by lazy{ // database initialization
         Room.databaseBuilder(
             applicationContext,
             ProfileDatabase::class.java,
             "profiles.db"
         ).build()
     }
-    private val viewModel by viewModels<ProfileViewModel>(
+    private val viewModel by viewModels<ProfileViewModel>( // profileviewmodel initialization
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -60,7 +69,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Bluetooth Code
         val enableBluetoothLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { /* Not needed */ }
@@ -88,7 +96,6 @@ class MainActivity : ComponentActivity() {
             )
         }
 
-
         setContent {
             DigitalKeyFOBCompTheme {
                 // A surface container using the 'background' color from the theme
@@ -96,11 +103,47 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+
                     val viewModel1 = hiltViewModel<BluetoothViewModel>()
                     val state1 by viewModel1.state.collectAsState()
+                    LaunchedEffect(key1 = state1.errorMessage) {
+                        state1.errorMessage?.let { message ->
+                            Toast.makeText(
+                                applicationContext,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+
+                    LaunchedEffect(key1 = state1.isConnected) {
+                        if(state1.isConnected) {
+                            Toast.makeText(
+                                applicationContext,
+                                "You're connected!",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
 
                     val state by viewModel.state.collectAsState()
-                    Navigation(state = state, onEvent = viewModel::onEvent, profileNamesFlow = viewModel.profileNames, viewModel = viewModel )
+
+                    when {
+                        state1.isConnecting -> {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                                Text(text = "Connecting...")
+                            }
+                        }
+                        else -> {
+                            Navigation(state = state, onEvent = viewModel::onEvent, profileNamesFlow = viewModel.profileNames, viewModel = viewModel,  blueViewModel = viewModel1, bluetoothState = state1 )
+                        }
+                    }
+
                 }
             }
         }
