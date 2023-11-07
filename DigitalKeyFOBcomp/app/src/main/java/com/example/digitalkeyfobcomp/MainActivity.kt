@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            DigitalKeyFOBCompTheme {
+            DigitalKeyFOBCompTheme(darkTheme = true){
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

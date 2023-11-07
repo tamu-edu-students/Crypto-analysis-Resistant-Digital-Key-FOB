@@ -47,6 +47,7 @@ import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.bitmapToHash
 import com.example.digitalkeyfobcomp.components.BottomNavigation
+import com.example.digitalkeyfobcomp.ui.theme.lightblue
 import kotlinx.coroutines.launch
 import se.warting.signaturepad.SignaturePadAdapter
 import se.warting.signaturepad.SignaturePadView
@@ -83,7 +84,7 @@ fun ProfileScreen(
         content = {
             Column(
                 modifier = Modifier.fillMaxSize()
-                    .background(color = Color.LightGray),
+                    .background(color = lightblue),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -117,7 +118,13 @@ fun ProfileScreen(
                 }
                 Spacer(modifier = Modifier.height(32.dp))
                 Row {
-                    OutlinedButton(onClick = { // clear signature button
+                    OutlinedButton(
+                        modifier = Modifier
+                        .background(Color.White)
+                        .border(1.dp, Color.Black)
+                        ,
+
+                        onClick = { // clear signature button
                         signaturePadAdapter?.clear()
                     }) {
                         Text("Clear Signature")
@@ -125,7 +132,10 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.width(32.dp))
 
-                    OutlinedButton(onClick = { // add profile button
+                    OutlinedButton(
+                        modifier = Modifier
+                            .background(color = Color.White),
+                        onClick = { // add profile button
 //                        mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
                         coroutineScope.launch {
                             if (state.name != "") {
