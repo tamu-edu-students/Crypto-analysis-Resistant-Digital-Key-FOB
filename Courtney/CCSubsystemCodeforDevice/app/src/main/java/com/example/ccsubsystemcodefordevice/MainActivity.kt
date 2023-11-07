@@ -14,6 +14,7 @@ import com.example.ccsubsystemcodefordevice.ui.theme.CCSubsystemCodeForDeviceThe
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+//Needed Imports Below
 import java.math.BigInteger
 import java.security.SecureRandom
 
@@ -48,7 +49,8 @@ fun DHKEBefore(modifier: Modifier = Modifier) {
         //Doing the Diffie-Hellman Process
         var A = BigInteger("2")
         A = (G.pow(a)) % P //mathematics
-        Text(text = "Before Vehicle: P = $P \n G = $G \n A Val = $a \n Vehicle DHKE Portion = $A", modifier = modifier.padding(12.dp))
+        Text(text = "Before Vehicle: P = $P \n\nG = $G \n\nA Val = $a \n\nVehicle DHKE Portion = $A",
+            modifier = modifier.padding(12.dp))
     }
 }
 

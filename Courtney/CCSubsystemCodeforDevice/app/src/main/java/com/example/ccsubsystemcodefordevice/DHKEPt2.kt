@@ -14,6 +14,7 @@ import com.example.ccsubsystemcodefordevice.ui.theme.CCSubsystemCodeForDeviceThe
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+//Needed Imports Below
 import java.math.BigInteger
 
 class DHKEPt2 : ComponentActivity() {
@@ -41,7 +42,7 @@ fun DHKEAfter(modifier: Modifier = Modifier) {
         val a: Int = 3
         val B = BigInteger("49")
         val sk = (B.pow(a) % P)
-        Text(text = "Testing: Sk = $sk", modifier = modifier.padding(12.dp))
+        Text(text = "Testing: \nSk = $sk", modifier = modifier.padding(12.dp))
     }
 }
 

@@ -14,6 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.ccsubsystemcodefordevice.ui.theme.CCSubsystemCodeForDeviceTheme
+//Needed Imports Below
+import java.security.MessageDigest
+import java.math.BigInteger
+import java.nio.charset.StandardCharsets
+
+
 
 class DynamicDigitalSignature : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +41,24 @@ class DynamicDigitalSignature : ComponentActivity() {
 @Composable
 fun DDS(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        Text(text = "Testing: ", modifier = modifier.padding(12.dp))
+        //SHA-256 Protocol
+        val fromDevice = "CommandAndZHardwareProfileAndTimeStamp"
+        val md = MessageDigest.getInstance("SHA-256")
+        val hashText = md.digest(fromDevice.toByteArray(StandardCharsets.UTF_8))
+
+        //Turning the Hash Text from a Byte Array into Hex
+        val hashNumber = BigInteger(1, hashText)
+        val hexString = StringBuilder(hashNumber.toString(16))
+
+        Text(text = "Testing: \nHash Text from SHA = $hashText \n\nHash Text in Binary = $hashNumber " +
+                "\n\nHash Text in Hex = $hexString ",
+            modifier = modifier.padding(12.dp))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview3() {
+fun DDSOutput() {
     CCSubsystemCodeForDeviceTheme {
         DDS()
     }
