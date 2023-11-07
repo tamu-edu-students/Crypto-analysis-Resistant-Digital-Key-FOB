@@ -1,0 +1,4 @@
+-PCB design came in and I will begin soldering this week
+-I have began the firmware code for the MCU chip
+-I will be testing out a basic program on the ESP32 Dev kit to get a grasp on how to program the ESP32
+-I have to ask Lusher if I am able to use Arduino IDE and if not change to what is allowed

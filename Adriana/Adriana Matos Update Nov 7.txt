@@ -1,0 +1,4 @@
+-I have almost finished soldering, I just need to ask Lusher if he is able to solder some microscopic/difficult components I have
+-I asked Lusher about the Arduino IDE and he said I should switch to ESP-IDF so I had to deal with downloading that and learning how it works before continuing with my code
+-I am still currently working on the firmware code and should have it done within the next 2 weeks
+-I still need to test the PCB board once it is complete to see if it works
