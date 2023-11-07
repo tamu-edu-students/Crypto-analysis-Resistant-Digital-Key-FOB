@@ -19,3 +19,6 @@ I found a major glitch in my DHKE so I fixed that this week. I also started work
 
 October 31st, 2023
 This past week I worked more on the AES protocol. I decided what crpytography libary to use for the C++ vehicle code and I am working on figuring out what mode of AES to use. This week I plan to finish up the AES encryption and decryption protocol and maybe even start on the SHA-256 protocol.
+
+November 7th, 2023
+This past week I finished all of the code for the deivce (i.e. all the code that needs to be done in Kotlin) including the AES-256 Encryption algortithm, SHA-256 for the device, and the transformation of the Bit Array for the hand signature into the Z-Hardware Profile. This upcoming week I plan to finish the vehicle code (i.e. all the code done in C++) including the AES-256 Decryption algorithm, SHA-256 for the vehicle, and the verification of the Dynamic Digital Signatures. This will then give me two weeks before final demo to test the completed algorithms and make sure all the values are able to be accruatly passed back and forth as well as make the needed changes to the Diffie-Hellman Key Exchange Protocol.
