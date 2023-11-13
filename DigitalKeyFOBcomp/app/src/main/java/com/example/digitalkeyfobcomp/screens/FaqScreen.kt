@@ -11,12 +11,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +49,7 @@ fun FaqScreen(navController: NavController) {
             ) {
                 TopAppBar(
                     title = {
-                        Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
+                        Text(text = "Digital Key FOB - FAQ", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -50,47 +57,52 @@ fun FaqScreen(navController: NavController) {
         },
         content = {
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .background(color = Color(0xFFF4F4F4)), // Light Gray background color
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(top = 56.dp) // Add top padding
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 70.dp) // Add top padding
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = "Frequently Asked Questions",
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                color = Color(0xFF6200EE) // Dark Purple text color
-                            ),
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+//                    item {
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                        Text(
+//                            text = "Frequently Asked Questions",
+//                            style = TextStyle(
+//                                fontWeight = FontWeight.Bold,
+//                                fontSize = 20.sp,
+//                                color = Color(0xFF6200EE) // Dark Purple text color
+//                            ),
+//                            modifier = Modifier.padding(horizontal = 16.dp)
+//                        )
+//                        Spacer(modifier = Modifier.height(16.dp))
+//                    }
 
                     // Boilerplate FAQ questions
                     item {
-                        FAQQuestion("What is the purpose of this app?", "This app is designed to...")
+                       ExpandableCard("What is the purpose of this app?", "This app is designed " +
+                               "to streamline your daily tasks by providing an intuitive " +
+                               "interface for managing your vehicles.")
                     }
                     item {
-                        FAQQuestion("How do I get started?", "To get started with the app, follow these steps...")
+                        ExpandableCard("How do I get started?", "Register your vehicle and pair it with the app by following the provided instructions. Once linked, simply approach your vehicle and use the app to unlock or start it.")
                     }
                     item {
-                        FAQQuestion("Is my data secure?", "We take data security seriously...")
+                        ExpandableCard("Is my data secure?", "We prioritize the security of your vehicles. The app implements robust encryption methods to ensure that your vehicle access data remains secure and inaccessible to unauthorized parties.")
                     }
                     item {
-                        FAQQuestion("What devices are supported?", "Our app is available on...")
+                        ExpandableCard("What devices are supported?", "The app is compatible with Android operating systems. It's optimized for the latest smartphone models to ensure a reliable and consistent experience.")
                     }
                     item {
-                        FAQQuestion("How can I contact support?", "You can reach our support team at support@example.com.")
+                        ExpandableCard("How can I contact support?", "For any assistance, questions, or concerns, you can contact our support team at support@example.com. Our dedicated support staff is ready to assist with any issues you might encounter while using the app.")
                     }
 
                     // Add more FAQ questions as needed
 
                     item {
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(100.dp))
                     }
                 }
             }
@@ -145,6 +157,27 @@ fun FaqScreen(navController: NavController) {
 fun FaqScreenPreview(){
     val navController = rememberNavController()
     FaqScreen(navController)
+}
+
+
+//@Preview
+//@Composable
+//fun FaqScreenPreview(){
+//    ExpandableCard(title = "Hello")
+//}
+@Composable
+fun ExpandableCard(question: String, answer: String) {
+
+    Card(
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp) ,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    )
+    {
+        FAQQuestion(question = question, answer = answer)
+    }
 }
 @Composable
 fun FAQQuestion(question: String, answer: String) {

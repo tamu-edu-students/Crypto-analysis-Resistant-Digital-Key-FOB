@@ -17,7 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -104,7 +106,7 @@ fun StartScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color.LightGray),
+                    .background(color = Color(0xFFF4F4F4)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -148,7 +150,9 @@ fun StartScreen(
                 val openDialog = remember { mutableStateOf(false)  }
 
                 Row(){
-                    OutlinedButton(
+                    ElevatedButton(
+                        modifier = Modifier,
+                        colors = ButtonDefaults.buttonColors(),
                         onClick = {
                             openDialog.value = true
                             if (selectedText.isNotBlank()) {
@@ -240,6 +244,8 @@ fun StartScreen(
                                         // Show a Toast message to inform the user
                                         Toast.makeText(context, "Profile deleted: $selectedText", Toast.LENGTH_SHORT).show()
 
+                                        blueViewModel.disconnectFromDevice()
+
                                         selectedText = "" // Reset the selectedText
 
                                         showDeleteConfirmationDialog = false // Close the dialog
@@ -260,7 +266,9 @@ fun StartScreen(
                         )
                     }
 
-                    OutlinedButton(
+                    ElevatedButton(
+                        modifier = Modifier,
+                        colors = ButtonDefaults.buttonColors(),
                         onClick = {
                             if (selectedText.isNotBlank()) {
                                 // Show the delete confirmation dialog
@@ -312,9 +320,9 @@ fun BluetoothScreen(
             Button(onClick = onStopScan) {
                 Text(text = "Stop scan")
             }
-            Button(onClick = onStartServer) {
-                Text(text = "Start server")
-            }
+//            Button(onClick = onStartServer) {
+//                Text(text = "Start server")
+//            }
         }
     }
 }

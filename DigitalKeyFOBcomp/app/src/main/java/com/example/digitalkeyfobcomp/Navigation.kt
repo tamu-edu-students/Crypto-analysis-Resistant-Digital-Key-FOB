@@ -41,7 +41,7 @@ fun Navigation(state: ProfileState,
             state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState ) }
         composable("Add") { ProfileScreen(navController,
            state, onEvent ) }
-        composable("Controls") { ControlScreen(navController) }
+        composable("Controls") { ControlScreen(navController,blueViewModel, bluetoothState) }
         composable("Faq") { FaqScreen(navController) }
     }
 }

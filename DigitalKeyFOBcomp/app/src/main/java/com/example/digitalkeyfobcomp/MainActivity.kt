@@ -33,6 +33,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 
 import androidx.compose.ui.Alignment
+import com.example.digitalkeyfobcomp.screens.ChatScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -86,7 +87,6 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionLauncher.launch(
                 arrayOf(
@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            DigitalKeyFOBCompTheme(darkTheme = true){
+            DigitalKeyFOBCompTheme(darkTheme = false){
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -139,6 +139,13 @@ class MainActivity : ComponentActivity() {
                                 Text(text = "Connecting...")
                             }
                         }
+//                        state1.isConnected -> {
+//                            ChatScreen(
+//                                state = state1,
+//                                onDisconnect = viewModel1::disconnectFromDevice,
+//                                onSendMessage = viewModel1::sendMessage
+//                            )
+//                        }
                         else -> {
                             Navigation(state = state, onEvent = viewModel::onEvent, profileNamesFlow = viewModel.profileNames, viewModel = viewModel,  blueViewModel = viewModel1, bluetoothState = state1 )
                         }
