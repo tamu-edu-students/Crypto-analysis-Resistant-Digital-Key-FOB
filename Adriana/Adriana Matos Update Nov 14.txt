@@ -1,0 +1,4 @@
+-I have finished soldering the PCB and tested to see if it will power on; it does!
+-I got into some trouble working with an Arduino Library in VS Code, so I spent a few days trying to figure out why it wouldn't work and what was wrong
+-Will now start programming the ESP32 and testing the code to see if it works
+-Have tested an example code with the ESP32 DevKit to test if the LED lights would work; need to work on the actual LED code 
