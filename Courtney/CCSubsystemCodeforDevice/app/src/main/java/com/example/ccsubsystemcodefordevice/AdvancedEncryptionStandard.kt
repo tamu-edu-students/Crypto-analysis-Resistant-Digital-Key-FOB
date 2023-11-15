@@ -21,6 +21,7 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.PBEKeySpec
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.SecretKeySpec
+import java.math.BigInteger
 
 
 class AdvancedEncryptionStandard : ComponentActivity() {
@@ -44,7 +45,7 @@ class AdvancedEncryptionStandard : ComponentActivity() {
 fun AESEncryption(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //Setting up variables for the AES Encryption
-        val SecretKeyInt = 221 //SecretKey from the Diffie-Hellman Key Exchange
+        val SecretKeyInt = BigInteger("221") //SecretKey from the Diffie-Hellman Key Exchange
         val SecretKey = SecretKeyInt.toString()
         val ivbytes = byteArrayOf(0x64, 0x7b, 0x5e, 0x57, 0x67, 0x1f, 0x2c, 0x10, 0x43, 0x25, 0x0a, 0x25, 0x72, 0x12, 0x49, 0x03)
         val salt = "CrytoAnalysisDigtialKeyFOB"
@@ -65,7 +66,9 @@ fun AESEncryption(modifier: Modifier = Modifier) {
         val cipherText = cipher.doFinal(zHardware)
         val CipherTextString = Base64.getEncoder().encodeToString(cipherText)
 
-        Text(text = "Testing: \nKey = $symmetrickey \n\nCipher Text = $CipherTextString",
+        Text(text = "Testing: \nKey = $symmetrickey" +
+                "\n\nPlain Text: $zHardware" +
+                "\n\nCipher Text = $CipherTextString",
             modifier = modifier.padding(12.dp))
     }
 }

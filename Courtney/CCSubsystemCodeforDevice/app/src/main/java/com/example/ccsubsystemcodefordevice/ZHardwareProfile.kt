@@ -39,11 +39,8 @@ class ZHardwareProfile : ComponentActivity() {
 fun ZHardware(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //Turning the BitMap in Byte Array form (bitMapIn) from Jeremy into a BigInteger
-        val bitMapIn = byteArrayOf(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-            0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x11, 0x12, 0x13, 0x14,
-            0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e,
-            0x1f, 0x21)
-        val bitMapInt = BigInteger(bitMapIn)
+        val bitMapIn = "ef72b1d67e57f2"
+        val bitMapInt = BigInteger(bitMapIn, 16)
 
         //Creating the PseudoRandom number to XOR with
         val randomInt = SecureRandom()
@@ -52,9 +49,13 @@ fun ZHardware(modifier: Modifier = Modifier) {
         //XOR the Pseudo-Random Number and the Byte Array
         val zhp = bitMapInt.xor(prnBigInt)
 
+        //Turning the Z-Hardware Profile back into a Byte Array
+        val zhpArray = zhp.toByteArray()
+
         Text(text = "Testing: \nBit Map in BigInteger: $bitMapInt " +
                 "\n\nPseudo-Random Number: $prnBigInt" +
-                "\n\nZ-Hardware Profile: $zhp",
+                "\n\nZ-Hardware Profile (BigInteger): $zhp" +
+                "\n\nZ-Hardware Profile (Byte-Array): $zhpArray",
             modifier = modifier.padding(12.dp))
     }
 }
