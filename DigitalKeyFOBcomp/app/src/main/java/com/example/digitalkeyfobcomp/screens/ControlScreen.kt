@@ -33,8 +33,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -53,10 +55,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
+import com.example.digitalkeyfobcomp.CarModes
 import com.example.digitalkeyfobcomp.PreferencesManager
 import com.example.digitalkeyfobcomp.ProfileEntity
+import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.components.BottomNavigation
 import com.example.digitalkeyfobcomp.R
+import com.example.digitalkeyfobcomp.bitmapToHash
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,20 +75,25 @@ fun ControlScreen(navController: NavController,
 
     val ledSize = 24.dp
     val imagesize = 30
-    var isUnlocked by remember { mutableStateOf(false) }
-    var isEngineOn by remember { mutableStateOf(false) }
     var rememberedProfile by remember { mutableStateOf("") }
     val context = LocalContext.current
-    var message = ""
+    var message = 0
+    val coroutineScope = rememberCoroutineScope()
+    var selectedProfile by remember { mutableStateOf<ProfileEntity?>(null) }
+    var selectedCarModes by remember { mutableStateOf(CarModes(locked = false, engine = false)) }
 
     LaunchedEffect(Unit) {
         // This block of code is executed only once when the Composable is initially displayed
         val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
         retrievedProfile?.let { profile ->
+            selectedProfile = profile
             rememberedProfile = profile.name
         }
+        val retrievedModes: CarModes? =  preferencesManager.getData("selectedProfileMode", null)
+        if(retrievedModes != null){
+            selectedCarModes = retrievedModes
+        }
     }
-    val messageProfile = rememberedProfile
     Scaffold(
         topBar = {
             Surface(
@@ -92,7 +103,7 @@ fun ControlScreen(navController: NavController,
             ) {
                 TopAppBar(
                     title = {
-                        Text(text = "Digital Key FOB - Current Profile: $rememberedProfile", fontWeight = FontWeight.Bold)
+                        Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
 
@@ -118,12 +129,12 @@ fun ControlScreen(navController: NavController,
                             modifier = Modifier.width(300.dp).padding(16.dp),
                                     verticalAlignment = Alignment.CenterVertically
                         ) {
-                            LEDIndicator(isOn = isUnlocked)
+                            LEDIndicator(isOn = selectedCarModes.locked)
                             Text("Locked", modifier = Modifier
                                 .padding(start = 8.dp),
                                 fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(20.dp))
-                            LEDIndicator(isOn = isEngineOn)
+                            LEDIndicator(isOn = selectedCarModes.engine)
                             Text("Engine On",
                                 modifier = Modifier.padding(start = 8.dp),
                                 fontWeight = FontWeight.Bold)
@@ -136,9 +147,9 @@ fun ControlScreen(navController: NavController,
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     modifier = Modifier.padding(16.dp).clickable {
                         if (bluetoothState.isConnected) {
-                            isEngineOn = !isEngineOn
-                            message = isEngineOn.toString()
-                            blueViewModel.sendMessage("Engine Mode for $messageProfile is $message")
+                            selectedCarModes.engine = !selectedCarModes.engine
+                            message = booleanToInt(selectedCarModes.engine)
+                            blueViewModel.sendMessage("Mode0$message$rememberedProfile")
                             Toast
                                 .makeText(
                                     context,
@@ -154,6 +165,9 @@ fun ControlScreen(navController: NavController,
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()
+                        }
+                        coroutineScope.launch {
+                            selectedCarModes.let { selectedCarModes -> preferencesManager.saveData("selectedProfileMode", selectedCarModes) }
                         }
                     }
                 ) {
@@ -180,10 +194,11 @@ fun ControlScreen(navController: NavController,
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     modifier = Modifier.padding(16.dp)
                         .clickable {
+
                             if (bluetoothState.isConnected) {
-                                isUnlocked = !isUnlocked
-                                message = isUnlocked.toString()
-                                blueViewModel.sendMessage("Unlocked Mode $messageProfile is $message")
+                                selectedCarModes.locked = !selectedCarModes.locked
+                                message = booleanToInt(selectedCarModes.locked)
+                                blueViewModel.sendMessage("Mode1$message$rememberedProfile")
                                 Toast
                                     .makeText(context, "Message sent", Toast.LENGTH_SHORT)
                                     .show()
@@ -195,6 +210,9 @@ fun ControlScreen(navController: NavController,
                                         Toast.LENGTH_SHORT
                                     )
                                     .show()
+                            }
+                            coroutineScope.launch {
+                                selectedCarModes.let { selectedCarModes -> preferencesManager.saveData("selectedProfileMode", selectedCarModes) }
                             }
                         }
                 ) {
@@ -263,6 +281,9 @@ fun ExpandableCardControl(question: String, answer: String) {
     }
 }
 
+fun booleanToInt(b: Boolean): Int {
+    return if (b) 1 else 0
+}
 //Box(
 //modifier = Modifier.fillMaxHeight(.5f).fillMaxWidth(),
 //contentAlignment = Alignment.Center
@@ -314,3 +335,4 @@ fun ExpandableCardControl(question: String, answer: String) {
 //                }
 //        )
 //    }
+

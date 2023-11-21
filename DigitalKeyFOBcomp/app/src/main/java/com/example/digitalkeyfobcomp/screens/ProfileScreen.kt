@@ -150,7 +150,7 @@ fun ProfileScreen(
                 Row {
                     ElevatedButton(
                         modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
 
                         onClick = { // clear signature button
                         signaturePadAdapter?.clear()
@@ -162,7 +162,7 @@ fun ProfileScreen(
 
                     ElevatedButton(
                         modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                         onClick = { // add profile button
 
                             keyboardController?.hide()

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedButton
@@ -152,8 +153,9 @@ fun StartScreen(
                 Row(){
                     ElevatedButton(
                         modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                         onClick = {
+                            blueViewModel.disconnectFromDevice()
                             openDialog.value = true
                             if (selectedText.isNotBlank()) {
                             // Call the deleteByName function to delete the selected profile
@@ -199,6 +201,7 @@ fun StartScreen(
                             },
                             confirmButton = {
                                 Button(
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
 
                                     onClick = {
                                         openDialog.value = false
@@ -206,15 +209,15 @@ fun StartScreen(
                                     Text("Confirm")
                                 }
                             },
-                            dismissButton = {
-                                Button(
-
-                                    onClick = {
-                                        openDialog.value = false
-                                    }) {
-                                    Text("Dismiss")
-                                }
-                            }
+//                            dismissButton = {
+//                                Button(
+//                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+//                                    onClick = {
+//                                        openDialog.value = false
+//                                    }) {
+//                                    Text("Dismiss")
+//                                }
+//                            }
                         )
                     }
                     Spacer(modifier = Modifier.width(32.dp))
@@ -234,17 +237,18 @@ fun StartScreen(
                             },
                             confirmButton = {
                                 Button(
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                                     onClick = {
                                         // Call the deleteByName function to delete the selected profile
                                         viewModel.deleteProfileByName(selectedText)
                                         if (selectedText == rememberedProfile) {
                                             preferencesManager.clearData()
+                                            blueViewModel.disconnectFromDevice()
                                         }
 
                                         // Show a Toast message to inform the user
                                         Toast.makeText(context, "Profile deleted: $selectedText", Toast.LENGTH_SHORT).show()
 
-                                        blueViewModel.disconnectFromDevice()
 
                                         selectedText = "" // Reset the selectedText
 
@@ -256,6 +260,7 @@ fun StartScreen(
                             },
                             dismissButton = {
                                 Button(
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                                     onClick = {
                                         showDeleteConfirmationDialog = false // Close the dialog
                                     }
@@ -268,7 +273,7 @@ fun StartScreen(
 
                     ElevatedButton(
                         modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                         onClick = {
                             if (selectedText.isNotBlank()) {
                                 // Show the delete confirmation dialog
@@ -314,10 +319,14 @@ fun BluetoothScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Button(onClick = onStartScan) {
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                onClick = onStartScan) {
                 Text(text = "Start scan")
             }
-            Button(onClick = onStopScan) {
+            Button(
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                onClick = onStopScan) {
                 Text(text = "Stop scan")
             }
 //            Button(onClick = onStartServer) {

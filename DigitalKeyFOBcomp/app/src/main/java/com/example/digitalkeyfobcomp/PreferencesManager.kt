@@ -24,6 +24,11 @@ class PreferencesManager(context: Context) {
             defaultValue
         }
     }
+    fun removeKey(key: String) {
+        val editor = sharedPreferences.edit()
+        editor.remove(key)
+        editor.apply()
+    }
     fun clearData(){
         val editor = sharedPreferences.edit()
         editor.clear()
