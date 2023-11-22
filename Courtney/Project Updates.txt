@@ -25,3 +25,6 @@ This past week I finished all of the code for the deivce (i.e. all the code that
 
 November 14th, 2023
 This past week I worked on the code for the vehicle. I finished coding the DDS verification code but I have been unsuccessful in getting the Cryptography libary to connect to my AES and SHA files so I am working on fixing/getting help for that. In the meantime, I am working on coding the AES and SHA even if it won't build just yet. I hope to get everything coded by today or tomorrow then I will get started working on getting the code to function before final demo.
+
+November 21st, 2023
+I have finished writing all of the code for my subsystem. I am now working on fixing some build issues I am having with C++ and doing the final testing and validation in preparation for demo next week.
