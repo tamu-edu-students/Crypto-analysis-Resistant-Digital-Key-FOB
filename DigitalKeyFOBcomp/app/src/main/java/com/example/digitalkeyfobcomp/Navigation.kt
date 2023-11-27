@@ -40,7 +40,7 @@ fun Navigation(state: ProfileState,
         composable("Home") { StartScreen(navController,
             state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState ) }
         composable("Add") { ProfileScreen(navController,
-           state, onEvent ) }
+           state, onEvent , viewModel) }
         composable("Controls") { ControlScreen(navController,blueViewModel, bluetoothState) }
         composable("Faq") { FaqScreen(navController) }
     }

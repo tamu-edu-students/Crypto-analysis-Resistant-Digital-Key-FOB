@@ -11,6 +11,8 @@ import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 
 @HiltViewModel
@@ -45,12 +47,30 @@ class BluetoothViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun connectToDevice(device: BluetoothDeviceDomain) {
-        _state.update { it.copy(isConnecting = true) }
-        deviceConnectionJob = bluetoothController
-            .connectToDevice(device)
-            .listen()
+//    fun connectToDevice(device: BluetoothDeviceDomain) {
+//        _state.update { it.copy(isConnecting = true) }
+//        deviceConnectionJob = bluetoothController
+//            .connectToDevice(device)
+//            .listen()
+//    }
+fun connectToDevice(device: BluetoothDeviceDomain) {
+    _state.update { it.copy(isConnecting = true) }
+
+    // Start a timer to automatically transition out of the connecting state after 10 seconds
+    val timer = Timer()
+    timer.schedule(10000) {
+        viewModelScope.launch {
+            // Check the state and show the connection failed message if needed
+            if (!_state.value.isConnected) {
+                _state.update { it.copy(isConnecting = false, errorMessage = "Connection failed. Please try again.") }
+            }
+        }
     }
+
+    deviceConnectionJob = bluetoothController
+        .connectToDevice(device)
+        .listen()
+}
 
     fun disconnectFromDevice() {
         deviceConnectionJob?.cancel()

@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
+import com.example.digitalkeyfobcomp.ProfileViewModel
 import com.example.digitalkeyfobcomp.R
 import com.example.digitalkeyfobcomp.bitmapToHash
 import com.example.digitalkeyfobcomp.components.BottomNavigation
@@ -71,13 +72,14 @@ private const val SIGNATURE_PAD_HEIGHT = 120
 fun ProfileScreen(
     navController: NavController,
     state: ProfileState,
-    onEvent:(ProfileEvent) -> Unit
+    onEvent:(ProfileEvent) -> Unit,
+    viewModel: ProfileViewModel
 
 ) {
     val coroutineScope = rememberCoroutineScope()  // use coroutine to perform logic outside of main UI thread
     val context = LocalContext.current // use context to send toast messages to user
     val keyboardController = LocalSoftwareKeyboardController.current
-
+    var profileDuplicateCheck by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
             Surface(
@@ -167,7 +169,12 @@ fun ProfileScreen(
 
                             keyboardController?.hide()
                         coroutineScope.launch {
-                            if (state.name != "") {
+                            val profile = viewModel.getProfileByName(state.name)
+
+                            if (profile != null) {
+                                profileDuplicateCheck = profile.name
+                            }
+                            if (state.name != "" && state.name != profileDuplicateCheck) {
                                 currentbitmap = signaturePadAdapter?.getSignatureBitmap()  // saving bitmap value to variable to pass to hash function
 
                                 signatureSigned = signaturePadAdapter?.isEmpty == false // Check if signature pad is empty, default value = false
@@ -202,7 +209,7 @@ fun ProfileScreen(
                             }else{
                                 Toast.makeText( // user prompt for profile creation if missing profile text
                                     context,
-                                    "Please Enter Profile Name",
+                                    "Please enter a unique and non-duplicate profile name",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }

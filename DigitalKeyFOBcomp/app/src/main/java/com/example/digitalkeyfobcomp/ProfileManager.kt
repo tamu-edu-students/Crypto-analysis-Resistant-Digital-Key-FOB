@@ -32,6 +32,7 @@ interface ProfileDao {
 
     @Query("SELECT * FROM profiles")
     fun getAllProfiles(): Flow<List<ProfileEntity>>
+
     @Query("SELECT name FROM profiles")
     fun getAllNames(): Flow<List<String>>
 

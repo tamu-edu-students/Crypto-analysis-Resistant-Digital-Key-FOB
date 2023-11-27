@@ -188,7 +188,7 @@ fun StartScreen(
 //                                openDialog.value = false
                             },
                             title = {
-                                Text(text = "Dialog Title")
+                                Text(text = "Bluetooth Menu")
                             },
                             text = {
                                 BluetoothScreen(
@@ -206,7 +206,7 @@ fun StartScreen(
                                     onClick = {
                                         openDialog.value = false
                                     }) {
-                                    Text("Confirm")
+                                    Text("Dismiss")
                                 }
                             },
 //                            dismissButton = {
