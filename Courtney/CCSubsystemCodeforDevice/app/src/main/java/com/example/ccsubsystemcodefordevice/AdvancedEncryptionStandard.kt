@@ -46,30 +46,48 @@ fun AESEncryption(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //Setting up variables for the AES Encryption
         val SecretKeyInt = BigInteger("221") //SecretKey from the Diffie-Hellman Key Exchange
-        val SecretKey = SecretKeyInt.toString()
+        val SecretKey = SecretKeyInt.toString() //Turning that to a string
         val ivbytes = byteArrayOf(0x64, 0x7b, 0x5e, 0x57, 0x67, 0x1f, 0x2c, 0x10, 0x43, 0x25, 0x0a, 0x25, 0x72, 0x12, 0x49, 0x03)
         val salt = "CrytoAnalysisDigtialKeyFOB"
-        val zHardware = byteArrayOf(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f)
+        val zHardware = "This will be replaced with the zHardware Profile."
 
-        //IV Random Generator (May need to fix this if it messes with the IV value)
+        //IV Spec
         val ivspec = IvParameterSpec(ivbytes);
 
         //Generating a secret key from Diffie-Hellman Output
         val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256")
         val spec = PBEKeySpec(SecretKey.toCharArray(), salt.toByteArray(), 65536, 256)
         val sk_temp = factory.generateSecret(spec)
-        val symmetrickey = SecretKeySpec(sk_temp.getEncoded(), "AES")
+        val symmetricKeySpec = SecretKeySpec(sk_temp.getEncoded(), "AES")
 
         //Doing the encryption
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-        cipher.init(Cipher.ENCRYPT_MODE, symmetrickey, ivspec)
-        val cipherText = cipher.doFinal(zHardware)
-        val CipherTextString = Base64.getEncoder().encodeToString(cipherText)
+        cipher.init(Cipher.ENCRYPT_MODE, symmetricKeySpec, ivspec)
+        val cipherText = cipher.doFinal(zHardware.toByteArray())
+        val length = ivbytes.size + cipherText.size
+        val encryptedData = ByteArray(length)
+        System.arraycopy(ivbytes, 0, encryptedData, 0, ivbytes.size)
+        System.arraycopy(cipherText, 0, encryptedData, ivbytes.size, cipherText.size)
+        val cipherTextString = Base64.getEncoder().encodeToString(encryptedData)
 
-        Text(text = "Testing: \nKey = $symmetrickey" +
-                "\n\nPlain Text: $zHardware" +
-                "\n\nCipher Text = $CipherTextString",
+        //Doing the Decryption (For Demo Purposes - will be taken out later when integrated)
+        val DataEncryptedAbove = Base64.getDecoder().decode(cipherTextString)
+        System.arraycopy(DataEncryptedAbove, 0, ivbytes, 0, ivbytes.size)
+
+        cipher.init(Cipher.DECRYPT_MODE, symmetricKeySpec, ivspec)
+        val encryptedTextSize = DataEncryptedAbove.size - 16
+        val encryptedText = ByteArray(encryptedTextSize)
+        System.arraycopy(DataEncryptedAbove, 16, encryptedText, 0, encryptedText.size)
+
+        val returnText = cipher.doFinal(encryptedText)
+        val returnTextString = String(returnText)
+
+
+        Text(text = "Testing: \nPlain Text: $zHardware" +
+                "\n\nCipher Text: $cipherTextString" +
+                "\n\nReturn Text: $returnTextString",
             modifier = modifier.padding(12.dp))
+
     }
 }
 
