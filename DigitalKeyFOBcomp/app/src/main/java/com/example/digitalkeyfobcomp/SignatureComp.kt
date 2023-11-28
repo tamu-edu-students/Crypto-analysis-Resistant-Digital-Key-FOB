@@ -36,12 +36,17 @@ fun SignaturePad() {
         // A surface container using the 'background' color from the theme
         Surface(color = Color.LightGray) {
 
+            // State to hold the generated SVG string
             val mutableSvg = remember { mutableStateOf("") }
+
             Column {
 
                 var signaturePadAdapter: SignaturePadAdapter? = null
+
+                // State to hold the current pen color
                 val penColor = remember { mutableStateOf(Color.Black) }
 
+                // Signature Pad View with callbacks for various signature events
                 Box(
                     modifier = Modifier
                         .height(SIGNATURE_PAD_HEIGHT.dp)
@@ -56,7 +61,6 @@ fun SignaturePad() {
                             signaturePadAdapter = it
                         },
                         penColor = penColor.value,
-
                         onStartSigning = {
                             Log.d("SignedListener", "OnStartSigning")
                         },
@@ -74,13 +78,17 @@ fun SignaturePad() {
                         },
                     )
                 }
+
+                // Row of buttons for actions like Save, Clear, and changing pen color
                 Row {
+                    // Save button
                     Button(onClick = {
                         mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
                     }) {
                         Text("Save")
                     }
 
+                    // Clear button
                     Button(onClick = {
                         mutableSvg.value = ""
                         signaturePadAdapter?.clear()
@@ -88,12 +96,14 @@ fun SignaturePad() {
                         Text("Clear")
                     }
 
+                    // Button to set pen color to Red
                     Button(onClick = {
                         penColor.value = Color.Red
                     }) {
                         Text("Red")
                     }
 
+                    // Button to set pen color to Black
                     Button(onClick = {
                         penColor.value = Color.Black
                     }) {
@@ -101,11 +111,13 @@ fun SignaturePad() {
                     }
                 }
 
+                // Display the generated SVG string
                 Text(text = "SVG: " + mutableSvg.value)
             }
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -114,32 +126,3 @@ fun DefaultPreview() {
         SignaturePadView()
     }
 }
-//@Composable
-//fun SignatureComp(){
-//    var signaturePadAdapter: SignaturePadAdapter? = null
-//    val mutableSvg = remember { mutableStateOf("") }
-//    Box (
-//
-//        modifier = Modifier
-//            .size(300.dp,200.dp)
-//            .border(width = 2.dp, color = Color.DarkGray),
-//        contentAlignment = Alignment.Center
-//    ){
-//        SignaturePadView(onReady = {
-//            signaturePadAdapter = it
-//        })
-//    }
-//    Row {
-//        Button(onClick = {
-//            mutableSvg.value = signaturePadAdapter?.getSignatureSvg() ?: ""
-//        }) {
-//            Text("Save")
-//        }
-//        Button(onClick = {
-//            mutableSvg.value = ""
-//            signaturePadAdapter?.clear()
-//        }) {
-//            Text("Clear")
-//        }
-//    }
-//}

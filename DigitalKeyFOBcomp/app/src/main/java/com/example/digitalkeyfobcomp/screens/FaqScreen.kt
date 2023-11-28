@@ -66,19 +66,6 @@ fun FaqScreen(navController: NavController) {
                         .fillMaxSize()
                         .padding(top = 70.dp) // Add top padding
                 ) {
-//                    item {
-//                        Spacer(modifier = Modifier.height(16.dp))
-//                        Text(
-//                            text = "Frequently Asked Questions",
-//                            style = TextStyle(
-//                                fontWeight = FontWeight.Bold,
-//                                fontSize = 20.sp,
-//                                color = Color(0xFF6200EE) // Dark Purple text color
-//                            ),
-//                            modifier = Modifier.padding(horizontal = 16.dp)
-//                        )
-//                        Spacer(modifier = Modifier.height(16.dp))
-//                    }
 
                     // Boilerplate FAQ questions
                     item {
@@ -112,46 +99,6 @@ fun FaqScreen(navController: NavController) {
         }
     )
 }
-
-//@Composable
-//fun FaqScreen(navController: NavController) {
-//    Scaffold(
-//        topBar = {
-//            Surface(
-//                modifier = Modifier.fillMaxWidth(),
-//                color = Color.White, // Set the background color here
-//
-//            ) {
-//                TopAppBar(
-//                    title = {
-//                        Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
-//                    },
-//                    modifier = Modifier.fillMaxWidth(),
-//
-//                    )
-//            }
-//        },
-//        content = {
-//            Column(
-//                modifier = Modifier.fillMaxSize()
-//                    .background(color = Color.LightGray),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                // The rest of your content
-//
-//
-//                Spacer(modifier = Modifier.height(16.dp))
-//                Text(text = "Contact Jeremy Hein for assistance")
-//                //content
-//
-//            }
-//        },
-//        bottomBar = {
-//            BottomNavigation(navController)
-//        }
-//    )
-//}
 @Preview
 @Composable
 fun FaqScreenPreview(){

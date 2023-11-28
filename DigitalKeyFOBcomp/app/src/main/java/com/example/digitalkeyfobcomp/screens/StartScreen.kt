@@ -156,9 +156,9 @@ fun StartScreen(
                         colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
                         onClick = {
                             blueViewModel.disconnectFromDevice()
-                            openDialog.value = true
                             if (selectedText.isNotBlank()) {
                             // Call the deleteByName function to delete the selected profile
+                                openDialog.value = true
                                 preferencesManager.clearData()
                                 coroutineScope.launch {
                                     val profile = viewModel.getProfileByName(selectedText)

@@ -34,19 +34,22 @@ import androidx.compose.material3.Text
 
 import androidx.compose.ui.Alignment
 import com.example.digitalkeyfobcomp.screens.ChatScreen
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val db by lazy{ // database initialization
+    // Lazy initialization of the Room database for profiles
+    private val db by lazy {
         Room.databaseBuilder(
             applicationContext,
             ProfileDatabase::class.java,
             "profiles.db"
         ).build()
     }
-    private val viewModel by viewModels<ProfileViewModel>( // profileviewmodel initialization
+
+    // Lazy initialization of the ProfileViewModel using Hilt's viewModels delegate
+    private val viewModel by viewModels<ProfileViewModel>(
         factoryProducer = {
+            // Custom ViewModelProvider.Factory to provide the ProfileViewModel with the DAO
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     return ProfileViewModel(db.dao) as T
@@ -57,37 +60,47 @@ class MainActivity : ComponentActivity() {
 
     // Bluetooth Initialization
 
+    // Lazy initialization of BluetoothManager
     private val bluetoothManager by lazy {
         applicationContext.getSystemService(BluetoothManager::class.java)
     }
+
+    // Lazy initialization of BluetoothAdapter
     private val bluetoothAdapter by lazy {
         bluetoothManager?.adapter
     }
 
+    // Property to check if Bluetooth is enabled
     private val isBluetoothEnabled: Boolean
         get() = bluetoothAdapter?.isEnabled == true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Activity result launcher to enable Bluetooth
         val enableBluetoothLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { /* Not needed */ }
 
+        // Activity result launcher to request Bluetooth-related permissions
         val permissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { perms ->
-            val canEnableBluetooth = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Check if Bluetooth-related permissions are granted
+            val canEnableBluetooth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 perms[Manifest.permission.BLUETOOTH_CONNECT] == true
             } else true
 
-            if(canEnableBluetooth && !isBluetoothEnabled) {
+            // If permissions are granted and Bluetooth is not enabled, launch the enable Bluetooth activity
+            if (canEnableBluetooth && !isBluetoothEnabled) {
                 enableBluetoothLauncher.launch(
                     Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 )
             }
         }
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+
+        // Request Bluetooth-related permissions (BLUETOOTH_SCAN and BLUETOOTH_CONNECT)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.BLUETOOTH_SCAN,
@@ -97,15 +110,19 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            DigitalKeyFOBCompTheme(darkTheme = false){
+            DigitalKeyFOBCompTheme(darkTheme = false) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
+                    // Hilt ViewModel for Bluetooth functionality
                     val viewModel1 = hiltViewModel<BluetoothViewModel>()
+
+                    // Collect BluetoothViewModel state as a State
                     val state1 by viewModel1.state.collectAsState()
+
+                    // Display a toast message for any error message in the BluetoothViewModel state
                     LaunchedEffect(key1 = state1.errorMessage) {
                         state1.errorMessage?.let { message ->
                             Toast.makeText(
@@ -116,8 +133,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    // Display a toast message when the Bluetooth connection is established
                     LaunchedEffect(key1 = state1.isConnected) {
-                        if(state1.isConnected) {
+                        if (state1.isConnected) {
                             Toast.makeText(
                                 applicationContext,
                                 "You're connected!",
@@ -126,10 +144,13 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    // Collect the state from the ProfileViewModel
                     val state by viewModel.state.collectAsState()
 
+                    // Choose the appropriate UI based on the profile and Bluetooth states
                     when {
                         state1.isConnecting -> {
+                            // Display a progress indicator and "Connecting..." text
                             Column(
                                 modifier = Modifier.fillMaxSize(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -139,21 +160,20 @@ class MainActivity : ComponentActivity() {
                                 Text(text = "Connecting...")
                             }
                         }
-//                        state1.isConnected -> {
-//                            ChatScreen(
-//                                state = state1,
-//                                onDisconnect = viewModel1::disconnectFromDevice,
-//                                onSendMessage = viewModel1::sendMessage
-//                            )
-//                        }
                         else -> {
-                            Navigation(state = state, onEvent = viewModel::onEvent, profileNamesFlow = viewModel.profileNames, viewModel = viewModel,  blueViewModel = viewModel1, bluetoothState = state1 )
+                            // Navigate to the appropriate screen based on the ProfileViewModel state
+                            Navigation(
+                                state = state,
+                                onEvent = viewModel::onEvent,
+                                profileNamesFlow = viewModel.profileNames,
+                                viewModel = viewModel,
+                                blueViewModel = viewModel1,
+                                bluetoothState = state1
+                            )
                         }
                     }
-
                 }
             }
         }
     }
 }
-
