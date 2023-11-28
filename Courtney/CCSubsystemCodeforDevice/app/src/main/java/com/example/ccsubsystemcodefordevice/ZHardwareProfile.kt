@@ -46,16 +46,15 @@ fun ZHardware(modifier: Modifier = Modifier) {
         val randomInt = SecureRandom()
         val prnBigInt = BigInteger(256, randomInt)
 
-        //XOR the Pseudo-Random Number and the Byte Array
+        //XOR the Pseudo-Random Number and the BitMap
         val zhp = bitMapInt.xor(prnBigInt)
 
-        //Turning the Z-Hardware Profile back into a Byte Array
-        val zhpArray = zhp.toByteArray()
+        //Turning the Z-Hardware Profile into a string for encryption
+        val zhpArray = zhp.toString()
 
         Text(text = "Testing: \nBit Map in BigInteger: $bitMapInt " +
                 "\n\nPseudo-Random Number: $prnBigInt" +
-                "\n\nZ-Hardware Profile (BigInteger): $zhp" +
-                "\n\nZ-Hardware Profile (Byte-Array): $zhpArray",
+                "\n\nZ-Hardware Profile: $zhpArray",
             modifier = modifier.padding(12.dp))
     }
 }
