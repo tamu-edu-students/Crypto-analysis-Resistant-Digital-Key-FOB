@@ -123,14 +123,7 @@ fun ProfileScreen(
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-//                Box ( // box to outline signature pad
-//
-//                    modifier = Modifier
-//                        .size(400.dp,200.dp)
-//                        .border(width = 2.dp, color = Color.Black)
-//                        .background( color = Color.White),
-//                    contentAlignment = Alignment.Center
-//                )
+
                 Card(
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                             modifier = Modifier

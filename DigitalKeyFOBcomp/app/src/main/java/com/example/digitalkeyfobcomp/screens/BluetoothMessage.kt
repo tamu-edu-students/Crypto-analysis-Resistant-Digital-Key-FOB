@@ -51,6 +51,7 @@ fun DataButton(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        // Header Row with Messages and Disconnect button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -68,6 +69,8 @@ fun DataButton(
                 )
             }
         }
+
+        // Message List
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,6 +82,7 @@ fun DataButton(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Display each chat message
                     ChatMessage(
                         message = message,
                         modifier = Modifier
@@ -89,6 +93,8 @@ fun DataButton(
                 }
             }
         }
+
+        // Input Row with TextField for typing messages and Send button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,6 +122,7 @@ fun DataButton(
         }
     }
 }
+
 @Composable
 fun ChatScreen(
     state: BluetoothUiState,
@@ -131,6 +138,7 @@ fun ChatScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        // Header Row with Messages and Disconnect button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -148,6 +156,8 @@ fun ChatScreen(
                 )
             }
         }
+
+        // Message List
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -159,6 +169,7 @@ fun ChatScreen(
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    // Display each chat message
                     ChatMessage(
                         message = message,
                         modifier = Modifier
@@ -169,6 +180,8 @@ fun ChatScreen(
                 }
             }
         }
+
+        // Input Row with TextField for typing messages and Send button
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -217,11 +230,13 @@ fun ChatMessage(
             )
             .padding(16.dp)
     ) {
+        // Display sender name
         Text(
             text = message.senderName,
             fontSize = 10.sp,
             color = Color.Black
         )
+        // Display message
         Text(
             text = message.message,
             color = Color.Black,
@@ -229,6 +244,7 @@ fun ChatMessage(
         )
     }
 }
+
 
 @Preview
 @Composable

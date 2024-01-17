@@ -13,24 +13,35 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 
 
-class TransferFailedException: IOException("Reading incoming data failed")
+// Custom exception to indicate a failure in reading incoming Bluetooth data
+class TransferFailedException : IOException("Reading incoming data failed")
 
+// Service class for handling Bluetooth data transfer
 class BluetoothDataTransferService(
     private val socket: BluetoothSocket
 ) {
+    // Function to listen for incoming Bluetooth messages and emit them as a Flow
     fun listenForIncomingMessages(): Flow<BluetoothMessage> {
         return flow {
-            if(!socket.isConnected) {
+            // Check if the socket is connected
+            if (!socket.isConnected) {
                 return@flow
             }
+
+            // Buffer to hold incoming data
             val buffer = ByteArray(1024)
-            while(true) {
+
+            // Continuously read incoming data from the Bluetooth socket
+            while (true) {
                 val byteCount = try {
+                    // Read data into the buffer
                     socket.inputStream.read(buffer)
-                } catch(e: IOException) {
+                } catch (e: IOException) {
+                    // Throw a custom exception if reading data fails
                     throw TransferFailedException()
                 }
 
+                // Emit a BluetoothMessage constructed from the received data
                 emit(
                     buffer.decodeToString(
                         endIndex = byteCount
@@ -39,18 +50,22 @@ class BluetoothDataTransferService(
                     )
                 )
             }
-        }.flowOn(Dispatchers.IO)
+        }.flowOn(Dispatchers.IO) // Perform the flow operations on the IO dispatcher
     }
 
+    // Function to send a message over Bluetooth
     suspend fun sendMessage(bytes: ByteArray): Boolean {
         return withContext(Dispatchers.IO) {
             try {
+                // Write the provided bytes to the Bluetooth socket output stream
                 socket.outputStream.write(bytes)
-            } catch(e: IOException) {
+            } catch (e: IOException) {
                 e.printStackTrace()
+                // Return false if sending the message fails
                 return@withContext false
             }
 
+            // Return true if the message is sent successfully
             true
         }
     }

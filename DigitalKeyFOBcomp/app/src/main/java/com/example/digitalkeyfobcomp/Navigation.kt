@@ -24,57 +24,61 @@ import com.example.digitalkeyfobcomp.screens.ProfileScreen
 import com.example.digitalkeyfobcomp.screens.StartScreen
 import kotlinx.coroutines.flow.Flow
 
-//
+// Composable function for handling navigation between screens
 @Composable
-fun Navigation(state: ProfileState,
-               onEvent:(ProfileEvent) -> Unit,
-               profileNamesFlow: Flow<List<String>>,
-               viewModel: ProfileViewModel,
-               blueViewModel: BluetoothViewModel,
-               bluetoothState: BluetoothUiState
-
+fun Navigation(
+    state: ProfileState,
+    onEvent: (ProfileEvent) -> Unit,
+    profileNamesFlow: Flow<List<String>>,
+    viewModel: ProfileViewModel,
+    blueViewModel: BluetoothViewModel,
+    bluetoothState: BluetoothUiState
 ) {
+    // Create a NavHost for navigation
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "Home") {
-        composable("Home") { StartScreen(navController,
-            state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState ) }
-        composable("Add") { ProfileScreen(navController,
-           state, onEvent , viewModel) }
-        composable("Controls") { ControlScreen(navController,blueViewModel, bluetoothState) }
-        composable("Faq") { FaqScreen(navController) }
+        // Screen for the Home destination
+        composable("Home") {
+            StartScreen(navController, state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState)
+        }
+        // Screen for the Add destination
+        composable("Add") {
+            ProfileScreen(navController, state, onEvent, viewModel)
+        }
+        // Screen for the Controls destination
+        composable("Controls") {
+            ControlScreen(navController, blueViewModel, bluetoothState)
+        }
+        // Screen for the Faq destination
+        composable("Faq") {
+            FaqScreen(navController)
+        }
     }
 }
 
+// Sealed class representing each item in the bottom navigation bar
 sealed class BottomNavItem(
     var title: String,
     var icon: Int
 ) {
-    object Home : BottomNavItem(
-        "Home",
-        R.drawable.homeicon
-    )
+    // Home destination
+    object Home : BottomNavItem("Home", R.drawable.homeicon)
 
-    object Add : BottomNavItem(
-        "Add",
-        R.drawable.addicon
-    )
+    // Add destination
+    object Add : BottomNavItem("Add", R.drawable.addicon)
 
-    object Controls : BottomNavItem(
-        "Controls",
-        R.drawable.caricon
-    )
+    // Controls destination
+    object Controls : BottomNavItem("Controls", R.drawable.caricon)
 
-    object FAQ : BottomNavItem(
-        "FAQ",
-        R.drawable.faqicon
-    )
+    // FAQ destination
+    object FAQ : BottomNavItem("FAQ", R.drawable.faqicon)
 }
 
-
+// Composable function for creating the bottom navigation bar
 @Composable
 fun BottomNavigation(navController: NavController) {
-
+    // List of navigation items
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Add,
@@ -82,25 +86,21 @@ fun BottomNavigation(navController: NavController) {
         BottomNavItem.FAQ
     )
 
+    // Navigation bar
     NavigationBar {
         items.forEach { item ->
-            AddItem(
-                screen = item,
-                navController = navController
-            )
+            // Add each item to the navigation bar
+            AddItem(screen = item, navController = navController)
         }
     }
 }
 
-
+// Composable function for creating a single item in the bottom navigation bar
 @Composable
-fun RowScope.AddItem(
-    screen: BottomNavItem,
-    navController: NavController
-) {
-
+fun RowScope.AddItem(screen: BottomNavItem, navController: NavController) {
+    // Navigation bar item
     NavigationBarItem(
-        // Text that shows bellow the icon
+        // Text that shows below the icon
         label = {
             Text(text = screen.title)
         },
@@ -113,10 +113,10 @@ fun RowScope.AddItem(
             )
         },
 
-        // Display if the icon it is select or not
+        // Display if the icon is selected or not
         selected = true,
 
-        // Always show the label bellow the icon or not
+        // Always show the label below the icon or not
         alwaysShowLabel = true,
 
         // Click listener for the icon
@@ -126,6 +126,7 @@ fun RowScope.AddItem(
         colors = NavigationBarItemDefaults.colors()
     )
 }
+
 //
 //@Composable
 //fun currentRoute(navController: NavHostController): String {

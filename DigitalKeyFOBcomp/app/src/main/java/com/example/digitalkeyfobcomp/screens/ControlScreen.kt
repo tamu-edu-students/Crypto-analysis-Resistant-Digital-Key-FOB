@@ -67,12 +67,15 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ControlScreen(navController: NavController,
-                  blueViewModel: BluetoothViewModel,
-                  bluetoothState: BluetoothUiState
+fun ControlScreen(
+    navController: NavController,
+    blueViewModel: BluetoothViewModel,
+    bluetoothState: BluetoothUiState
 ) {
+    // Initialize PreferencesManager for managing shared preferences
     val preferencesManager = PreferencesManager(LocalContext.current)
 
+    // Constants for UI styling
     val ledSize = 24.dp
     val imagesize = 30
     var rememberedProfile by remember { mutableStateOf("") }
@@ -82,32 +85,32 @@ fun ControlScreen(navController: NavController,
     var selectedProfile by remember { mutableStateOf<ProfileEntity?>(null) }
     var selectedCarModes by remember { mutableStateOf(CarModes(locked = false, engine = false)) }
 
+    // LaunchedEffect block to execute code only once when the Composable is initially displayed
     LaunchedEffect(Unit) {
-        // This block of code is executed only once when the Composable is initially displayed
-        val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
+        val retrievedProfile: ProfileEntity? = preferencesManager.getData("selectedProfile", null)
         retrievedProfile?.let { profile ->
             selectedProfile = profile
             rememberedProfile = profile.name
         }
-        val retrievedModes: CarModes? =  preferencesManager.getData("selectedProfileMode", null)
-        if(retrievedModes != null){
+        val retrievedModes: CarModes? = preferencesManager.getData("selectedProfileMode", null)
+        if (retrievedModes != null) {
             selectedCarModes = retrievedModes
         }
     }
+
+    // Scaffold for the overall screen structure
     Scaffold(
         topBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 color = Color.White, // Set the background color here
-
             ) {
                 TopAppBar(
                     title = {
                         Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
-
-                    )
+                )
             }
         },
         content = {
@@ -127,7 +130,7 @@ fun ControlScreen(navController: NavController,
                     ) {
                         Row(
                             modifier = Modifier.width(300.dp).padding(16.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             LEDIndicator(isOn = selectedCarModes.locked)
                             Text("Locked", modifier = Modifier
@@ -142,6 +145,7 @@ fun ControlScreen(navController: NavController,
                     }
                 }
 
+                // Change Engine Mode button
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -175,26 +179,24 @@ fun ControlScreen(navController: NavController,
                         modifier = Modifier.width(300.dp).padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
-
                         Image(
                             painter = painterResource(R.drawable.car_engine_2061910),
                             contentDescription = "Description for accessibility",
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
-                                .size(imagesize.dp, imagesize.dp)
-                                ,
-
-                            )
+                                .size(imagesize.dp, imagesize.dp),
+                        )
                         Spacer(modifier = Modifier.width(20.dp))
                         Text("Change Engine Mode", color = Color.Black, fontWeight = FontWeight.Bold)
                     }
                 }
+
+                // Change Lock Mode button
                 Card(
                     shape = RoundedCornerShape(8.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                     modifier = Modifier.padding(16.dp)
                         .clickable {
-
                             if (bluetoothState.isConnected) {
                                 selectedCarModes.locked = !selectedCarModes.locked
                                 message = booleanToInt(selectedCarModes.locked)
@@ -220,14 +222,12 @@ fun ControlScreen(navController: NavController,
                         modifier = Modifier.width(300.dp).padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ){
-
                         Image(
                             painter = painterResource(R.drawable.lock_2913133),
                             contentDescription = "Description for accessibility",
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(imagesize.dp, imagesize.dp)
-
                         )
                         Spacer(modifier = Modifier.width(20.dp))
                         Text("Change Lock Mode", color = Color.Black, fontWeight = FontWeight.Bold)
@@ -266,9 +266,10 @@ fun LEDIndicator(isOn: Boolean) {
         }
     }
 }
+
 @Composable
 fun ExpandableCardControl(question: String, answer: String) {
-
+    // Placeholder for future expansion of the UI
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp) ,
@@ -277,62 +278,12 @@ fun ExpandableCardControl(question: String, answer: String) {
             .padding(16.dp)
     )
     {
-
+        // Content of the expandable card goes here
     }
 }
 
+// Function to convert boolean to integer
 fun booleanToInt(b: Boolean): Int {
     return if (b) 1 else 0
 }
-//Box(
-//modifier = Modifier.fillMaxHeight(.5f).fillMaxWidth(),
-//contentAlignment = Alignment.Center
-//) {
-//    Image(
-//        painter = painterResource(R.drawable.car1),
-//        contentDescription = "Car Image",
-//        modifier = Modifier.size(400.dp, 400.dp)
-//    )
-//    Column {
-//        Image(
-//            painter = painterResource(R.drawable.car_engine_2061910),
-//            contentDescription = "Description for accessibility",
-//            contentScale = ContentScale.Fit,
-//            modifier = Modifier
-//                .size(imagesize.dp, imagesize.dp)
-//                .clickable {
-//                    if(bluetoothState.isConnected) {
-//                        isEngineOn = !isEngineOn
-//                        message = isEngineOn.toString()
-//                        blueViewModel.sendMessage("Engine Mode for $messageProfile is $message")
-//                        Toast.makeText(
-//                            context,
-//                            "Message sent",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }else{
-//                        Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
-//                    }
-//                },
-//
-//            )
-//        Spacer(modifier = Modifier.height(170.dp))
-//        Image(
-//            painter = painterResource(R.drawable.lock_2913133),
-//            contentDescription = "Description for accessibility",
-//            contentScale = ContentScale.Fit,
-//            modifier = Modifier
-//                .size(imagesize.dp, imagesize.dp)
-//                .clickable {
-//                    if(bluetoothState.isConnected) {
-//                        isUnlocked = !isUnlocked
-//                        message = isUnlocked.toString()
-//                        blueViewModel.sendMessage("Unlocked Mode $messageProfile is $message")
-//                        Toast.makeText(context, "Message sent", Toast.LENGTH_SHORT).show()
-//                    }else{
-//                        Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//        )
-//    }
 
