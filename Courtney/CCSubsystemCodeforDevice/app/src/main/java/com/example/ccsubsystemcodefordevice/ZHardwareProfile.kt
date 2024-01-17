@@ -39,7 +39,8 @@ class ZHardwareProfile : ComponentActivity() {
 fun ZHardware(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //Turning the BitMap in Byte Array form (bitMapIn) from Jeremy into a BigInteger
-        val bitMapIn = "ef72b1d67e57f2"
+        val bitMapIn = "aef72b1d67e57f2a4b653fc407e693db3ef72b1d67e57f2a4b653fc407e693db"
+        // "d63a2c76f48d3b84e42dc408e393bf3a872b9d67e5g78f2a4b653fc407e693db"
         val bitMapInt = BigInteger(bitMapIn, 16)
 
         //Creating the PseudoRandom number to XOR with

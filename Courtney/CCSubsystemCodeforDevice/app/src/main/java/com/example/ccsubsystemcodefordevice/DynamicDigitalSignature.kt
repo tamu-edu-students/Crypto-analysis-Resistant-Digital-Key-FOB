@@ -41,16 +41,19 @@ class DynamicDigitalSignature : ComponentActivity() {
 @Composable
 fun DDS(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        //SHA-256 Protocol
-        val fromDevice = "CommandAndZHardwareProfileAndTimeStamp"
-        val md = MessageDigest.getInstance("SHA-256")
-        val hashText = md.digest(fromDevice.toByteArray(StandardCharsets.UTF_8))
+        //Setting up the SHA-256 Protocol
+        val fromDevice = "ZHardwareProfileandCommandandTimestamp" //Example Text for Testing
+        val md = MessageDigest.getInstance("SHA-256") //Setting up the instance for SHA
+
+        //Doing the SHA-256 Protocol - turns the device string into a byte array first.
+        val hashText = md.digest(fromDevice.toByteArray())
 
         //Turning the Hash Text from a Byte Array into Hex
-        val hashNumber = BigInteger(1, hashText)
-        val hexString = StringBuilder(hashNumber.toString(16))
+        val hashNumber = BigInteger(1, hashText) //Turing the hash text into a BigInteger
+        val hexString = StringBuilder(hashNumber.toString(16)) //turing the Hash into a Hex number in string format
 
-        Text(text = "Testing: \nHash Text from SHA = $hashText \n\nHash Text in Binary = $hashNumber " +
+        Text(text = "Testing: \nHash Text Straight from SHA = $hashText" +
+                "\n\nHash Text in Binary = $hashNumber " +
                 "\n\nHash Text in Hex = $hexString ",
             modifier = modifier.padding(12.dp))
     }

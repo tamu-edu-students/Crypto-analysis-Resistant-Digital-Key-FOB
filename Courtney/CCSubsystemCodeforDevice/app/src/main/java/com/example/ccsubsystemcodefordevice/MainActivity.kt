@@ -40,16 +40,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DHKEBefore(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        //setting P and G
-        val P = BigInteger("947")
-        val G = BigInteger("7")
+        //Setting P and G - P is the prime number and G is the generator (primative root of P)
+        val P = BigInteger("653")
+        val G = BigInteger("5")
+
         //Creating the random A for the Vehicle
-        val randInt = SecureRandom()
+        val randInt = SecureRandom() //special randomization that follow standard cryptography protocols
         val a = randInt.nextInt(6)
-        //Doing the Diffie-Hellman Process
+
+        //Doing the Diffie-Hellman Process (G^a mod P)
         var A = BigInteger("2")
         A = (G.pow(a)) % P //mathematics
-        Text(text = "Before Vehicle: P = $P \n\nG = $G \n\nA Val = $a \n\nVehicle DHKE Portion = $A",
+
+        //Outputs the text to use for demonstration and debugging purposes
+        Text(text = "Before Vehicle: P = $P \n\nG = $G" +
+                "\n\nA Val = $a" +
+                "\n\nVehicle DHKE Portion = $A",
             modifier = modifier.padding(12.dp))
     }
 }

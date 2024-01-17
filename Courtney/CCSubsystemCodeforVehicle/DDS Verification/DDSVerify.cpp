@@ -9,11 +9,11 @@ int main(){
 
     //Setting up the Vehicle Stored DDS Value (for testing)
     std::string DDSVehicle;
-    DDSVehicle = "C0mmun1c8t10nAndCr7ptoSubsystem2";
+    DDSVehicle = "C0mmun1c8t10nAndCr7ptographySubsystemTeam2CapstoneProjectECEN403";
 
-    //Striping out the DDS from the device information
+    //Striping out the DDS from the device information (command, timestamp, etc.)
     std::string DDSDevice;
-    DDSDevice = InfoDevice.substr(0,32);
+    DDSDevice = InfoDevice.substr(0,64);
 
     //Verification that the DDSs match
     if (DDSDevice == DDSVehicle){
