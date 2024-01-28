@@ -1,11 +1,8 @@
 package com.example.digitalkeyfobcomp
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -15,7 +12,7 @@ sealed interface ProfileEvent {
     data class SetName(val name: String) : ProfileEvent
     data class SetLocked(val locked: Boolean) : ProfileEvent
     data class SetEngine(val engine: Boolean) : ProfileEvent
-    data class Setaddress(val address: Int) : ProfileEvent
+    data class Setaddress(val address: String) : ProfileEvent
     data class Setsigid(val sigid: String) : ProfileEvent
     object ShowDialog : ProfileEvent
     object HideDialong : ProfileEvent
@@ -28,7 +25,7 @@ data class ProfileState(
     val name: String = "",
     val locked: Boolean = false,
     val engine: Boolean = false,
-    val address: Int = 0,
+    val address: String = "",
     val sigid: String = "",
     val isAddingProfile: Boolean = false,
 )
@@ -112,7 +109,7 @@ class ProfileViewModel(
                         name = "",
                         locked = false,
                         engine = false,
-                        address = 0,
+                        address = "",
                         sigid = "",
                     )
                 }

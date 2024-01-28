@@ -44,7 +44,7 @@ fun Navigation(
         }
         // Screen for the Add destination
         composable("Add") {
-            ProfileScreen(navController, state, onEvent, viewModel)
+            ProfileScreen(navController, state, onEvent, viewModel, blueViewModel, bluetoothState)
         }
         // Screen for the Controls destination
         composable("Controls") {

@@ -70,6 +70,9 @@ class BluetoothViewModel @Inject constructor(
             .connectToDevice(device)
             .listen()
     }
+    fun saveDevice(device: BluetoothDeviceDomain) {
+
+    }
 
     // Function to disconnect from a Bluetooth device
     fun disconnectFromDevice() {
