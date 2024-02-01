@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
+import com.example.digitalkeyfobcomp.Encryption.ZHardware
 import com.example.digitalkeyfobcomp.ProfileEvent
 import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.ProfileViewModel
@@ -171,7 +172,7 @@ fun ProfileScreen(
 
                                     if(signatureSigned) { // Check for true/false signatureSigned
                                         openDialog.value = true
-                                        onEvent(ProfileEvent.Setsigid(bitmapHash)) // setting sigid to bitmaphash for profile creation
+                                        onEvent(ProfileEvent.Setsigid(ZHardware(bitmapHash))) // setting sigid to bitmaphash for profile creation
                                         signaturePadAdapter?.clear() // clearing signature pad
                                         signatureSigned = false // resetting signature signed value
 

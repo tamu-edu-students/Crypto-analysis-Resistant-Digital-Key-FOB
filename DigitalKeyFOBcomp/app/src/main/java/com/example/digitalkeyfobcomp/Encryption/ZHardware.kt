@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import java.math.BigInteger
 import java.security.SecureRandom
 
-@Composable
+
 fun ZHardware(bitMapIn: String): String {
 //    Surface(color = Color.LightGray) {
         // Turning the BitMap in Byte Array form (bitMapIn) from Jeremy into a BigInteger
