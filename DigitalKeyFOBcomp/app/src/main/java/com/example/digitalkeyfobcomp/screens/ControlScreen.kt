@@ -153,11 +153,11 @@ fun ControlScreen(
                         if (bluetoothState.isConnected) {
                             selectedCarModes.engine = !selectedCarModes.engine
                             message = booleanToInt(selectedCarModes.engine)
-                            blueViewModel.sendMessage("Mode0$message$rememberedProfile")
+                            blueViewModel.sendMessage("Mode0$message$rememberedProfile*")
                             Toast
                                 .makeText(
                                     context,
-                                    "Message sent",
+                                    "Mode0$message$rememberedProfile",
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()
@@ -200,9 +200,9 @@ fun ControlScreen(
                             if (bluetoothState.isConnected) {
                                 selectedCarModes.locked = !selectedCarModes.locked
                                 message = booleanToInt(selectedCarModes.locked)
-                                blueViewModel.sendMessage("Mode1$message$rememberedProfile")
+                                blueViewModel.sendMessage("Mode1$message$rememberedProfile*")
                                 Toast
-                                    .makeText(context, "Message sent", Toast.LENGTH_SHORT)
+                                    .makeText(context, "Mode1$message$rememberedProfile", Toast.LENGTH_SHORT)
                                     .show()
                             } else {
                                 Toast
