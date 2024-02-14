@@ -232,7 +232,7 @@ fun ProfileScreen(
                                         ).show()
 
                                         onEvent(ProfileEvent.SaveProfile) // Saving profile
-
+                                        openDialog.value = false
                                     }
 //                                    onDeviceClick = blueViewModel::connectToDevice
                                 )

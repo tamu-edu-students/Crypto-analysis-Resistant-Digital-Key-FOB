@@ -298,10 +298,8 @@ class AndroidBluetoothController(
     private fun hasPermission(permission: String): Boolean {
         return context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
     }
-
     // Companion object containing the service UUID for Bluetooth communication
     companion object {
         const val SERVICE_UUID = "00001101-0000-1000-8000-00805F9B34FB"
-//        "27b7d1da-08c7-4505-a6d1-2459987e5e2d"
     }
 }

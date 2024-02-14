@@ -25,15 +25,6 @@ fun ZHardware(bitMapIn: String): String {
 
         // Turning the Z-Hardware Profile into a string for encryption
         val zhpArray = zhp.toString()
-
-        // Uncomment the following lines if you want to display information using Text()
-        /*
-        Text(text = "Testing: \nBit Map in BigInteger: $bitMapInt " +
-            "\n\nPseudo-Random Number: $prnBigInt" +
-            "\n\nZ-Hardware Profile: $zhpArray",
-            modifier = modifier.padding(12.dp))
-        */
-
         // Return the Z-Hardware Profile
         return zhpArray
 //    }

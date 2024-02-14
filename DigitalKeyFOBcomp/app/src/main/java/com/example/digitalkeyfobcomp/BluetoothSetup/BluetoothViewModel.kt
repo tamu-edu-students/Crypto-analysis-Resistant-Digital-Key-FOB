@@ -1,5 +1,6 @@
 package com.example.digitalkeyfobcomp.BluetoothSetup
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,9 +12,11 @@ import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.Base64
 import java.util.Timer
 import java.util.TimerTask
 import kotlin.concurrent.schedule
+import kotlin.experimental.xor
 
 
 @HiltViewModel
@@ -70,6 +73,24 @@ class BluetoothViewModel @Inject constructor(
             .connectToDevice(device)
             .listen()
     }
+    fun registerToDevice(device: BluetoothDeviceDomain) {
+        _state.update { it.copy(isConnecting = true) }
+
+        // Start a timer to automatically transition out of the connecting state after 10 seconds
+        val timer = Timer()
+        val timerTask = timer.schedule(10000) {
+            viewModelScope.launch {
+                // Check the state and show the connection failed message if needed
+                if (!_state.value.isConnected) {
+                    disconnectFromDevice()
+                }
+            }
+        }
+        deviceConnectionJob = bluetoothController
+            .connectToDevice(device)
+            .listen()
+    }
+
 
     // Function to disconnect from a Bluetooth device
     fun disconnectFromDevice() {
@@ -135,4 +156,6 @@ class BluetoothViewModel @Inject constructor(
         super.onCleared()
         bluetoothController.release()
     }
+    // registraiton stuff
+
 }
