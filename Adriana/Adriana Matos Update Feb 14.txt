@@ -1,0 +1,2 @@
+-This week I will be working on creating a database in the ESP32 so I will be able to store the Z-hardware profile.
+-I will also begin on working on integrating the DHKE from Courtney's subsystem into the ESP32.

@@ -1,0 +1,2 @@
+-This week I worked with Jeremy to continue trying to connect the application to the microcontroller through bluetooth.
+-We were finally able to connect the application and the microcontroller through bluetooth, by changing the UUID in Jeremy's code to match the UUID of the Bluetooth Serial library I was using to code the bluetooth functionalities.

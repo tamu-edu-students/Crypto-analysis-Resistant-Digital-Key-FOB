@@ -1,0 +1,3 @@
+-This week we tried to integrate the application and microcontroller together through bluetooth, but something was interrupting the connection
+-Tried to troubleshoot why the connection wasn't working with the application in specific, but would work with a regular bluetooth terminal application on an android device.
+-checked out an android telephone so I could test the bluetooth functionalities outside of lab.
