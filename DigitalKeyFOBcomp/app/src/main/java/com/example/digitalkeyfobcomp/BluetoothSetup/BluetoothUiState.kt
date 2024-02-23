@@ -9,6 +9,7 @@ data class BluetoothUiState(
     val isConnecting: Boolean = false,                         // Indicates whether a Bluetooth connection is in progress
 
     val isRegistering: Boolean = false,                         // Indicates whether a Bluetooth registration is in progress
+    val isRegistered: Boolean = false,
 
     val errorMessage: String? = null,                          // Error message, if any
     val messages: List<BluetoothMessage> = emptyList(),        // List of Bluetooth messages

@@ -13,6 +13,9 @@ interface BluetoothController {
     // StateFlow indicating whether the device is currently connected
     val isConnected: StateFlow<Boolean>
 
+    // StateFlow indicating whether the device is currently registered
+    val isRegistered: StateFlow<Boolean>
+
     // StateFlow containing a list of discovered Bluetooth devices
     val scannedDevices: StateFlow<List<BluetoothDevice>>
 
@@ -34,11 +37,16 @@ interface BluetoothController {
     // Function to initiate a connection to a remote Bluetooth device
     fun connectToDevice(device: BluetoothDevice): Flow<ConnectionResult>
 
+    // Function to initiate a registration connection to a remote Bluetooth device
+    fun registerToDevice(device: BluetoothDevice): Flow<RegistrationResult> //new
+
     // Function to attempt sending a message via Bluetooth
     suspend fun trySendMessage(message: String): BluetoothMessage?
 
     // Function to close the Bluetooth connection
     fun closeConnection()
+
+    fun closeRegistration() // new
 
     // Function to release resources and perform cleanup
     fun release()

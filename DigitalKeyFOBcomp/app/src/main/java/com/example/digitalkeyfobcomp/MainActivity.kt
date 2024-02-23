@@ -160,6 +160,18 @@ class MainActivity : ComponentActivity() {
                                 Text(text = "Connecting...")
                             }
                         }
+                        //new state
+                        state1.isRegistering -> {
+                            // Display a progress indicator and "Connecting..." text
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                                Text(text = "Registering your device...")
+                            }
+                        }
                         else -> {
                             // Navigate to the appropriate screen based on the ProfileViewModel state
                             Navigation(

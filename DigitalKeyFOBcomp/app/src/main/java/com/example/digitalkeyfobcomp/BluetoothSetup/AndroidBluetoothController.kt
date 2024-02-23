@@ -55,6 +55,11 @@ class AndroidBluetoothController(
     override val isConnected: StateFlow<Boolean>
         get() = _isConnected.asStateFlow()
 
+    //new
+    private val _isRegistered = MutableStateFlow(false)
+    override val isRegistered: StateFlow<Boolean>
+        get() = _isRegistered.asStateFlow()
+
     // StateFlow containing a list of discovered Bluetooth devices
     private val _scannedDevices = MutableStateFlow<List<BluetoothDeviceDomain>>(emptyList())
     override val scannedDevices: StateFlow<List<BluetoothDeviceDomain>>
@@ -235,6 +240,52 @@ class AndroidBluetoothController(
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
+        return flow {
+            // Check if the necessary Bluetooth connect permission is granted
+            if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+                throw SecurityException("No BLUETOOTH_CONNECT permission")
+            }
+
+            // Create a Bluetooth socket to the specified remote device
+            currentClientSocket = bluetoothAdapter
+                ?.getRemoteDevice(device.address)
+                ?.createRfcommSocketToServiceRecord(
+                    UUID.fromString(SERVICE_UUID)
+                )
+            // Stop ongoing device discovery
+            stopDiscovery()
+
+            currentClientSocket?.let { socket ->
+                try {
+                    // Attempt to connect to the remote device
+                    socket.connect()
+                    // Emit a connection established result
+
+                    emit(RegistrationResult.RegistrationEstablished)
+
+                    // Initialize the data transfer service and emit transfer results
+                    BluetoothDataTransferService(socket).also {
+                        dataTransferService = it
+                        emitAll(
+                            it.listenForIncomingMessages()
+                                .map { RegistrationResult.RegistrationSucceeded(it) }
+                        )
+                    }
+                } catch(e: IOException) {
+                    // Close the socket if the connection was interrupted
+                    socket.close()
+                    currentClientSocket = null
+                    // Emit an error result
+                    emit(RegistrationResult.Error("Registration was interrupted"))
+                }
+            }
+        }.onCompletion {
+            // Close the connection when the flow completes
+            closeRegistration()
+        }.flowOn(Dispatchers.IO)
+    }
+
     // Function to attempt sending a message via Bluetooth
     override suspend fun trySendMessage(message: String): BluetoothMessage? {
         // Check if the necessary Bluetooth connect permission is granted
@@ -262,6 +313,15 @@ class AndroidBluetoothController(
 
     // Function to close the Bluetooth connection
     override fun closeConnection() {
+        // Close the client and server sockets
+        currentClientSocket?.close()
+        currentServerSocket?.close()
+        // Set sockets to null after closing
+        currentClientSocket = null
+        currentServerSocket = null
+    }
+
+    override fun closeRegistration() {
         // Close the client and server sockets
         currentClientSocket?.close()
         currentServerSocket?.close()
