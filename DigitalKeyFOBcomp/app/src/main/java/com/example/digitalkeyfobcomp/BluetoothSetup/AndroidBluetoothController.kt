@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.security.PublicKey
 import java.util.*
 
 
@@ -240,10 +241,11 @@ class AndroidBluetoothController(
         }.flowOn(Dispatchers.IO)
     }
 
+
     override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
         return flow {
             // Check if the necessary Bluetooth connect permission is granted
-            if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+            if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No BLUETOOTH_CONNECT permission")
             }
 
@@ -260,19 +262,24 @@ class AndroidBluetoothController(
                 try {
                     // Attempt to connect to the remote device
                     socket.connect()
-                    // Emit a connection established result
-
-                    emit(RegistrationResult.RegistrationEstablished)
-
-                    // Initialize the data transfer service and emit transfer results
-                    BluetoothDataTransferService(socket).also {
-                        dataTransferService = it
-                        emitAll(
-                            it.listenForIncomingMessages()
-                                .map { RegistrationResult.RegistrationSucceeded(it) }
-                        )
+                    // Initialize the data transfer service
+                    val dataTransferService = BluetoothDataTransferService(socket)
+                    // Send a simple message to initiate the key exchange
+                    val initiationMessage = "InitiateKeyExchange"
+                    dataTransferService.sendMessage(initiationMessage.encodeToByteArray())
+                    // Listen for incoming messages to receive the response
+                    val incomingMessages = dataTransferService.listenForIncomingMessages()
+                    // Process incoming messages until the key exchange is complete or a timeout occurs
+                    incomingMessages.collect { message ->
+                        // Check if the received message is the expected response
+                        if (message.message == "Confirmation: InitiateKeyExchange") {
+                            // Key exchange successful, emit a successful registration result
+                            emit(RegistrationResult.RegistrationEstablished)
+                        } else {
+                            // Handle unexpected response or key exchange failure
+                        }
                     }
-                } catch(e: IOException) {
+                } catch (e: IOException) {
                     // Close the socket if the connection was interrupted
                     socket.close()
                     currentClientSocket = null
@@ -285,6 +292,7 @@ class AndroidBluetoothController(
             closeRegistration()
         }.flowOn(Dispatchers.IO)
     }
+
 
     // Function to attempt sending a message via Bluetooth
     override suspend fun trySendMessage(message: String): BluetoothMessage? {
@@ -310,6 +318,8 @@ class AndroidBluetoothController(
 
         return bluetoothMessage
     }
+
+
 
     // Function to close the Bluetooth connection
     override fun closeConnection() {

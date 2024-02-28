@@ -49,7 +49,10 @@ import com.example.digitalkeyfobcomp.ProfileState
 import com.example.digitalkeyfobcomp.ProfileViewModel
 import com.example.digitalkeyfobcomp.bitmapToHash
 import com.example.digitalkeyfobcomp.components.BottomNavigation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import se.warting.signaturepad.SignaturePadAdapter
 import se.warting.signaturepad.SignaturePadView
 
@@ -234,6 +237,19 @@ fun ProfileScreen(
                                         onEvent(ProfileEvent.SaveProfile) // Saving profile
                                         blueViewModel.registerToDevice(selectedDevice)
 
+
+
+// Handle the key exchange result
+//                                        when (keyExchangeResult) {
+//                                            is KeyExchangeResult.Success -> {
+//                                                // Key exchange successful, proceed with encryption using shared secret
+//                                                val sharedSecret = keyExchangeResult.sharedSecret
+//                                                // Use the shared secret for encryption
+//                                            }
+//                                            is KeyExchangeResult.Failure -> {
+//                                                // Key exchange failed, handle the failure
+//                                            }
+//                                        }
                                         openDialog.value = false
                                     }
 //                                    onDeviceClick = blueViewModel::connectToDevice
@@ -277,3 +293,42 @@ fun ProfileInput() {
         label = { Text("Enter New Profile Name") }
     )
 }
+
+sealed class KeyExchangeResult {
+    data class Success(val sharedSecret: ByteArray) : KeyExchangeResult()
+    data class Failure(val errorMessage: String) : KeyExchangeResult()
+}
+//suspend fun performKeyExchange(bluetoothViewModel: BluetoothViewModel): KeyExchangeResult {
+//    return withContext(Dispatchers.IO) {
+//        performKeyExchangeInternal(bluetoothViewModel)
+//    }
+//}
+//
+//private suspend fun performKeyExchangeInternal(bluetoothViewModel: BluetoothViewModel): KeyExchangeResult {
+//    // Step 1: Send a key exchange request message
+//    val requestMessage = "KEY_EXCHANGE_REQUEST"
+//    bluetoothViewModel.sendMessage(requestMessage)
+//
+//    // Step 2: Wait for the remote device's response
+//    val responseMessage = collectResponseMessage(bluetoothViewModel) ?: return KeyExchangeResult.Failure("Failed to receive key exchange response")
+//
+//    // Step 3: Process the response and extract the shared secret
+//    if (responseMessage == "KEY_EXCHANGE_ACCEPTED") {
+//        // Step 4: Send the shared secret confirmation message
+//        val confirmationMessage = "KEY_EXCHANGE_CONFIRMED"
+//        bluetoothViewModel.sendMessage(confirmationMessage)
+//
+//        // Step 5: Return success with the shared secret
+//        return KeyExchangeResult.Success(generateSharedSecret())
+//    } else {
+//        // Step 6: Handle rejection from the remote device
+//        return KeyExchangeResult.Failure("Key exchange request rejected")
+//    }
+//}
+//
+//private suspend fun collectResponseMessage(bluetoothViewModel: BluetoothViewModel): String? {
+//    // Collect incoming messages until a response is received
+//    return bluetoothViewModel.listenForIncomingMessages()
+//        .takeWhile { it != "KEY_EXCHANGE_ACCEPTED" }
+//        .firstOrNull()
+//}

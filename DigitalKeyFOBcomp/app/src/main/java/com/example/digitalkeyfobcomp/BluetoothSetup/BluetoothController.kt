@@ -37,6 +37,7 @@ interface BluetoothController {
     // Function to initiate a connection to a remote Bluetooth device
     fun connectToDevice(device: BluetoothDevice): Flow<ConnectionResult>
 
+
     // Function to initiate a registration connection to a remote Bluetooth device
     fun registerToDevice(device: BluetoothDevice): Flow<RegistrationResult> //new
 

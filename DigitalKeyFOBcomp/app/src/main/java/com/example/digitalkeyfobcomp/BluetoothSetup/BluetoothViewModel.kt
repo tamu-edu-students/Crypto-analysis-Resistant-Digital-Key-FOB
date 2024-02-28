@@ -86,55 +86,10 @@ class BluetoothViewModel @Inject constructor(
     fun registerToDevice(device: BluetoothDeviceDomain) {
         _state.update { it.copy(isRegistering = true) }
 
-        deviceConnectionJob = viewModelScope.launch {
-            try {
-                // Start the registration process
-                val registrationResult = bluetoothController.registerToDevice(device).first()
-
-                // Handle the registration result
-                when (registrationResult) {
-                    is RegistrationResult.RegistrationEstablished -> {
-                        // Handle successful registration
-                        _state.update { it.copy(isRegistered = true, isRegistering = false, errorMessage = null) }
-                        // Now that registration is done, send the message
-                        bluetoothController.trySendMessage("hellow")
-                    }
-                    is RegistrationResult.Error -> {
-                        // Handle registration error
-                        _state.update { it.copy(isRegistered = false, isRegistering = false, errorMessage = registrationResult.message) }
-                    }
-
-                    else -> {}
-                }
-            } catch (e: Exception) {
-                // Handle exceptions
-                _state.update { it.copy(errorMessage = "Error during registration: ${e.message}") }
-            }
-        }
+        deviceConnectionJob = bluetoothController
+            .registerToDevice(device)
+            .listenForRegistration()
     }
-
-
-//    fun registerToDevice(device: BluetoothDeviceDomain) {
-//        _state.update { it.copy(isRegistering = true) }
-//
-//        // Start a timer to automatically transition out of the registering state after 10 seconds
-////        val timer = Timer()
-////        val timerTask = timer.schedule(10000) {
-////            viewModelScope.launch {
-////                // Check the state and show the connection failed message if needed
-////                if (!_state.value.isRegistering) {
-////                    disconnectFromDevice()
-////                }
-////            }
-////        }
-//
-//
-//        deviceConnectionJob = bluetoothController
-//            .registerToDevice(device)
-//            .listenForRegistration()
-//
-//        Register()
-//    }
 
 
     // Function to disconnect from a Bluetooth device
@@ -164,14 +119,7 @@ class BluetoothViewModel @Inject constructor(
         }
     }
 
-    fun Register() {
-        viewModelScope.launch {
-            val bluetoothMessage = bluetoothController.trySendMessage("hellowHowWASYOURDAY")
-            if (bluetoothMessage != null) {
-                _state.update { it.copy(messages = it.messages + bluetoothMessage) }
-            }
-        }
-    }
+
 
     // Function to start Bluetooth discovery
     fun startScan() {
@@ -211,7 +159,7 @@ class BluetoothViewModel @Inject constructor(
                     _state.update { it.copy(isRegistered = true, isRegistering = false, errorMessage = null) }
                 }
                 is RegistrationResult.RegistrationSucceeded -> {
-                    // Handle successful registration here if needed
+                    _state.update { it.copy(messages = it.messages + result.message, latestMessage = result.message) }
                 }
                 is RegistrationResult.Error -> {
                     _state.update { it.copy(isRegistered = false, isRegistering = false, errorMessage = result.message) }
