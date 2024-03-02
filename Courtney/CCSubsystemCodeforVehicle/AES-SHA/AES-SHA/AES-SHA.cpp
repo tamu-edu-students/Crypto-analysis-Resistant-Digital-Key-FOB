@@ -4,6 +4,7 @@
 #include "files.h"
 #include "osrng.h"
 #include "hex.h"
+#include "base64.h"
 
 #include <iostream>
 #include <string>
@@ -18,35 +19,25 @@ int main(int argc, char* argv[])
     //Setting up The Key, IV, and Cipher/Plain Text Variables
     std::string cipherText;
     std::string plainText;
+    std::string AESKey;
 
-    AutoSeededRandomPool prng; //defining a variable for random generation which follows cryptography standards
     HexEncoder encoder(new FileSink(std::cout)); //encoder to turn bytes into encoded hex
 
-    SecByteBlock key(AES::DEFAULT_KEYLENGTH); //setting up the lengths of the key byte block
-    SecByteBlock iv(AES::BLOCKSIZE); //setting up the lengths of the iv byte block
+    AESKey = "j8e83vUr8EWoc37M";
+    std::vector<unsigned char> IVecV{ 0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32 };
 
-    prng.GenerateBlock(key, key.size()); //generating the key
-    prng.GenerateBlock(iv, iv.size()); //generating the iv
+    SecByteBlock EncryptKey(reinterpret_cast<const byte*>(&AESKey[0]), AESKey.size());
+    SecByteBlock IVecB(reinterpret_cast<const byte*>(&IVecV[0]), IVecV.size());
 
-    std::string start = "This will be replaced with the ZHardware Profile"; //String to encrypt and decrypt
+    std::string start = "Demo"; //String to encrypt and decrypt
     std::string cipher, plain; //setting up the variable for the cipher and recovered plain text
 
-    //Printing out the Starting Phrase, Key, and IV
+    //Printing out the Starting Phrase
     std::cout << "Starting Phrase text: " << start << std::endl;
-
-    std::cout << "Key: ";
-    encoder.Put(key, key.size());
-    encoder.MessageEnd();
-    std::cout << std::endl;
-
-    std::cout << "IV: ";
-    encoder.Put(iv, iv.size());
-    encoder.MessageEnd();
-    std::cout << std::endl;
 
     //Setting up the Instances of Encryption
     CBC_Mode<AES>::Encryption e;
-    e.SetKeyWithIV(key, key.size(), iv);
+    e.SetKeyWithIV(EncryptKey, EncryptKey.size(), IVecB);
 
     //Doing the Encryption - Only for demonstration purposes, will be taken out later.
     //Done using Piplining - Takes the data and passes it through the encrytption filter using strings and pointers.
@@ -54,7 +45,9 @@ int main(int argc, char* argv[])
         start,
         true,
         new StreamTransformationFilter(e,
-            new StringSink(cipher)
+            new Base64Encoder(
+                new StringSink(cipher)       
+            )
         )
     );
 
@@ -65,15 +58,19 @@ int main(int argc, char* argv[])
     std::cout << std::endl;
 
     //Doing the Decryption
-    //Similar to the encryption (setting up the instances then doing the decryption with piplining)
+    //Setting up the instances
     CBC_Mode <AES>::Decryption d;
-    d.SetKeyWithIV(key, key.size(), iv);
+    d.SetKeyWithIV(EncryptKey, EncryptKey.size(), IVecB);
 
+    //Doing the decryption with piplining
     StringSource ss(
         cipher,
         true,
-        new StreamTransformationFilter(d, 
-            new StringSink(plain))
+        new Base64Decoder(
+            new StreamTransformationFilter(d,
+                new StringSink(plain)
+            )
+        )
     );
 
     std::cout << "Plain Text: " << plain << std::endl;
@@ -82,7 +79,7 @@ int main(int argc, char* argv[])
     std::cout << std::endl << "SHA-256 " << std::endl;
 
     //Setting up the starting message and the output variable
-    std::string msgStart = "This will be replaced with the Dynamic Digital Signature and Command";
+    std::string msgStart = "Demonstration";
     std::string msgDigest;
 
     SHA256 hashAlgorithm;

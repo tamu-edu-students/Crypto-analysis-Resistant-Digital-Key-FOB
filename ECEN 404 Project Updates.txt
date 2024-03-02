@@ -1,0 +1,9 @@
+Week of Jan. 17 - Checked subsystems are still in working order. Discussed plans for integration and updated the execution and validation plans for 404. 
+
+Week of Jan. 24 - Adriana worked on bluetooth for the locking mechanism. Jeremy worked on updating the profile registration UI. Courtney explored RSA as a replacement for the Diffie-Hellman Key Exchange.
+
+Week of Jan. 31 -  Jeremy and Courtney integrated the Z-Hardware Profile creation code. Adriana worked on the bluetooth. Courtney also worked on integrating the C++ and Java versions of the AES algorithum. 
+
+Week of Feb. 7 - Jeremy and Adriana worked on finishing up bluetooth integration. Courtney worked on AES C++ and Java integration and preparing the DHKE for integration.
+
+Week of Feb. 14 - Jeremy worked on the UI interface and bluetooth for the Registration Process. Adriana worked on creating a database for her PCB. Courtney worked on integrating the C++ and Java methods of AES.

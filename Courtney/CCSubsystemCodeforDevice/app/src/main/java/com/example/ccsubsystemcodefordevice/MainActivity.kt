@@ -39,23 +39,24 @@ class MainActivity : ComponentActivity() {
 //DHKE Before Being Send to the Vehicle
 @Composable
 fun DHKEBefore(modifier: Modifier = Modifier) {
+    //A gets passed via bluetooth to the Vehicle
     Surface(color = Color.LightGray) {
         //Setting P and G - P is the prime number and G is the generator (primative root of P)
-        val P = BigInteger("653")
-        val G = BigInteger("5")
+        val P = BigInteger("13")
+        val G = BigInteger("7")
 
         //Creating the random A for the Vehicle
         val randInt = SecureRandom() //special randomization that follow standard cryptography protocols
-        val a = randInt.nextInt(6)
+        val a = randInt.nextInt(15)
 
         //Doing the Diffie-Hellman Process (G^a mod P)
-        var A = BigInteger("2")
-        A = (G.pow(a)) % P //mathematics
+        var GiveMetoVehicle = BigInteger("2")
+        GiveMetoVehicle = (G.pow(a)) % P //mathematics
 
         //Outputs the text to use for demonstration and debugging purposes
         Text(text = "Before Vehicle: P = $P \n\nG = $G" +
                 "\n\nA Val = $a" +
-                "\n\nVehicle DHKE Portion = $A",
+                "\n\nVehicle DHKE Portion = $GiveMetoVehicle",
             modifier = modifier.padding(12.dp))
     }
 }

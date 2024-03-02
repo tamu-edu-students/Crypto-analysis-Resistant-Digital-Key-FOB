@@ -37,15 +37,16 @@ class DHKEPt2 : ComponentActivity() {
 //DHKE Return From Vehicle
 @Composable
 fun DHKEAfter(modifier: Modifier = Modifier) {
+    //A from the main activity
     Surface(color = Color.LightGray) {
         //Setting the Values of P, A, and B
         //P is predetermined, A is calculated before, and B is taken from the vehicle.
-        val P = BigInteger("653")
-        val a: Int = 1 //This has to be changed with the unique A value from the first part.
-        val B = BigInteger("513") //Add in the value of B from the vehicle here.
+        val P = BigInteger("13")
+        val GetMeFromPart1: Int = 1 //This has to be changed with the unique A value from the first part.
+        val GetMeFromVehicle = BigInteger("513") //Add in the value of B from the vehicle here.
 
         //Calculating the final secret key - B^a mod P
-        val sk = (B.pow(a) % P)
+        val sk = (GetMeFromVehicle.pow(GetMeFromPart1) % P)
 
         //Text Output for demonstration and debugging.
         Text(text = "Testing: \nSk = $sk", modifier = modifier.padding(12.dp))

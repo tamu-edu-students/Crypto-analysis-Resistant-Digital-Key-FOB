@@ -22,6 +22,9 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.SecretKeySpec
 import java.math.BigInteger
+import java.security.SecureRandom
+import javax.crypto.SecretKey
+import java.security.spec.KeySpec
 
 
 class AdvancedEncryptionStandard : ComponentActivity() {
@@ -44,42 +47,42 @@ class AdvancedEncryptionStandard : ComponentActivity() {
 @Composable
 fun AESEncryption(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
-        /* In general commands with spec in them confine the data going in by the specifications of
+        /* In general, commands with spec in them confine the data going in by the specifications of
         the given algorithm or key. It essentially turns the original key data into a key that is
         of use and type safe for the algorithum. */
 
-        //Setting up variables for the AES Encryption
-        val SecretKeyInt = BigInteger("3874") //SecretKey from the Diffie-Hellman Key Exchange
-        val SecretKey = SecretKeyInt.toString() //Turning that to a string to output
-        //Below: Index Vector - used to initialize AES - this was chosen at random, eventually must match vehicle.
-        val ivbytes = byteArrayOf(0x64, 0x7b, 0x5e, 0x57, 0x67, 0x1f, 0x2c, 0x10, 0x43, 0x25, 0x0a, 0x25, 0x72, 0x12, 0x49, 0x03)
-        val salt = "CrytoAnalysisDigtialKeyFOB" //This is used in the generation to turn the DHKE result into a key
-        val zHardware = "This will later be replaced with the Z-Hardware Profile" //Text to encrypt
+        //Pre-Set variables (intake) for the AES Encryption
+        val SecretKeyStr = "j8e83vUr8EWoc37M" //SecretKey from the Diffie-Hellman Key Exchange
+        val SecretKey = SecretKeyStr.toByteArray() //Turning that to a byte array for the encryption
 
-        //IV Spec - used in the initiation of the AES - confines the IV to the necessary specification for AES
-        val ivspec = IvParameterSpec(ivbytes);
+        //Below: Initialization Vector - used to initialize AES
+        val iv = byteArrayOf(0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32)
 
-        //Chaning the resulting key from the Diffie-Hellman Output into a Password Based Encryption Key
-        val factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256") //setting up the algorithm to turn the DHKE output into a key
-        //Setting up the specifics for the specification of the PBE key
-        val spec = PBEKeySpec(SecretKey.toCharArray(), salt.toByteArray(), 65536, 256)
-        val sk_temp = factory.generateSecret(spec) //generating the key based on the specification
-        val symmetricKeySpec = SecretKeySpec(sk_temp.getEncoded(), "AES") //generating the final key spec
+        val zHardware = "Demo" //Text to encrypt
+        val zHardwareByte = zHardware.toByteArray(Charsets.UTF_8)
+
+        //Specs - used in the initiation of the AES - confines the IV and key to the necessary specification for AES
+        val ivspec = IvParameterSpec(iv);
+        val keyspec = SecretKeySpec(SecretKey, "AES") //generating the final key spec
 
         //Doing the encryption
         val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding") //getting the instance of AES - i.e. setting it up
-        cipher.init(Cipher.ENCRYPT_MODE, symmetricKeySpec, ivspec) //initializing the cipher and the specific mod needed.
-        val cipherText = cipher.doFinal(zHardware.toByteArray()) //Performs the encryption
+        cipher.init(Cipher.ENCRYPT_MODE, keyspec, ivspec) //initializing the cipher and the specific mod needed.
+        val cipherText = cipher.doFinal(zHardwareByte) //Performs the encryption
+
         //Turning the cipherText from binary into a string through Base64 encoding so it can be outputted.
         val cipherTextString = Base64.getEncoder().encodeToString(cipherText)
 
         //Doing the Decryption (For Demo Purposes - will be taken out later when integrated)
         val dataEncryptedAbove = Base64.getDecoder().decode(cipherTextString) //Decrypting the string back to binary.
-        cipher.init(Cipher.DECRYPT_MODE, symmetricKeySpec, ivspec) //setting up the decrypt instance of AES
+        cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec) //setting up the decrypt instance of AES
         val returnText = cipher.doFinal(dataEncryptedAbove) //doing the decryption
         val returnTextString = String(returnText) //turning the final output from a Byte Array into a string that can be outputted.
 
         Text(text = "Testing: \nPlain Text: $zHardware" +
+                "\n\nKey (String): $SecretKeyStr" +
+                "\n\nKey (Byte Array): $SecretKey" +
+                "\n\nIV: $iv" +
                 "\n\nCipher Text: $cipherTextString" +
                 "\n\nReturn Text: $returnTextString",
             modifier = modifier.padding(12.dp))

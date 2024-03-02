@@ -4,4 +4,5 @@
     <string name="title_activity_zhardware_profile">ZHardwareProfile</string>
     <string name="title_activity_advanced_encryption_standard">AdvancedEncryptionStandard</string>
     <string name="title_activity_dhkept2">DHKEPt2</string>
+    <string name="title_activity_aesecb">AESECB</string>
 </resources>
