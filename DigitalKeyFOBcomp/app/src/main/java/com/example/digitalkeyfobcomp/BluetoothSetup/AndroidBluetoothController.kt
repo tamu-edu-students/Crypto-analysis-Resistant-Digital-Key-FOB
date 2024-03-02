@@ -10,10 +10,14 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.widget.Toast
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothDeviceDomain
+import com.example.digitalkeyfobcomp.Encryption.DHKEAfter
+import com.example.digitalkeyfobcomp.Encryption.DHKEBefore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +32,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.IOException
+import java.math.BigInteger
 import java.security.PublicKey
 import java.util.*
 
@@ -75,6 +80,10 @@ class AndroidBluetoothController(
     private val _errors = MutableSharedFlow<String>()
     override val errors: SharedFlow<String>
         get() = _errors.asSharedFlow()
+
+    private val _usermessage = MutableSharedFlow<String>()
+    override val usermessage: SharedFlow<String>
+        get() = _usermessage.asSharedFlow()
 
     // BroadcastReceiver for handling discovered devices
     private val foundDeviceReceiver = FoundDeviceReceiver { device ->
@@ -242,8 +251,62 @@ class AndroidBluetoothController(
     }
 
 
+//    override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
+//        return flow {
+//            // Check if the necessary Bluetooth connect permission is granted
+//            if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+//                throw SecurityException("No BLUETOOTH_CONNECT permission")
+//            }
+//
+//            // Create a Bluetooth socket to the specified remote device
+//            currentClientSocket = bluetoothAdapter
+//                ?.getRemoteDevice(device.address)
+//                ?.createRfcommSocketToServiceRecord(
+//                    UUID.fromString(SERVICE_UUID)
+//                )
+//            // Stop ongoing device discovery
+//            stopDiscovery()
+//
+//            currentClientSocket?.let { socket ->
+//                try {
+//                    // Attempt to connect to the remote device
+//                    socket.connect()
+//                    // Initialize the data transfer service
+//                    val dataTransferService = BluetoothDataTransferService(socket)
+//                    // Send a simple message to initiate the key exchange
+//                    val initiationMessage = "InitiateKeyExchange"
+//                    dataTransferService.sendMessage(initiationMessage.encodeToByteArray())
+//                    // Listen for incoming messages to receive the response
+//                    val incomingMessages = dataTransferService.listenForIncomingMessages()
+//                    // Process incoming messages until the key exchange is complete or a timeout occurs
+//                    incomingMessages.collect { message ->
+//                        // Check if the received message is the expected response
+//                        if (message.message == "Confirmation: InitiateKeyExchange") {
+//                            // Key exchange successful, emit a successful registration result
+//                            emit(RegistrationResult.RegistrationEstablished)
+//                        } else {
+//                            // Handle unexpected response or key exchange failure
+//                        }
+//                    }
+//                } catch (e: IOException) {
+//                    // Close the socket if the connection was interrupted
+//                    socket.close()
+//                    currentClientSocket = null
+//                    // Emit an error result
+//                    emit(RegistrationResult.Error("Registration was interrupted"))
+//                }
+//            }
+//        }.onCompletion {
+//            // Close the connection when the flow completes
+//            closeRegistration()
+//        }.flowOn(Dispatchers.IO)
+//    }
+
     override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
         return flow {
+            // Generate DHKE values
+            val dhkeBeforeResult = DHKEBefore()
+
             // Check if the necessary Bluetooth connect permission is granted
             if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No BLUETOOTH_CONNECT permission")
@@ -264,19 +327,29 @@ class AndroidBluetoothController(
                     socket.connect()
                     // Initialize the data transfer service
                     val dataTransferService = BluetoothDataTransferService(socket)
-                    // Send a simple message to initiate the key exchange
-                    val initiationMessage = "InitiateKeyExchange"
-                    dataTransferService.sendMessage(initiationMessage.encodeToByteArray())
+
+                    // Send the public key generated by DHKE
+                    val publicKeyMessage = "${dhkeBeforeResult.first}"
+                    dataTransferService.sendMessage(publicKeyMessage.encodeToByteArray())
+
                     // Listen for incoming messages to receive the response
                     val incomingMessages = dataTransferService.listenForIncomingMessages()
-                    // Process incoming messages until the key exchange is complete or a timeout occurs
+
+                    // Receive and process the public key from the remote device
                     incomingMessages.collect { message ->
-                        // Check if the received message is the expected response
-                        if (message.message == "Confirmation: InitiateKeyExchange") {
-                            // Key exchange successful, emit a successful registration result
+                        // Check if the received message contains the public key
+                        val receivedMessage = message.message
+                        if (receivedMessage.startsWith("Public Key:")) {
+                            // Extract the public key from the message
+                            val publicKeyString = receivedMessage.substringAfter("Public Key:").trim()
+                            val receivedPublicKey = BigInteger(publicKeyString)
+                            // Show a toast message with the received public key
+                            val sharedKey = DHKEAfter(receivedPublicKey, dhkeBeforeResult.second)
+
                             emit(RegistrationResult.RegistrationEstablished)
                         } else {
                             // Handle unexpected response or key exchange failure
+                            // for input string "7.0"
                         }
                     }
                 } catch (e: IOException) {
@@ -292,6 +365,9 @@ class AndroidBluetoothController(
             closeRegistration()
         }.flowOn(Dispatchers.IO)
     }
+
+
+
 
 
     // Function to attempt sending a message via Bluetooth

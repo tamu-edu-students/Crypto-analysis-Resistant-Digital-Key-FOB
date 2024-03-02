@@ -25,6 +25,8 @@ interface BluetoothController {
     // SharedFlow for emitting error messages
     val errors: SharedFlow<String>
 
+    val usermessage: SharedFlow<String>
+
     // Function to start discovering nearby Bluetooth devices
     fun startDiscovery()
 

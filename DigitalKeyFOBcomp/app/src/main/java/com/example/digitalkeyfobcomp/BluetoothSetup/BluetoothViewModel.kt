@@ -62,6 +62,11 @@ class BluetoothViewModel @Inject constructor(
         bluetoothController.errors.onEach { error ->
             _state.update { it.copy(errorMessage = error) }
         }.launchIn(viewModelScope)
+
+        bluetoothController.usermessage.onEach { usermessage ->
+            _state.update { it.copy(userMessage = usermessage) }
+        }.launchIn(viewModelScope)
+
     }
 
     // Function to initiate a connection to a Bluetooth device
@@ -163,6 +168,9 @@ class BluetoothViewModel @Inject constructor(
                 }
                 is RegistrationResult.Error -> {
                     _state.update { it.copy(isRegistered = false, isRegistering = false, errorMessage = result.message) }
+                }
+                is RegistrationResult.Usermessage -> {
+                    _state.update { it.copy(userMessage = result.message) }
                 }
             }
         }.catch { throwable ->

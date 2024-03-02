@@ -23,4 +23,6 @@ sealed interface RegistrationResult {
 
     // Sealed class indicating an error during the Bluetooth connection, carrying an error message
     data class Error(val message: String) : RegistrationResult
+
+    data class Usermessage(val message: String) : RegistrationResult
 }

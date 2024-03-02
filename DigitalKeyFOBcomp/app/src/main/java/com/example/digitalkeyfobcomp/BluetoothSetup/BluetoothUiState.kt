@@ -12,6 +12,7 @@ data class BluetoothUiState(
     val isRegistered: Boolean = false,
 
     val errorMessage: String? = null,                          // Error message, if any
+    val userMessage: String? = null,
     val messages: List<BluetoothMessage> = emptyList(),        // List of Bluetooth messages
     val latestMessage: BluetoothMessage? = null                // The latest received Bluetooth message
 )

@@ -286,4 +286,3 @@ fun ExpandableCardControl(question: String, answer: String) {
 fun booleanToInt(b: Boolean): Int {
     return if (b) 1 else 0
 }
-

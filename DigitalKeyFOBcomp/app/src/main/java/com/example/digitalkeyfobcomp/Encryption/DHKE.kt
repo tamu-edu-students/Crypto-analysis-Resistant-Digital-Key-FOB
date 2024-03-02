@@ -9,21 +9,24 @@ import androidx.compose.ui.unit.dp
 import java.math.BigInteger
 import java.security.SecureRandom
 
-fun DHKEBefore(): BigInteger {
+fun twoPair(B: BigInteger, a: Int): Pair<BigInteger, Int> = B to a // equivalent to Pair("Ali", 33)
+
+fun DHKEBefore(): Pair<BigInteger, Int> {
 //    Surface(color = Color.LightGray) {
         //Setting P and G - P is the prime number and G is the generator (primative root of P)
-        val P = BigInteger("653")
-        val G = BigInteger("5")
+        val P = BigInteger("13")
+        val G = BigInteger("7")
 
         //Creating the random A for the Vehicle
         val randInt = SecureRandom() //special randomization that follow standard cryptography protocols
-        val a = randInt.nextInt(6)
+        val a = randInt.nextInt(15) // pass to DHKE after
 
         //Doing the Diffie-Hellman Process (G^a mod P)
         var A = BigInteger("2")
         A = (G.pow(a)) % P //mathematics
 
-        return A
+        val retunval = twoPair(A,a)
+        return retunval
         //Outputs the text to use for demonstration and debugging purposes
 //        Text(text = "Before Vehicle: P = $P \n\nG = $G" +
 //                "\n\nA Val = $a" +
@@ -32,13 +35,14 @@ fun DHKEBefore(): BigInteger {
 //    }
 }
 
-fun DHKEAfter(): BigInteger {
+fun DHKEAfter(B: BigInteger, a: Int): BigInteger {
 //    Surface(color = Color.LightGray) {
         //Setting the Values of P, A, and B
         //P is predetermined, A is calculated before, and B is taken from the vehicle.
-        val P = BigInteger("653")
-        val a: Int = 1 //This has to be changed with the unique A value from the first part.
-        val B = BigInteger("513") //Add in the value of B from the vehicle here.
+        val P = BigInteger("13")
+//        val a: Int = 1 //This has to be changed with the unique A value from the first part.
+
+//        val B = BigInteger("7") //Add in the value of B from the vehicle here.
 
         //Calculating the final secret key - B^a mod P
         val sk = (B.pow(a) % P)
