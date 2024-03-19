@@ -63,9 +63,9 @@ class BluetoothViewModel @Inject constructor(
             _state.update { it.copy(errorMessage = error) }
         }.launchIn(viewModelScope)
 
-        bluetoothController.usermessage.onEach { usermessage ->
-            _state.update { it.copy(userMessage = usermessage) }
-        }.launchIn(viewModelScope)
+//        bluetoothController.usermessage.onEach { usermessage ->
+//            _state.update { it.copy(userMessage = usermessage) }
+//        }.launchIn(viewModelScope)
 
     }
 
@@ -184,6 +184,5 @@ class BluetoothViewModel @Inject constructor(
         super.onCleared()
         bluetoothController.release()
     }
-    // registraiton stuff
 
 }

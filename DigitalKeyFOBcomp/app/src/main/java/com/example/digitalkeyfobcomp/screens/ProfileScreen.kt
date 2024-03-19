@@ -234,22 +234,13 @@ fun ProfileScreen(
                                             Toast.LENGTH_SHORT
                                         ).show()
 
-                                        onEvent(ProfileEvent.SaveProfile) // Saving profile
+                                        // Saving profile
                                         blueViewModel.registerToDevice(selectedDevice)
 
+                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
 
+                                        onEvent(ProfileEvent.SaveProfile)
 
-// Handle the key exchange result
-//                                        when (keyExchangeResult) {
-//                                            is KeyExchangeResult.Success -> {
-//                                                // Key exchange successful, proceed with encryption using shared secret
-//                                                val sharedSecret = keyExchangeResult.sharedSecret
-//                                                // Use the shared secret for encryption
-//                                            }
-//                                            is KeyExchangeResult.Failure -> {
-//                                                // Key exchange failed, handle the failure
-//                                            }
-//                                        }
                                         openDialog.value = false
                                     }
 //                                    onDeviceClick = blueViewModel::connectToDevice

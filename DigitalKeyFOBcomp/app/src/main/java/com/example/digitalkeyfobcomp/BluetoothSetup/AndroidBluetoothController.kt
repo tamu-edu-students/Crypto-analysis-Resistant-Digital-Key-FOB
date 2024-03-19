@@ -81,9 +81,9 @@ class AndroidBluetoothController(
     override val errors: SharedFlow<String>
         get() = _errors.asSharedFlow()
 
-    private val _usermessage = MutableSharedFlow<String>()
-    override val usermessage: SharedFlow<String>
-        get() = _usermessage.asSharedFlow()
+//    private val _usermessage = MutableSharedFlow<String>()
+//    override val usermessage: SharedFlow<String>
+//        get() = _usermessage.asSharedFlow()
 
     // BroadcastReceiver for handling discovered devices
     private val foundDeviceReceiver = FoundDeviceReceiver { device ->
@@ -342,14 +342,21 @@ class AndroidBluetoothController(
                         if (receivedMessage.startsWith("Public Key:")) {
                             // Extract the public key from the message
                             val publicKeyString = receivedMessage.substringAfter("Public Key:").trim()
-                            val receivedPublicKey = BigInteger(publicKeyString)
+
+                            // Remove the decimal part if present
+                            val integerPart = publicKeyString.substringBefore(".").trim()
+
+                            // Parse the integer part to BigInteger
+                            val receivedPublicKey = BigInteger(integerPart)
+
                             // Show a toast message with the received public key
                             val sharedKey = DHKEAfter(receivedPublicKey, dhkeBeforeResult.second)
+                            emit(RegistrationResult.Usermessage("Received public key: $sharedKey"))
 
                             emit(RegistrationResult.RegistrationEstablished)
                         } else {
                             // Handle unexpected response or key exchange failure
-                            // for input string "7.0"
+                           emit(RegistrationResult.Error("registration failed"))
                         }
                     }
                 } catch (e: IOException) {
