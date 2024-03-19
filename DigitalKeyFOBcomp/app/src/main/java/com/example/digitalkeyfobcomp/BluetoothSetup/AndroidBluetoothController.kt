@@ -13,6 +13,7 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothDeviceDomain
+import com.example.digitalkeyfobcomp.Encryption.DDS
 import com.example.digitalkeyfobcomp.Encryption.DHKEAfter
 import com.example.digitalkeyfobcomp.Encryption.DHKEBefore
 import kotlinx.coroutines.CoroutineScope
@@ -376,7 +377,6 @@ class AndroidBluetoothController(
 
 
 
-
     // Function to attempt sending a message via Bluetooth
     override suspend fun trySendMessage(message: String): BluetoothMessage? {
         // Check if the necessary Bluetooth connect permission is granted
@@ -396,11 +396,37 @@ class AndroidBluetoothController(
             isFromLocalUser = true
         )
 
+        val finalmessage = DDS("105926696395547794221731657698776911235116083757072597824902476161628405855886$message") + message
         // Send the message using the data transfer service
-        dataTransferService?.sendMessage(bluetoothMessage.toByteArray())
+        dataTransferService?.sendMessage(finalmessage.toByteArray())
 
         return bluetoothMessage
     }
+
+    // Function to attempt sending a message via Bluetooth
+//    override suspend fun trySendMessage(message: String): BluetoothMessage? {
+//        // Check if the necessary Bluetooth connect permission is granted
+//        if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+//            return null
+//        }
+//
+//        // Check if the data transfer service is initialized
+//        if(dataTransferService == null) {
+//            return null
+//        }
+//
+//        // Create a BluetoothMessage instance
+//        val bluetoothMessage = BluetoothMessage(
+//            message = message,
+//            senderName = bluetoothAdapter?.name ?: "Unknown name",
+//            isFromLocalUser = true
+//        )
+//
+//        // Send the message using the data transfer service
+//        dataTransferService?.sendMessage(bluetoothMessage.toByteArray())
+//
+//        return bluetoothMessage
+//    }
 
 
 
