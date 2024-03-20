@@ -96,6 +96,7 @@ class BluetoothViewModel @Inject constructor(
             .listenForRegistration()
     }
 
+    
 
     // Function to disconnect from a Bluetooth device
     fun disconnectFromDevice() {
@@ -115,9 +116,9 @@ class BluetoothViewModel @Inject constructor(
     }
 
     // Function to send a message over Bluetooth
-    fun sendMessage(message: String) {
+    fun sendMessage(message: String, devicekey: String) {
         viewModelScope.launch {
-            val bluetoothMessage = bluetoothController.trySendMessage(message)
+            val bluetoothMessage = bluetoothController.trySendMessage(message, devicekey)
             if (bluetoothMessage != null) {
                 _state.update { it.copy(messages = it.messages + bluetoothMessage) }
             }

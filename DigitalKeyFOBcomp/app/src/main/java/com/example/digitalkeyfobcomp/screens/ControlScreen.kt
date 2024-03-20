@@ -79,6 +79,7 @@ fun ControlScreen(
     val ledSize = 24.dp
     val imagesize = 30
     var rememberedProfile by remember { mutableStateOf("") }
+    var DeviceKey by remember { mutableStateOf("") }
     val context = LocalContext.current
     var message = 0
     val coroutineScope = rememberCoroutineScope()
@@ -91,6 +92,7 @@ fun ControlScreen(
         retrievedProfile?.let { profile ->
             selectedProfile = profile
             rememberedProfile = profile.name
+            DeviceKey= profile.sigid
         }
         val retrievedModes: CarModes? = preferencesManager.getData("selectedProfileMode", null)
         if (retrievedModes != null) {
@@ -153,7 +155,7 @@ fun ControlScreen(
                         if (bluetoothState.isConnected) {
                             selectedCarModes.engine = !selectedCarModes.engine
                             message = booleanToInt(selectedCarModes.engine)
-                            blueViewModel.sendMessage("Mode0$message")
+                            blueViewModel.sendMessage("Mode0$message", DeviceKey)
                             Toast
                                 .makeText(
                                     context,
@@ -170,6 +172,7 @@ fun ControlScreen(
                                 )
                                 .show()
                         }
+                        // saving locked/unlocked or engine state
                         coroutineScope.launch {
                             selectedCarModes.let { selectedCarModes -> preferencesManager.saveData("selectedProfileMode", selectedCarModes) }
                         }
@@ -200,7 +203,7 @@ fun ControlScreen(
                             if (bluetoothState.isConnected) {
                                 selectedCarModes.locked = !selectedCarModes.locked
                                 message = booleanToInt(selectedCarModes.locked)
-                                blueViewModel.sendMessage("Mode1$message")
+                                blueViewModel.sendMessage("Mode1$message", DeviceKey)
                                 Toast
                                     .makeText(context, "Mode1$message$rememberedProfile", Toast.LENGTH_SHORT)
                                     .show()
@@ -213,6 +216,7 @@ fun ControlScreen(
                                     )
                                     .show()
                             }
+                            // saving locked/unlocked or engine state
                             coroutineScope.launch {
                                 selectedCarModes.let { selectedCarModes -> preferencesManager.saveData("selectedProfileMode", selectedCarModes) }
                             }

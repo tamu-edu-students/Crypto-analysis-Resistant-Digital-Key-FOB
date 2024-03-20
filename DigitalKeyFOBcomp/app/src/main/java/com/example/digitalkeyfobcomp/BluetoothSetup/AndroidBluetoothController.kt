@@ -252,57 +252,6 @@ class AndroidBluetoothController(
     }
 
 
-//    override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
-//        return flow {
-//            // Check if the necessary Bluetooth connect permission is granted
-//            if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
-//                throw SecurityException("No BLUETOOTH_CONNECT permission")
-//            }
-//
-//            // Create a Bluetooth socket to the specified remote device
-//            currentClientSocket = bluetoothAdapter
-//                ?.getRemoteDevice(device.address)
-//                ?.createRfcommSocketToServiceRecord(
-//                    UUID.fromString(SERVICE_UUID)
-//                )
-//            // Stop ongoing device discovery
-//            stopDiscovery()
-//
-//            currentClientSocket?.let { socket ->
-//                try {
-//                    // Attempt to connect to the remote device
-//                    socket.connect()
-//                    // Initialize the data transfer service
-//                    val dataTransferService = BluetoothDataTransferService(socket)
-//                    // Send a simple message to initiate the key exchange
-//                    val initiationMessage = "InitiateKeyExchange"
-//                    dataTransferService.sendMessage(initiationMessage.encodeToByteArray())
-//                    // Listen for incoming messages to receive the response
-//                    val incomingMessages = dataTransferService.listenForIncomingMessages()
-//                    // Process incoming messages until the key exchange is complete or a timeout occurs
-//                    incomingMessages.collect { message ->
-//                        // Check if the received message is the expected response
-//                        if (message.message == "Confirmation: InitiateKeyExchange") {
-//                            // Key exchange successful, emit a successful registration result
-//                            emit(RegistrationResult.RegistrationEstablished)
-//                        } else {
-//                            // Handle unexpected response or key exchange failure
-//                        }
-//                    }
-//                } catch (e: IOException) {
-//                    // Close the socket if the connection was interrupted
-//                    socket.close()
-//                    currentClientSocket = null
-//                    // Emit an error result
-//                    emit(RegistrationResult.Error("Registration was interrupted"))
-//                }
-//            }
-//        }.onCompletion {
-//            // Close the connection when the flow completes
-//            closeRegistration()
-//        }.flowOn(Dispatchers.IO)
-//    }
-
     override fun registerToDevice(device: BluetoothDeviceDomain): Flow<RegistrationResult> {
         return flow {
             // Generate DHKE values
@@ -378,7 +327,7 @@ class AndroidBluetoothController(
 
 
     // Function to attempt sending a message via Bluetooth
-    override suspend fun trySendMessage(message: String): BluetoothMessage? {
+    override suspend fun trySendMessage(message: String, devicekey: String): BluetoothMessage? {
         // Check if the necessary Bluetooth connect permission is granted
         if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
             return null
@@ -396,7 +345,7 @@ class AndroidBluetoothController(
             isFromLocalUser = true
         )
 
-        val finalmessage = DDS("105926696395547794221731657698776911235116083757072597824902476161628405855886$message") + message
+        val finalmessage = DDS("$devicekey$message") + message
         // Send the message using the data transfer service
         dataTransferService?.sendMessage(finalmessage.toByteArray())
 

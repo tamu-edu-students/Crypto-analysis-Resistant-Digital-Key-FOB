@@ -241,6 +241,8 @@ fun ProfileScreen(
 
                                         onEvent(ProfileEvent.SaveProfile)
 
+                                        blueViewModel.closeRegistration()
+
                                         openDialog.value = false
                                     }
 //                                    onDeviceClick = blueViewModel::connectToDevice
