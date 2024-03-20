@@ -51,23 +51,19 @@ fun AESEncryption(modifier: Modifier = Modifier) {
         the given algorithm or key. It essentially turns the original key data into a key that is
         of use and type safe for the algorithum. */
 
-        //Pre-Set variables (intake) for the AES Encryption
-        val SecretKeyStr = "j8e83vUr8EWoc37M" //SecretKey from the Diffie-Hellman Key Exchange
-        val SecretKey = SecretKeyStr.toByteArray() //Turning that to a byte array for the encryption
-
-        //Below: Initialization Vector - used to initialize AES
-        val iv = byteArrayOf(0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32)
-
-        val zHardware = "Demo" //Text to encrypt
+        //Pre-Set variables (intake) for the AES Encryption (Key and IV)
+        val keyStr = "AESEncrpytionKey" //SecretKey from the Diffie-Hellman Key Exchange
+        val ivStr = "InitalizationVec" //byteArrayOf(0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32)
+        val zHardware = "DemonstrationTxt" //Text to encrypt
         val zHardwareByte = zHardware.toByteArray(Charsets.UTF_8)
 
         //Specs - used in the initiation of the AES - confines the IV and key to the necessary specification for AES
-        val ivspec = IvParameterSpec(iv);
-        val keyspec = SecretKeySpec(SecretKey, "AES") //generating the final key spec
+        val iv = IvParameterSpec(ivStr.toByteArray(Charsets.UTF_8))
+        val key = SecretKeySpec(keyStr.toByteArray(Charsets.UTF_8), "AES") //generating the final key spec
 
         //Doing the encryption
-        val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding") //getting the instance of AES - i.e. setting it up
-        cipher.init(Cipher.ENCRYPT_MODE, keyspec, ivspec) //initializing the cipher and the specific mod needed.
+        val cipher = Cipher.getInstance("AES/CBC/NoPadding") //getting the instance of AES - i.e. setting it up
+        cipher.init(Cipher.ENCRYPT_MODE, key, iv) //initializing the cipher and the specific mod needed.
         val cipherText = cipher.doFinal(zHardwareByte) //Performs the encryption
 
         //Turning the cipherText from binary into a string through Base64 encoding so it can be outputted.
@@ -75,13 +71,13 @@ fun AESEncryption(modifier: Modifier = Modifier) {
 
         //Doing the Decryption (For Demo Purposes - will be taken out later when integrated)
         val dataEncryptedAbove = Base64.getDecoder().decode(cipherTextString) //Decrypting the string back to binary.
-        cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec) //setting up the decrypt instance of AES
+        cipher.init(Cipher.DECRYPT_MODE, key, iv) //setting up the decrypt instance of AES
         val returnText = cipher.doFinal(dataEncryptedAbove) //doing the decryption
         val returnTextString = String(returnText) //turning the final output from a Byte Array into a string that can be outputted.
 
         Text(text = "Testing: \nPlain Text: $zHardware" +
-                "\n\nKey (String): $SecretKeyStr" +
-                "\n\nKey (Byte Array): $SecretKey" +
+                "\n\nKey (String): $keyStr" +
+                "\n\nKey (Byte Array): $key" +
                 "\n\nIV: $iv" +
                 "\n\nCipher Text: $cipherTextString" +
                 "\n\nReturn Text: $returnTextString",

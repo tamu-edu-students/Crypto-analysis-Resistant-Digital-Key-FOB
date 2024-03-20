@@ -1,6 +1,7 @@
 ﻿  AES-SHA.cpp
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 850 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  3 of 779 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    28 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   AES-SHA.vcxproj -> C:\Users\happy\OneDrive\Documents\GitHub\Crypto-analysis-Resistant-Digital-Key-FOB\Courtney\CCSubsystemCodeforVehicle\AES-SHA\x64\Release\AES-SHA.exe

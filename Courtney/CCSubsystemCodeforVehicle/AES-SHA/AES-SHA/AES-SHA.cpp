@@ -20,16 +20,18 @@ int main(int argc, char* argv[])
     std::string cipherText;
     std::string plainText;
     std::string AESKey;
+    std::string IvVec;
 
     HexEncoder encoder(new FileSink(std::cout)); //encoder to turn bytes into encoded hex
 
-    AESKey = "j8e83vUr8EWoc37M";
-    std::vector<unsigned char> IVecV{ 0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32 };
+    AESKey = "AESEncryptionKey";
+    IvVec = "InitalizationVec";
+    //std::vector<unsigned char> IVecV{ 0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32 };
 
     SecByteBlock EncryptKey(reinterpret_cast<const byte*>(&AESKey[0]), AESKey.size());
-    SecByteBlock IVecB(reinterpret_cast<const byte*>(&IVecV[0]), IVecV.size());
+    SecByteBlock IVecB(reinterpret_cast<const byte*>(&IvVec[0]), IvVec.size());
 
-    std::string start = "Demo"; //String to encrypt and decrypt
+    std::string start = "DemonstrationTxt"; //String to encrypt and decrypt
     std::string cipher, plain; //setting up the variable for the cipher and recovered plain text
 
     //Printing out the Starting Phrase
@@ -45,9 +47,10 @@ int main(int argc, char* argv[])
         start,
         true,
         new StreamTransformationFilter(e,
-            new Base64Encoder(
-                new StringSink(cipher)       
-            )
+            //new Base64Encoder(
+                new StringSink(cipher)
+            //),
+            , StreamTransformationFilter::NO_PADDING
         )
     );
 
@@ -66,11 +69,12 @@ int main(int argc, char* argv[])
     StringSource ss(
         cipher,
         true,
-        new Base64Decoder(
+        //new Base64Decoder(
             new StreamTransformationFilter(d,
-                new StringSink(plain)
+                new StringSink(plain),
+                StreamTransformationFilter::NO_PADDING
             )
-        )
+        //)
     );
 
     std::cout << "Plain Text: " << plain << std::endl;

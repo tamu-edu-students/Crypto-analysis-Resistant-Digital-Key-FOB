@@ -6,4 +6,12 @@ Week of Jan. 31 -  Jeremy and Courtney integrated the Z-Hardware Profile creatio
 
 Week of Feb. 7 - Jeremy and Adriana worked on finishing up bluetooth integration. Courtney worked on AES C++ and Java integration and preparing the DHKE for integration.
 
-Week of Feb. 14 - Jeremy worked on the UI interface and bluetooth for the Registration Process. Adriana worked on creating a database for her PCB. Courtney worked on integrating the C++ and Java methods of AES.
+Week of Feb. 14 - Jeremy worked on the UI interface and bluetooth for the registration process. Adriana worked on creating a database for her PCB. Courtney worked on integrating the C++ and Java methods of AES.
+
+Week of Feb. 21 - Jeremy worked on finishing up the registration procedure for the application and the bluetooth connections for the registration process. Adriana finished up working on creating the database for her PCB. Courtney worked on integrating the C++ and Java methods of AES.
+
+Week of Feb. 28 - Jeremy worked on the DHKE integration process. Adriana worked on changed from Arduino to ESP-32 IDF for the Cryptography code and updated the bluetooth for these changes. Courtney worked on updating the SHA DDS creation code so that the letters are in uppercase for both hash texts. Courtney also worked on fixing the AES C++ and Java issue.
+
+Week of Mar. 6 - Jeremy finished the integration for the registration process. Adriana continued working on the bluetooth and the NVS storage. Courtney worked on alternatives for the AES after contacting Sandia to find that this solution is most likely not possible for us to find.
+
+Week of Mar. 13 - Jeremy finished the integration of the SHA. Adriana added writing communication code so data can be sent to the device and started with the DHKE integration. Courtney met with Sandia to gain tips on solving the AES issues. It was determined that Courtney will work on the relay attack prevention code as well in case the AES does not work.

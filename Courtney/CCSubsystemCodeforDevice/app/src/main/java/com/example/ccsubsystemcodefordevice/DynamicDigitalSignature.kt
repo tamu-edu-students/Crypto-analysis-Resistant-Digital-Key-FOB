@@ -53,8 +53,7 @@ fun DDS(modifier: Modifier = Modifier) {
         val hexString = StringBuilder(hashNumber.toString(16)) //turing the Hash into a Hex number in string format
         val hexStringUpper = hexString.toString().uppercase()
 
-        Text(text = "Testing: \nHash Text Straight from SHA = $hashText" +
-                "\n\nHash Text in Binary = $hashNumber " +
+        Text(text = "Testing: \nPlain Text = $fromDevice" +
                 "\n\nHash Text in Hex = $hexStringUpper ",
             modifier = modifier.padding(12.dp))
     }
