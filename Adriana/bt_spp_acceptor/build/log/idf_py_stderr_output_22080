@@ -1,0 +1,65 @@
+[0;33m--- WARNING: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM7 instead...[0m
+[0;33m--- esp-idf-monitor 1.4.0 on \\.\COM7 115200 ---[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x40081490: call_start_cpu1 at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/cpu_start.c:154
+[0m
+[0;33m0x40081b3a: panic_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/panic.c:452
+0x40091b19: esp_system_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/esp_system_chip.c:84
+0x400976c5: __assert_func at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/newlib/assert.c:81
+0x400edf9f: fixed_queue_enqueue at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/fixed_queue.c:135 (discriminator 1)
+0x400dac55: btc_spp_write at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:906
+0x400db02c: btc_spp_call_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:998
+0x400ed80d: btc_thread_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/btc/core/btc_task.c:204
+0x400eed5e: osi_thread_run at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/thread.c:165 (discriminator 1)
+0x40094385: vPortTaskWrapper at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:162
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x40081490: call_start_cpu1 at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/cpu_start.c:154
+[0m
+[0;33m0x40081b3a: panic_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/panic.c:452
+0x40091b19: esp_system_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/esp_system_chip.c:84
+0x400976c5: __assert_func at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/newlib/assert.c:81
+0x400edf9f: fixed_queue_enqueue at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/fixed_queue.c:135 (discriminator 1)
+0x400dac55: btc_spp_write at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:906
+0x400db02c: btc_spp_call_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:998
+0x400ed80d: btc_thread_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/btc/core/btc_task.c:204
+0x400eed5e: osi_thread_run at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/thread.c:165 (discriminator 1)
+0x40094385: vPortTaskWrapper at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:162
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x40081490: call_start_cpu1 at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/cpu_start.c:154
+[0m
+[0;33m0x40081b3a: panic_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/panic.c:452
+0x40091b19: esp_system_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/esp_system_chip.c:84
+0x400976c5: __assert_func at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/newlib/assert.c:81
+0x400edf9f: fixed_queue_enqueue at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/fixed_queue.c:135 (discriminator 1)
+0x400dac55: btc_spp_write at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:906
+0x400db02c: btc_spp_call_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:998
+0x400ed80d: btc_thread_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/btc/core/btc_task.c:204
+0x400eed5e: osi_thread_run at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/thread.c:165 (discriminator 1)
+0x40094385: vPortTaskWrapper at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:162
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x40081490: call_start_cpu1 at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/cpu_start.c:154
+[0m
+[0;33m0x40081b3a: panic_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/panic.c:452
+0x40091b19: esp_system_abort at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/esp_system_chip.c:84
+0x400976c5: __assert_func at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/newlib/assert.c:81
+0x400edf9f: fixed_queue_enqueue at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/fixed_queue.c:135 (discriminator 1)
+0x400dac55: btc_spp_write at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:906
+0x400db02c: btc_spp_call_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/host/bluedroid/btc/profile/std/spp/btc_spp.c:998
+0x400ed80d: btc_thread_handler at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/btc/core/btc_task.c:204
+0x400eed5e: osi_thread_run at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/bt/common/osi/thread.c:165 (discriminator 1)
+0x40094385: vPortTaskWrapper at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c:162
+[0m
+[0;33m0x40080400: _init at ??:?
+[0m
+[0;33m0x40081490: call_start_cpu1 at C:/Users/agmat/OneDrive/Desktop/esp-idf/components/esp_system/port/cpu_start.c:154
+[0m
+[0m
