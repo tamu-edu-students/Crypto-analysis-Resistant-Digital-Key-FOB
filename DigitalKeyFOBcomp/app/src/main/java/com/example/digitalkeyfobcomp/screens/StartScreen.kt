@@ -47,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothDevice
+import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothDeviceDomain
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
 import com.example.digitalkeyfobcomp.PreferencesManager
@@ -79,6 +80,7 @@ fun StartScreen(
     var selectedText by remember { mutableStateOf(profileNames.firstOrNull() ?: "") }
     var rememberedProfile by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    val selectedDevice = BluetoothDeviceDomain("", "")
 
     LaunchedEffect(Unit) {// reload selected profile when activity is launched
         // This block of code is executed only once when the Composable is initially displayed
@@ -158,14 +160,19 @@ fun StartScreen(
                             blueViewModel.disconnectFromDevice()
                             if (selectedText.isNotBlank()) {
                             // Call the deleteByName function to delete the selected profile
-                                openDialog.value = true
+//   moving to profile creation page                             openDialog.value = true
                                 preferencesManager.clearData()
                                 coroutineScope.launch {
                                     val profile = viewModel.getProfileByName(selectedText)
                                     selectedProfile = profile
                                     selectedProfile?.let { profile -> preferencesManager.saveData("selectedProfile", profile) }
                                     Toast.makeText(context, "Profile selected $selectedText", Toast.LENGTH_SHORT).show()
+                                    val selectedDevice = selectedProfile?.let { it1 -> BluetoothDeviceDomain(selectedProfile?.name, it1.address) }
+                                    if (selectedDevice != null) {
+                                        blueViewModel.connectToDevice(selectedDevice)
+                                    }
                                 }
+
                         } else {
                             Toast.makeText(context, "No profile selected", Toast.LENGTH_SHORT).show()
                         } },
@@ -177,49 +184,49 @@ fun StartScreen(
 //                        }
                     }
 
-
-                    if (openDialog.value) {
-
-                        AlertDialog(
-                            onDismissRequest = {
-                                // Dismiss the dialog when the user clicks outside the dialog or on the back
-                                // button. If you want to disable that functionality, simply use an empty
-                                // onCloseRequest.
-//                                openDialog.value = false
-                            },
-                            title = {
-                                Text(text = "Bluetooth Menu")
-                            },
-                            text = {
-                                BluetoothScreen(
-                                    state = bluetoothState ,
-                                    onStartScan = blueViewModel::startScan,
-                                    onStopScan = blueViewModel::stopScan,
-                                    onStartServer = blueViewModel::waitForIncomingConnections,
-                                    onDeviceClick = blueViewModel::connectToDevice
-                                )
-                            },
-                            confirmButton = {
-                                Button(
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-
-                                    onClick = {
-                                        openDialog.value = false
-                                    }) {
-                                    Text("Dismiss")
-                                }
-                            },
-//                            dismissButton = {
+//moved to Profile Screen
+//                    if (openDialog.value) {
+//
+//                        AlertDialog(
+//                            onDismissRequest = {
+//                                // Dismiss the dialog when the user clicks outside the dialog or on the back
+//                                // button. If you want to disable that functionality, simply use an empty
+//                                // onCloseRequest.
+////                                openDialog.value = false
+//                            },
+//                            title = {
+//                                Text(text = "Bluetooth Menu")
+//                            },
+//                            text = {
+//                                BluetoothScreen(
+//                                    state = bluetoothState ,
+//                                    onStartScan = blueViewModel::startScan,
+//                                    onStopScan = blueViewModel::stopScan,
+//                                    onStartServer = blueViewModel::waitForIncomingConnections,
+//                                    onDeviceClick = blueViewModel::connectToDevice
+//                                )
+//                            },
+//                            confirmButton = {
 //                                Button(
 //                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+//
 //                                    onClick = {
 //                                        openDialog.value = false
 //                                    }) {
 //                                    Text("Dismiss")
 //                                }
-//                            }
-                        )
-                    }
+//                            },
+////                            dismissButton = {
+////                                Button(
+////                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+////                                    onClick = {
+////                                        openDialog.value = false
+////                                    }) {
+////                                    Text("Dismiss")
+////                                }
+////                            }
+//                        )
+//                    }
                     Spacer(modifier = Modifier.width(32.dp))
 
                     var showDeleteConfirmationDialog by remember { mutableStateOf(false) }

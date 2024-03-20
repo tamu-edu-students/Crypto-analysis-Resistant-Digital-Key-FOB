@@ -133,6 +133,16 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+//                    LaunchedEffect(key1 = state1.userMessage) {
+//                        state1.userMessage?.let { message ->
+//                            Toast.makeText(
+//                                applicationContext,
+//                                message,
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    }
+
                     // Display a toast message when the Bluetooth connection is established
                     LaunchedEffect(key1 = state1.isConnected) {
                         if (state1.isConnected) {
@@ -158,6 +168,18 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 CircularProgressIndicator()
                                 Text(text = "Connecting...")
+                            }
+                        }
+                        //new state
+                        state1.isRegistering -> {
+                            // Display a progress indicator and "Connecting..." text
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                                Text(text = "Registering your device...")
                             }
                         }
                         else -> {
