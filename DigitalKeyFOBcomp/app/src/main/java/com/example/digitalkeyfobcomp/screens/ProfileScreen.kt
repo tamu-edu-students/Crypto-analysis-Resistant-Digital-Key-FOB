@@ -241,7 +241,7 @@ fun ProfileScreen(
 
                                         onEvent(ProfileEvent.SaveProfile)
 
-                                        blueViewModel.closeRegistration()
+//                                        blueViewModel.closeRegistration()
 
                                         openDialog.value = false
                                     }
