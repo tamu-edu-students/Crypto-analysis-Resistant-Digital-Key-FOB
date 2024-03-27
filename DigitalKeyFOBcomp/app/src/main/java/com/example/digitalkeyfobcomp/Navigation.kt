@@ -52,7 +52,7 @@ fun Navigation(
         }
         // Screen for the Faq destination
         composable("Faq") {
-            FaqScreen(navController)
+            FaqScreen(navController, blueViewModel, bluetoothState)
         }
     }
 }

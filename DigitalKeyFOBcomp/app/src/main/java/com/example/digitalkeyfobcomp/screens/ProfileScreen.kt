@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
@@ -74,20 +75,67 @@ fun ProfileScreen(
     val context = LocalContext.current // use context to send toast messages to user
     val keyboardController = LocalSoftwareKeyboardController.current
     var profileDuplicateCheck by remember { mutableStateOf("") }
+    var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
+    if (showDisconnectionConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDisconnectionConfirmationDialog = false
+            },
+            title = {
+                Text(text = "Confirm Disconnection")
+            },
+            text = {
+                Text("Are you sure you want to disconnect?")
+            },
+            confirmButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        blueViewModel.disconnectFromDevice()
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Disconnect")
+                }
+            },
+            dismissButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
     Scaffold(
         topBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.White, // Set the background color here
-
+                color = Color.Blue, // Set the background color here
             ) {
                 TopAppBar(
                     title = {
                         Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
-
-                    )
+                    actions = {
+                        Button(
+                            onClick = {
+                                if (bluetoothState.isConnected) {
+                                    showDisconnectionConfirmationDialog = true
+                                } else {
+                                    Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            modifier = Modifier.padding(end = 16.dp)
+                        ) {
+                            Text("Disconnect")
+                        }
+                    }
+                )
             }
         },
         content = {
@@ -175,6 +223,9 @@ fun ProfileScreen(
 
                                     if(signatureSigned) { // Check for true/false signatureSigned
                                         openDialog.value = true
+                                        if(bluetoothState.isConnected) {
+                                            blueViewModel.disconnectFromDevice()
+                                        }
                                         onEvent(ProfileEvent.Setsigid(ZHardware(bitmapHash))) // setting sigid to bitmaphash for profile creation
                                         signaturePadAdapter?.clear() // clearing signature pad
                                         signatureSigned = false // resetting signature signed value
@@ -241,6 +292,7 @@ fun ProfileScreen(
 
                                         onEvent(ProfileEvent.SaveProfile)
 
+                                        blueViewModel.disconnectFromDevice()
 //                                        blueViewModel.closeRegistration()
 
                                         openDialog.value = false

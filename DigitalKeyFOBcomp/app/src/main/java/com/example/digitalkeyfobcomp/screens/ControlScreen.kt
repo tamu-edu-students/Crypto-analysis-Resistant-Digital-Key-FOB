@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -100,18 +102,67 @@ fun ControlScreen(
         }
     }
 
+    var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
+    if (showDisconnectionConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDisconnectionConfirmationDialog = false
+            },
+            title = {
+                Text(text = "Confirm Disconnection")
+            },
+            text = {
+                Text("Are you sure you want to disconnect?")
+            },
+            confirmButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        blueViewModel.disconnectFromDevice()
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Disconnect")
+                }
+            },
+            dismissButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
     // Scaffold for the overall screen structure
     Scaffold(
         topBar = {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color.White, // Set the background color here
+                color = Color.Blue, // Set the background color here
             ) {
                 TopAppBar(
                     title = {
                         Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
+                    actions = {
+                        Button(
+                            onClick = {
+                                if (bluetoothState.isConnected) {
+                                    showDisconnectionConfirmationDialog = true
+                                } else {
+                                    Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            modifier = Modifier.padding(end = 16.dp)
+                        ) {
+                            Text("Disconnect")
+                        }
+                    }
                 )
             }
         },

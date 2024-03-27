@@ -80,7 +80,6 @@ fun StartScreen(
     var selectedText by remember { mutableStateOf(profileNames.firstOrNull() ?: "") }
     var rememberedProfile by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
-    val selectedDevice = BluetoothDeviceDomain("", "")
 
     LaunchedEffect(Unit) {// reload selected profile when activity is launched
         // This block of code is executed only once when the Composable is initially displayed
@@ -89,6 +88,41 @@ fun StartScreen(
             rememberedProfile = profile.name
         }
         selectedText = rememberedProfile
+    }
+    var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
+    if (showDisconnectionConfirmationDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDisconnectionConfirmationDialog = false
+            },
+            title = {
+                Text(text = "Confirm Disconnection")
+            },
+            text = {
+                Text("Are you sure you want to disconnect?")
+            },
+            confirmButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        blueViewModel.disconnectFromDevice()
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Disconnect")
+                }
+            },
+            dismissButton = {
+                Button(
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+                    onClick = {
+                        showDisconnectionConfirmationDialog = false // Close the dialog
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
     //added code to pull saved preferences profile into selected profile if activity restarts
     Scaffold(
@@ -102,6 +136,20 @@ fun StartScreen(
                         Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
                     },
                     modifier = Modifier.fillMaxWidth(),
+                    actions = {
+                        Button(
+                            onClick = {
+                                if (bluetoothState.isConnected) {
+                                    showDisconnectionConfirmationDialog = true
+                                } else {
+                                    Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            modifier = Modifier.padding(end = 16.dp)
+                        ) {
+                            Text("Disconnect")
+                        }
+                    }
                 )
             }
         },
@@ -183,50 +231,6 @@ fun StartScreen(
 //                            Text(profile.name)
 //                        }
                     }
-
-//moved to Profile Screen
-//                    if (openDialog.value) {
-//
-//                        AlertDialog(
-//                            onDismissRequest = {
-//                                // Dismiss the dialog when the user clicks outside the dialog or on the back
-//                                // button. If you want to disable that functionality, simply use an empty
-//                                // onCloseRequest.
-////                                openDialog.value = false
-//                            },
-//                            title = {
-//                                Text(text = "Bluetooth Menu")
-//                            },
-//                            text = {
-//                                BluetoothScreen(
-//                                    state = bluetoothState ,
-//                                    onStartScan = blueViewModel::startScan,
-//                                    onStopScan = blueViewModel::stopScan,
-//                                    onStartServer = blueViewModel::waitForIncomingConnections,
-//                                    onDeviceClick = blueViewModel::connectToDevice
-//                                )
-//                            },
-//                            confirmButton = {
-//                                Button(
-//                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-//
-//                                    onClick = {
-//                                        openDialog.value = false
-//                                    }) {
-//                                    Text("Dismiss")
-//                                }
-//                            },
-////                            dismissButton = {
-////                                Button(
-////                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
-////                                    onClick = {
-////                                        openDialog.value = false
-////                                    }) {
-////                                    Text("Dismiss")
-////                                }
-////                            }
-//                        )
-//                    }
                     Spacer(modifier = Modifier.width(32.dp))
 
                     var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
@@ -292,6 +296,21 @@ fun StartScreen(
                     ) {
                         Text("Delete Profile")
                     }
+//                    Spacer(modifier = Modifier.width(32.dp))
+//
+//                    ElevatedButton(
+//                        modifier = Modifier,
+//                        colors = ButtonDefaults.buttonColors(containerColor = Color.Blue),
+//                        onClick = {
+//                            if (bluetoothState.isConnected) {
+//                                blueViewModel.disconnectFromDevice()
+//                            } else {
+//                                Toast.makeText(context, "No Device Connected", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    ) {
+//                        Text("Disconnect")
+//                    }
                 }
 
             }
@@ -403,21 +422,6 @@ fun BackButton(){
         Text("Back")
     }
 }
-
-
-
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun ExposedDropdownMenuBox(
-//    state: ProfileState,
-//    onEvent:(ProfileEvent) -> Unit,
-//    profileNamesFlow: Flow<List<String>>
-//) {
-//
-//}
-//
-
 
 
 

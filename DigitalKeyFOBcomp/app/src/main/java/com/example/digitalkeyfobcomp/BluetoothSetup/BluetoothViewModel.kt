@@ -75,7 +75,7 @@ class BluetoothViewModel @Inject constructor(
 
         // Start a timer to automatically transition out of the connecting state after 10 seconds
         val timer = Timer()
-        val timerTask = timer.schedule(10000) {
+        val timerTask = timer.schedule(5000) {
             viewModelScope.launch {
                 // Check the state and show the connection failed message if needed
                 if (!_state.value.isConnected) {
