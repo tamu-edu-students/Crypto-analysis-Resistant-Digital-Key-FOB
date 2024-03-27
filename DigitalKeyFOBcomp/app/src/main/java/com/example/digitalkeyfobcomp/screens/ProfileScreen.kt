@@ -76,6 +76,9 @@ fun ProfileScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     var profileDuplicateCheck by remember { mutableStateOf("") }
     var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
+//    if(!bluetoothState.isRegistering && bluetoothState.isRegistered){
+//        blueViewModel.endRegistration()
+//    }
     if (showDisconnectionConfirmationDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -222,13 +225,21 @@ fun ProfileScreen(
                                     bitmapHash = bitmapToHash(currentbitmap!!) // Passing to hash function and checking if null
 
                                     if(signatureSigned) { // Check for true/false signatureSigned
-                                        openDialog.value = true
+
                                         if(bluetoothState.isConnected) {
-                                            blueViewModel.disconnectFromDevice()
+                                            Toast.makeText( // user prompt for profile creation if missing signature
+                                                context,
+                                                "Device Already Connected",
+                                                Toast.LENGTH_LONG
+                                            ).show()
                                         }
-                                        onEvent(ProfileEvent.Setsigid(ZHardware(bitmapHash))) // setting sigid to bitmaphash for profile creation
-                                        signaturePadAdapter?.clear() // clearing signature pad
-                                        signatureSigned = false // resetting signature signed value
+                                        else {
+                                            openDialog.value = true
+                                            onEvent(ProfileEvent.Setsigid(ZHardware(bitmapHash))) // setting sigid to bitmaphash for profile creation
+                                            signaturePadAdapter?.clear() // clearing signature pad
+                                            signatureSigned =
+                                                false // resetting signature signed value
+                                        }
 
                                     }else{
                                         Toast.makeText( // user prompt for profile creation if missing signature
@@ -279,11 +290,11 @@ fun ProfileScreen(
 
                                         onEvent(ProfileEvent.Setaddress(saveAddress))
 
-                                        Toast.makeText( // Debugging
-                                            context,
-                                            "Profile created",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+//                                        Toast.makeText( // Debugging
+//                                            context,
+//                                            "Profile created",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
 
                                         // Saving profile
                                         blueViewModel.registerToDevice(selectedDevice)
@@ -291,8 +302,7 @@ fun ProfileScreen(
                                         onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
 
                                         onEvent(ProfileEvent.SaveProfile)
-
-                                        blueViewModel.disconnectFromDevice()
+//                                        blueViewModel.disconnectFromDevice()
 //                                        blueViewModel.closeRegistration()
 
                                         openDialog.value = false

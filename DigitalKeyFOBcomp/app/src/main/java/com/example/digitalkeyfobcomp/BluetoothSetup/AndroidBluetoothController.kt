@@ -302,8 +302,9 @@ class AndroidBluetoothController(
                             // Show a toast message with the received public key
                             val sharedKey = DHKEAfter(receivedPublicKey, dhkeBeforeResult.second)
                             emit(RegistrationResult.Usermessage("Received public key: $sharedKey"))
-
                             emit(RegistrationResult.RegistrationEstablished)
+                            socket.close()
+                            currentClientSocket = null
                         } else {
                             // Handle unexpected response or key exchange failure
                            emit(RegistrationResult.Error("registration failed"))
@@ -314,7 +315,7 @@ class AndroidBluetoothController(
                     socket.close()
                     currentClientSocket = null
                     // Emit an error result
-                    emit(RegistrationResult.Error("Registration was interrupted"))
+                    emit(RegistrationResult.Error("Registration was ended"))
                 }
             }
         }.onCompletion {

@@ -90,13 +90,25 @@ class BluetoothViewModel @Inject constructor(
 
     fun registerToDevice(device: BluetoothDeviceDomain) {
         _state.update { it.copy(isRegistering = true) }
-
+        val timer1 = Timer()
+        timer1.schedule(5000) {
+            viewModelScope.launch {
+                // Check the state and show the connection failed message if needed
+                if (!_state.value.isRegistering) {
+                    endRegistration()
+                }
+            }
+        }
         deviceConnectionJob = bluetoothController
             .registerToDevice(device)
             .listenForRegistration()
     }
 
-    
+    fun endRegistration() {
+        deviceConnectionJob?.cancel()
+        bluetoothController.closeConnection()
+        _state.update { it.copy(isConnecting = false, isConnected = false, isRegistering = false, isRegistered = false) }
+    }
 
     // Function to disconnect from a Bluetooth device
     fun disconnectFromDevice() {
