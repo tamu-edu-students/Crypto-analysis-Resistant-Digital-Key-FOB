@@ -88,7 +88,7 @@ class BluetoothViewModel @Inject constructor(
             .listen()
     }
 
-    fun registerToDevice(device: BluetoothDeviceDomain) {
+    fun registerToDevice(device: BluetoothDeviceDomain, additionalData: String) {
         _state.update { it.copy(isRegistering = true) }
         val timer1 = Timer()
         timer1.schedule(5000) {
@@ -100,7 +100,7 @@ class BluetoothViewModel @Inject constructor(
             }
         }
         deviceConnectionJob = bluetoothController
-            .registerToDevice(device)
+            .registerToDevice(device, additionalData)
             .listenForRegistration()
     }
 

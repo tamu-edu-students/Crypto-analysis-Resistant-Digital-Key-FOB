@@ -222,7 +222,7 @@ fun ProfileScreen(
 
                                 if (currentbitmap != null) { // Comparing currentbitmap to null to make sure there is bitmaptype value
 
-                                    bitmapHash = bitmapToHash(currentbitmap!!) // Passing to hash function and checking if null
+                                    bitmapHash = ZHardware(bitmapToHash(currentbitmap!!)) // Passing to hash function and checking if null
 
                                     if(signatureSigned) { // Check for true/false signatureSigned
 
@@ -235,7 +235,7 @@ fun ProfileScreen(
                                         }
                                         else {
                                             openDialog.value = true
-                                            onEvent(ProfileEvent.Setsigid(ZHardware(bitmapHash))) // setting sigid to bitmaphash for profile creation
+                                            onEvent(ProfileEvent.Setsigid(bitmapHash)) // setting sigid to bitmaphash for profile creation
                                             signaturePadAdapter?.clear() // clearing signature pad
                                             signatureSigned =
                                                 false // resetting signature signed value
@@ -297,10 +297,11 @@ fun ProfileScreen(
 //                                        ).show()
 
                                         // Saving profile
-                                        blueViewModel.registerToDevice(selectedDevice)
+                                        blueViewModel.registerToDevice(selectedDevice, bitmapHash)
 
-                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
+//                                        onEvent(ProfileEvent.Setsigid())
 
+//                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
                                         onEvent(ProfileEvent.SaveProfile)
 //                                        blueViewModel.disconnectFromDevice()
 //                                        blueViewModel.closeRegistration()
