@@ -306,7 +306,7 @@ fun ProfileScreen(
                                         // Saving profile
                                         blueViewModel.registerToDevice(selectedDevice, additionalData)
 
-
+                                        operationCompleted = true
 //                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
 
 //                                        if(bluetoothState.userMessage == "Registration Successful"){

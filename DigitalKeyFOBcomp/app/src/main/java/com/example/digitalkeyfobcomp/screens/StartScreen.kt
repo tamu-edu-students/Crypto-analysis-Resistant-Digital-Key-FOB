@@ -59,7 +59,7 @@ import com.example.digitalkeyfobcomp.ProfileViewModel
 import com.example.digitalkeyfobcomp.components.BottomNavigation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-
+@Volatile var operationCompleted: Boolean = false
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,19 +82,32 @@ fun StartScreen(
     var rememberedProfile by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
+// Define a flag to track whether the operation is completed
+
+
     LaunchedEffect(key1 = bluetoothState.userMessage) {
         bluetoothState.userMessage?.let { message ->
-            if (message == "Registration Successful") {
-                onEvent(ProfileEvent.SaveProfile)
+            if (operationCompleted) {
+                if (message == "Registration Successful") {
+                    onEvent(ProfileEvent.SaveProfile)
+                    Toast.makeText(
+                        context,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else if (message == "Registration Failed") {
+                    Toast.makeText(
+                        context,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                // Mark the operation as completed
+                operationCompleted = false
             }
-            Toast.makeText(
-                context,
-                message,
-                Toast.LENGTH_LONG
-            ).show()
-
         }
     }
+
     LaunchedEffect(Unit) {// reload selected profile when activity is launched
         // This block of code is executed only once when the Composable is initially displayed
         val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)

@@ -1,5 +1,7 @@
 package com.example.digitalkeyfobcomp.components
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -23,7 +25,6 @@ import com.example.digitalkeyfobcomp.screens.FaqScreen
 import com.example.digitalkeyfobcomp.screens.ProfileScreen
 import com.example.digitalkeyfobcomp.screens.StartScreen
 import kotlinx.coroutines.flow.Flow
-
 // Composable function for handling navigation between screens
 @Composable
 fun Navigation(
@@ -56,6 +57,87 @@ fun Navigation(
         }
     }
 }
+
+// Throttle duration in milliseconds
+private const val THROTTLE_DURATION = 1000L
+
+// Flag to track whether navigation is currently allowed
+private var isNavigationAllowed = true
+
+// Composable function for creating a single item in the bottom navigation bar
+@Composable
+fun RowScope.AddItem(screen: BottomNavItem, navController: NavController) {
+    // Navigation bar item
+    NavigationBarItem(
+        // Text that shows below the icon
+        label = {
+            Text(text = screen.title)
+        },
+
+        // The icon resource
+        icon = {
+            Icon(
+                painterResource(id = screen.icon),
+                contentDescription = screen.title
+            )
+        },
+
+        // Display if the icon is selected or not
+        selected = true,
+
+        // Always show the label below the icon or not
+        alwaysShowLabel = true,
+
+        // Click listener for the icon
+        onClick = {
+            if (isNavigationAllowed) {
+                navController.navigate(route = screen.title)
+                // Disable navigation temporarily
+                isNavigationAllowed = false
+                // Enable navigation after throttle duration
+                Handler(Looper.getMainLooper()).postDelayed({
+                    isNavigationAllowed = true
+                }, THROTTLE_DURATION)
+            }
+        },
+
+        // Control all the colors of the icon
+        colors = NavigationBarItemDefaults.colors()
+    )
+}
+
+//// Composable function for handling navigation between screens
+//@Composable
+//fun Navigation(
+//    state: ProfileState,
+//    onEvent: (ProfileEvent) -> Unit,
+//    profileNamesFlow: Flow<List<String>>,
+//    viewModel: ProfileViewModel,
+//    blueViewModel: BluetoothViewModel,
+//    bluetoothState: BluetoothUiState
+//) {
+//    // Create a NavHost for navigation
+//    val navController = rememberNavController()
+//
+//    NavHost(navController = navController, startDestination = "Home") {
+//        // Screen for the Home destination
+//        composable("Home") {
+//            StartScreen(navController, state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Add destination
+//        composable("Add") {
+//            ProfileScreen(navController, state, onEvent, viewModel, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Controls destination
+//        composable("Controls") {
+//            ControlScreen(navController, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Faq destination
+//        composable("Faq") {
+//            FaqScreen(navController, blueViewModel, bluetoothState)
+//        }
+//    }
+//}
 
 // Sealed class representing each item in the bottom navigation bar
 sealed class BottomNavItem(
@@ -94,38 +176,38 @@ fun BottomNavigation(navController: NavController) {
         }
     }
 }
-
-// Composable function for creating a single item in the bottom navigation bar
-@Composable
-fun RowScope.AddItem(screen: BottomNavItem, navController: NavController) {
-    // Navigation bar item
-    NavigationBarItem(
-        // Text that shows below the icon
-        label = {
-            Text(text = screen.title)
-        },
-
-        // The icon resource
-        icon = {
-            Icon(
-                painterResource(id = screen.icon),
-                contentDescription = screen.title
-            )
-        },
-
-        // Display if the icon is selected or not
-        selected = true,
-
-        // Always show the label below the icon or not
-        alwaysShowLabel = true,
-
-        // Click listener for the icon
-        onClick = { navController.navigate(route = screen.title) },
-
-        // Control all the colors of the icon
-        colors = NavigationBarItemDefaults.colors()
-    )
-}
+//
+//// Composable function for creating a single item in the bottom navigation bar
+//@Composable
+//fun RowScope.AddItem(screen: BottomNavItem, navController: NavController) {
+//    // Navigation bar item
+//    NavigationBarItem(
+//        // Text that shows below the icon
+//        label = {
+//            Text(text = screen.title)
+//        },
+//
+//        // The icon resource
+//        icon = {
+//            Icon(
+//                painterResource(id = screen.icon),
+//                contentDescription = screen.title
+//            )
+//        },
+//
+//        // Display if the icon is selected or not
+//        selected = true,
+//
+//        // Always show the label below the icon or not
+//        alwaysShowLabel = true,
+//
+//        // Click listener for the icon
+//        onClick = { navController.navigate(route = screen.title) },
+//
+//        // Control all the colors of the icon
+//        colors = NavigationBarItemDefaults.colors()
+//    )
+//}
 
 //
 //@Composable
