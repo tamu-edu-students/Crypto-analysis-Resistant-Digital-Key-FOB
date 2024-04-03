@@ -132,16 +132,16 @@ class MainActivity : ComponentActivity() {
                             ).show()
                         }
                     }
-
-                    LaunchedEffect(key1 = state1.userMessage) {
-                        state1.userMessage?.let { message ->
-                            Toast.makeText(
-                                applicationContext,
-                                message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
+//
+//                    LaunchedEffect(key1 = state1.userMessage) {
+//                        state1.userMessage?.let { message ->
+//                            Toast.makeText(
+//                                applicationContext,
+//                                message,
+//                                Toast.LENGTH_LONG
+//                            ).show()
+//                        }
+//                    }
 
                     // Display a toast message when the Bluetooth connection is established
                     LaunchedEffect(key1 = state1.isConnected) {

@@ -29,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothUiState
 import com.example.digitalkeyfobcomp.BluetoothSetup.BluetoothViewModel
@@ -76,9 +79,21 @@ fun ProfileScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
     var profileDuplicateCheck by remember { mutableStateOf("") }
     var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
-//    if(!bluetoothState.isRegistering && bluetoothState.isRegistered){
-//        blueViewModel.endRegistration()
+
+//    val bluetoothState1 by blueViewModel.state.collectAsState()
+
+    // Observing user messages and showing toast
+//    LaunchedEffect(key1 = bluetoothState.userMessage) {
+//        bluetoothState.userMessage?.let { message ->
+//            Toast.makeText(
+//                context,
+//                message,
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
 //    }
+
+
     if (showDisconnectionConfirmationDialog) {
         AlertDialog(
             onDismissRequest = {
@@ -143,7 +158,8 @@ fun ProfileScreen(
         },
         content = {
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .background(color = Color(0xFFF4F4F4)),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -158,11 +174,11 @@ fun ProfileScreen(
                 val openDialog = remember { mutableStateOf(false)  }
                 var saveAddress = ""
                 var saveName = ""
-
+                var registrationBoolean = false
                 TextField( // Profile text input
                     modifier = Modifier
                         .border(width = 2.dp, color = Color.Black)
-                        .background( color = Color.White)
+                        .background(color = Color.White)
                         ,
                     singleLine = true,
                     value = state.name,
@@ -175,7 +191,7 @@ fun ProfileScreen(
                 Card(
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
                             modifier = Modifier
-                                .size(300.dp,SIGNATURE_PAD_HEIGHT.dp)
+                                .size(300.dp, SIGNATURE_PAD_HEIGHT.dp)
                                 .border(
                                     width = 2.dp,
                                     color = Color.Black,
@@ -269,10 +285,7 @@ fun ProfileScreen(
 
                         AlertDialog(
                             onDismissRequest = {
-                                // Dismiss the dialog when the user clicks outside the dialog or on the back
-                                // button. If you want to disable that functionality, simply use an empty
-                                // onCloseRequest.
-//                                openDialog.value = false
+
                             },
                             title = {
                                 Text(text = "Bluetooth Menu")
@@ -290,25 +303,30 @@ fun ProfileScreen(
 
                                         onEvent(ProfileEvent.Setaddress(saveAddress))
 
-//                                        Toast.makeText( // Debugging
-//                                            context,
-//                                            "Profile created",
-//                                            Toast.LENGTH_SHORT
-//                                        ).show()
-
                                         // Saving profile
                                         blueViewModel.registerToDevice(selectedDevice, bitmapHash)
 
-//                                        onEvent(ProfileEvent.Setsigid())
 
 //                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
-                                        onEvent(ProfileEvent.SaveProfile)
-//                                        blueViewModel.disconnectFromDevice()
-//                                        blueViewModel.closeRegistration()
+
+//                                        if(bluetoothState.userMessage == "Registration Successful"){
+//                                            onEvent(ProfileEvent.SaveProfile)
+//                                            Toast.makeText(
+//                                                context,
+//                                                bluetoothState.userMessage,
+//                                                Toast.LENGTH_LONG
+//                                            ).show()
+//                                        }else{
+//                                            Toast.makeText(
+//                                                context,
+//                                                bluetoothState.userMessage,
+//                                                Toast.LENGTH_LONG
+//                                            ).show()
+//                                        }
+
 
                                         openDialog.value = false
                                     }
-//                                    onDeviceClick = blueViewModel::connectToDevice
                                 )
                             },
                             confirmButton = {
@@ -349,42 +367,3 @@ fun ProfileInput() {
         label = { Text("Enter New Profile Name") }
     )
 }
-
-sealed class KeyExchangeResult {
-    data class Success(val sharedSecret: ByteArray) : KeyExchangeResult()
-    data class Failure(val errorMessage: String) : KeyExchangeResult()
-}
-//suspend fun performKeyExchange(bluetoothViewModel: BluetoothViewModel): KeyExchangeResult {
-//    return withContext(Dispatchers.IO) {
-//        performKeyExchangeInternal(bluetoothViewModel)
-//    }
-//}
-//
-//private suspend fun performKeyExchangeInternal(bluetoothViewModel: BluetoothViewModel): KeyExchangeResult {
-//    // Step 1: Send a key exchange request message
-//    val requestMessage = "KEY_EXCHANGE_REQUEST"
-//    bluetoothViewModel.sendMessage(requestMessage)
-//
-//    // Step 2: Wait for the remote device's response
-//    val responseMessage = collectResponseMessage(bluetoothViewModel) ?: return KeyExchangeResult.Failure("Failed to receive key exchange response")
-//
-//    // Step 3: Process the response and extract the shared secret
-//    if (responseMessage == "KEY_EXCHANGE_ACCEPTED") {
-//        // Step 4: Send the shared secret confirmation message
-//        val confirmationMessage = "KEY_EXCHANGE_CONFIRMED"
-//        bluetoothViewModel.sendMessage(confirmationMessage)
-//
-//        // Step 5: Return success with the shared secret
-//        return KeyExchangeResult.Success(generateSharedSecret())
-//    } else {
-//        // Step 6: Handle rejection from the remote device
-//        return KeyExchangeResult.Failure("Key exchange request rejected")
-//    }
-//}
-//
-//private suspend fun collectResponseMessage(bluetoothViewModel: BluetoothViewModel): String? {
-//    // Collect incoming messages until a response is received
-//    return bluetoothViewModel.listenForIncomingMessages()
-//        .takeWhile { it != "KEY_EXCHANGE_ACCEPTED" }
-//        .firstOrNull()
-//}

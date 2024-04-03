@@ -63,9 +63,9 @@ class BluetoothViewModel @Inject constructor(
             _state.update { it.copy(errorMessage = error) }
         }.launchIn(viewModelScope)
 
-//        bluetoothController.usermessage.onEach { usermessage ->
-//            _state.update { it.copy(userMessage = usermessage) }
-//        }.launchIn(viewModelScope)
+        bluetoothController.usermessage.onEach { usermessage ->
+            _state.update { it.copy(userMessage = usermessage) }
+        }.launchIn(viewModelScope)
 
     }
 
@@ -191,6 +191,7 @@ class BluetoothViewModel @Inject constructor(
             _state.update { it.copy(isRegistering = false, isRegistered= false, errorMessage = throwable.message ?: "Unknown error") }
         }.launchIn(viewModelScope)
     }
+
 
     // Release resources when the ViewModel is cleared
     override fun onCleared() {

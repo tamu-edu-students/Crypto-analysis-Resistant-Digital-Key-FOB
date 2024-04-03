@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -81,6 +82,19 @@ fun StartScreen(
     var rememberedProfile by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(key1 = bluetoothState.userMessage) {
+        bluetoothState.userMessage?.let { message ->
+            if (message == "Registration Successful") {
+                onEvent(ProfileEvent.SaveProfile)
+            }
+            Toast.makeText(
+                context,
+                message,
+                Toast.LENGTH_LONG
+            ).show()
+
+        }
+    }
     LaunchedEffect(Unit) {// reload selected profile when activity is launched
         // This block of code is executed only once when the Composable is initially displayed
         val retrievedProfile: ProfileEntity? =  preferencesManager.getData("selectedProfile", null)
