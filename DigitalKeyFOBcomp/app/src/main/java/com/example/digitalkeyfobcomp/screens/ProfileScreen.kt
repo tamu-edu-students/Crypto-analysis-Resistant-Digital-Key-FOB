@@ -302,9 +302,9 @@ fun ProfileScreen(
                                         saveName = selectedDevice.name.toString()
 
                                         onEvent(ProfileEvent.Setaddress(saveAddress))
-
+                                        val additionalData = bitmapHash + "|" + state.name
                                         // Saving profile
-                                        blueViewModel.registerToDevice(selectedDevice, bitmapHash)
+                                        blueViewModel.registerToDevice(selectedDevice, additionalData)
 
 
 //                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
