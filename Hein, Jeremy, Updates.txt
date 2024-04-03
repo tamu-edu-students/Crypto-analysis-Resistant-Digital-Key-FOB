@@ -23,3 +23,7 @@ Week Oct-22
 
 Rebuilt app completely in Jetpack compose. Created local room database for app to store profiles. Added PreferenceManager to store state across activities. Used to save selected profile status event after app restart/close. Redesigned UI in Jetpack compose for ease and code flow.
 
+Week Apr-3
+
+Worked on finishing registration verification. Added graphical updats to application and disconnect button.
+
