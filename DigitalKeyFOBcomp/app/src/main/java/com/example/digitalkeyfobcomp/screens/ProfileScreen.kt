@@ -80,19 +80,6 @@ fun ProfileScreen(
     var profileDuplicateCheck by remember { mutableStateOf("") }
     var showDisconnectionConfirmationDialog by remember { mutableStateOf(false) }
 
-//    val bluetoothState1 by blueViewModel.state.collectAsState()
-
-    // Observing user messages and showing toast
-//    LaunchedEffect(key1 = bluetoothState.userMessage) {
-//        bluetoothState.userMessage?.let { message ->
-//            Toast.makeText(
-//                context,
-//                message,
-//                Toast.LENGTH_LONG
-//            ).show()
-//        }
-//    }
-
 
     if (showDisconnectionConfirmationDialog) {
         AlertDialog(
@@ -307,23 +294,6 @@ fun ProfileScreen(
                                         blueViewModel.registerToDevice(selectedDevice, additionalData)
 
                                         operationCompleted = true
-//                                        onEvent(ProfileEvent.Setsigid(blueViewModel.state.value.userMessage.toString()))
-
-//                                        if(bluetoothState.userMessage == "Registration Successful"){
-//                                            onEvent(ProfileEvent.SaveProfile)
-//                                            Toast.makeText(
-//                                                context,
-//                                                bluetoothState.userMessage,
-//                                                Toast.LENGTH_LONG
-//                                            ).show()
-//                                        }else{
-//                                            Toast.makeText(
-//                                                context,
-//                                                bluetoothState.userMessage,
-//                                                Toast.LENGTH_LONG
-//                                            ).show()
-//                                        }
-
 
                                         openDialog.value = false
                                     }

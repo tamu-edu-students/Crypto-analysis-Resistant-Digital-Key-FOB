@@ -309,6 +309,7 @@ class AndroidBluetoothController(
                         } else {
                             // Handle unexpected response or key exchange failure
                             emit(RegistrationResult.Usermessage("Registration Failed"))
+                            emit(RegistrationResult.RegistrationEstablished)
                         }
                     }
                 } catch (e: IOException) {
