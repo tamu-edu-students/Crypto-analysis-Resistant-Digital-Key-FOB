@@ -186,7 +186,7 @@ fun ControlScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             LEDIndicator(isOn = selectedCarModes.locked)
-                            Text("Locked", modifier = Modifier
+                            Text("Unlocked", modifier = Modifier
                                 .padding(start = 8.dp),
                                 fontWeight = FontWeight.Bold)
                             Spacer(modifier = Modifier.width(20.dp))

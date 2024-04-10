@@ -429,7 +429,7 @@ class AndroidBluetoothController(
             isFromLocalUser = true
         )
 
-        val finalmessage = "COM" + DDS("$devicekey$message$timestamp") + message + timestamp
+        val finalmessage = "COM" + DDS("$devicekey$message$timestamp") + "|"  + message + "|" + timestamp
         // Send the message using the data transfer service
         dataTransferService?.sendMessage(finalmessage.toByteArray())
 
