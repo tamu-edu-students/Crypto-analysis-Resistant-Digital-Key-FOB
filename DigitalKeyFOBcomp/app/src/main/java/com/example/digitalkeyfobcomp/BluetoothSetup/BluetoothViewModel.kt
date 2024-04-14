@@ -128,9 +128,9 @@ class BluetoothViewModel @Inject constructor(
     }
 
     // Function to send a message over Bluetooth
-    fun sendMessage(message: String, devicekey: String) {
+    fun sendMessage(message: String, devicekey: String, devicename: String) {
         viewModelScope.launch {
-            val bluetoothMessage = bluetoothController.trySendMessage(message, devicekey)
+            val bluetoothMessage = bluetoothController.trySendMessage(message, devicekey, devicename)
             if (bluetoothMessage != null) {
                 _state.update { it.copy(messages = it.messages + bluetoothMessage) }
             }

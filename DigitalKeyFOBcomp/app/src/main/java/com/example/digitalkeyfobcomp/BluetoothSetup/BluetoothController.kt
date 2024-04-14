@@ -45,7 +45,7 @@ interface BluetoothController {
     fun registerToDevice(device: BluetoothDevice, additionalData: String): Flow<RegistrationResult> //new
 
     // Function to attempt sending a message via Bluetooth
-    suspend fun trySendMessage(message: String, devicekey: String): BluetoothMessage?
+    suspend fun trySendMessage(message: String, devicekey: String, devicename: String): BluetoothMessage?
 
     // Function to close the Bluetooth connection
     fun closeConnection()

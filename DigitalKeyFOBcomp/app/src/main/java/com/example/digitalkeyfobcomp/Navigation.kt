@@ -2,6 +2,11 @@ package com.example.digitalkeyfobcomp.components
 
 import android.os.Handler
 import android.os.Looper
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -57,6 +62,7 @@ fun Navigation(
         }
     }
 }
+// Define the animation duration globally
 
 // Throttle duration in milliseconds
 private const val THROTTLE_DURATION = 1000L
@@ -106,39 +112,6 @@ fun RowScope.AddItem(screen: BottomNavItem, navController: NavController) {
     )
 }
 
-//// Composable function for handling navigation between screens
-//@Composable
-//fun Navigation(
-//    state: ProfileState,
-//    onEvent: (ProfileEvent) -> Unit,
-//    profileNamesFlow: Flow<List<String>>,
-//    viewModel: ProfileViewModel,
-//    blueViewModel: BluetoothViewModel,
-//    bluetoothState: BluetoothUiState
-//) {
-//    // Create a NavHost for navigation
-//    val navController = rememberNavController()
-//
-//    NavHost(navController = navController, startDestination = "Home") {
-//        // Screen for the Home destination
-//        composable("Home") {
-//            StartScreen(navController, state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState)
-//        }
-//        // Screen for the Add destination
-//        composable("Add") {
-//            ProfileScreen(navController, state, onEvent, viewModel, blueViewModel, bluetoothState)
-//        }
-//        // Screen for the Controls destination
-//        composable("Controls") {
-//            ControlScreen(navController, blueViewModel, bluetoothState)
-//        }
-//        // Screen for the Faq destination
-//        composable("Faq") {
-//            FaqScreen(navController, blueViewModel, bluetoothState)
-//        }
-//    }
-//}
-
 // Sealed class representing each item in the bottom navigation bar
 sealed class BottomNavItem(
     var title: String,
@@ -176,6 +149,39 @@ fun BottomNavigation(navController: NavController) {
         }
     }
 }
+//// Composable function for handling navigation between screens
+//@Composable
+//fun Navigation(
+//    state: ProfileState,
+//    onEvent: (ProfileEvent) -> Unit,
+//    profileNamesFlow: Flow<List<String>>,
+//    viewModel: ProfileViewModel,
+//    blueViewModel: BluetoothViewModel,
+//    bluetoothState: BluetoothUiState
+//) {
+//    // Create a NavHost for navigation
+//    val navController = rememberNavController()
+//
+//    NavHost(navController = navController, startDestination = "Home") {
+//        // Screen for the Home destination
+//        composable("Home") {
+//            StartScreen(navController, state, onEvent, profileNamesFlow, viewModel, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Add destination
+//        composable("Add") {
+//            ProfileScreen(navController, state, onEvent, viewModel, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Controls destination
+//        composable("Controls") {
+//            ControlScreen(navController, blueViewModel, bluetoothState)
+//        }
+//        // Screen for the Faq destination
+//        composable("Faq") {
+//            FaqScreen(navController, blueViewModel, bluetoothState)
+//        }
+//    }
+//}
+
 //
 //// Composable function for creating a single item in the bottom navigation bar
 //@Composable

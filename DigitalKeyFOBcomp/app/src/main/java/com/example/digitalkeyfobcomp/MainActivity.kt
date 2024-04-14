@@ -1,5 +1,4 @@
 package com.example.digitalkeyfobcomp
-
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager

@@ -410,7 +410,7 @@ class AndroidBluetoothController(
 
 
     // Function to attempt sending a message via Bluetooth
-    override suspend fun trySendMessage(message: String, devicekey: String): BluetoothMessage? {
+    override suspend fun trySendMessage(message: String, devicekey: String,  devicename: String): BluetoothMessage? {
         // Check if the necessary Bluetooth connect permission is granted
         if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
             return null
@@ -429,7 +429,7 @@ class AndroidBluetoothController(
             isFromLocalUser = true
         )
 
-        val finalmessage = "COM" + DDS("$devicekey$message$timestamp") + "|"  + message + "|" + timestamp
+        val finalmessage = "COM" + DDS("$devicekey$message$timestamp") + "|"  + message + "|" + timestamp + "|" + devicename
         // Send the message using the data transfer service
         dataTransferService?.sendMessage(finalmessage.toByteArray())
 
