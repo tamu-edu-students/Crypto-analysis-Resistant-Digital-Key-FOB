@@ -314,7 +314,9 @@ class AndroidBluetoothController(
                     }
                 } catch (e: IOException) {
                     // Emit an error result
+                    emit(RegistrationResult.Usermessage("Registration Failed"))
                     emit(RegistrationResult.Error("Registration was ended"))
+
                 } finally {
                     // Close the socket if it's still open
                     if (socket.isConnected) {

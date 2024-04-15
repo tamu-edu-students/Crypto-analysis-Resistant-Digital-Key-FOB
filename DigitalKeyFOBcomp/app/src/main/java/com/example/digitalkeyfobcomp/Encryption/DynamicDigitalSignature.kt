@@ -24,6 +24,6 @@ fun DDS(fromDevice: String): String {
         val hashNumber = BigInteger(1, hashText) //Turing the hash text into a BigInteger
         val hexString = StringBuilder(hashNumber.toString(16)) //turing the Hash into a Hex number in string format
 
-//        return hexString.toString().uppercase() // had to add .toString() (ask Courtney)
-        return string
+        return hexString.toString().uppercase() // had to add .toString() (ask Courtney)
+//        return string
 }
