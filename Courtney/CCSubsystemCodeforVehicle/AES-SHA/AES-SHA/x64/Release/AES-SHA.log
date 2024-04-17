@@ -1,7 +1,7 @@
 ﻿  AES-SHA.cpp
   Generating code
-  3 of 779 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    28 functions had inline decision re-evaluated but remain unchanged
+  112 of 610 functions (18.4%) were compiled, the rest were copied from previous compilation.
+    100 functions were new in current compilation
+    86 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   AES-SHA.vcxproj -> C:\Users\happy\OneDrive\Documents\GitHub\Crypto-analysis-Resistant-Digital-Key-FOB\Courtney\CCSubsystemCodeforVehicle\AES-SHA\x64\Release\AES-SHA.exe

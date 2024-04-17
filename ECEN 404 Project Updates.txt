@@ -15,3 +15,11 @@ Week of Feb. 28 - Jeremy worked on the DHKE integration process. Adriana worked 
 Week of Mar. 6 - Jeremy finished the integration for the registration process. Adriana continued working on the bluetooth and the NVS storage. Courtney worked on alternatives for the AES after contacting Sandia to find that this solution is most likely not possible for us to find.
 
 Week of Mar. 13 - Jeremy finished the integration of the SHA. Adriana added writing communication code so data can be sent to the device and started with the DHKE integration. Courtney met with Sandia to gain tips on solving the AES issues. It was determined that Courtney will work on the relay attack prevention code as well in case the AES does not work.
+
+Week of Mar. 27th - Jeremy worked on modifiying the communication process for integration with the hardware. He also worked on finishing up some slight bugs with the registration process integration. Adriana worked on and completed on her code to store the Z-Hardware profile. Courtney worked on the relay attack code.
+
+Week of April 3rd - Jeremy worked on finishing up the integration. Adirana and Courtney worked on finishing the integration of the Communication Process. Courtney also worked on finishing up putting together the relay attack code to integrate it.
+
+Week of April 10th - Jeremy worked on user testing and edgecase testing. He also worked on fixing some bugs. Ariana and Courtney worked on integrating the relay attack prevention code. Due to issues with the Wifi working with the bluetooth on the ESP-32 chip the wifi capabilities necessary to capture the unix-time from the server to verify the unix-time from the device is close was unable to be completed. With final demo only a week away, it was decided to take the relay attack prevention code out of the final product.
+
+Week of April 17th - Final preperation for final demo and testing of application. Adriana uploaded her code to the PCB and Jeremy worked on making tweaks to his device based on user feedback.

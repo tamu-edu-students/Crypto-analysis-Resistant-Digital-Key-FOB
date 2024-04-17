@@ -1,18 +1,20 @@
 #include "cryptlib.h"
-#include "rijndael.h"
+//#include "rijndael.h"
 #include "modes.h"
 #include "files.h"
 #include "osrng.h"
 #include "hex.h"
-#include "base64.h"
+#include "sha.h"
+//#include "base64.h"
 
 #include <iostream>
 #include <string>
 
 int main(int argc, char* argv[])
 {
-    using namespace CryptoPP;
+    //using namespace CryptoPP;
     
+    /*
     /////////////////////////////////////// AES ///////////////////////////////////////
     std::cout << "AES-256 " << std::endl;
 
@@ -78,27 +80,33 @@ int main(int argc, char* argv[])
     );
 
     std::cout << "Plain Text: " << plain << std::endl;
+    */
 
     /////////////////////////////////////// SHA ///////////////////////////////////////
+    std::string DDS;
+
+    CryptoPP::HexEncoder encoder(new CryptoPP::StringSink(DDS)); //encoder to turn bytes into encoded hex
+
     std::cout << std::endl << "SHA-256 " << std::endl;
 
     //Setting up the starting message and the output variable
-    std::string msgStart = "Demonstration";
+    std::string msgStart = "FinalPresentationDemo";
     std::string msgDigest;
 
-    SHA256 hashAlgorithm;
-    hashAlgorithm.Update((const byte*)msgStart.data(), msgStart.size()); //adds the data to the given hash
+    CryptoPP::SHA256 hashAlgorithm;
+    hashAlgorithm.Update((const CryptoPP::byte*)msgStart.data(), msgStart.size()); //adds the data to the given hash
     msgDigest.resize(hashAlgorithm.DigestSize()); //resizes the string to the correct size - in this case 256 bits
-    hashAlgorithm.Final((byte*)&msgDigest[0]); //does the SHA hash algorithum using a pointer
+    hashAlgorithm.Final((CryptoPP::byte*)&msgDigest[0]); //does the SHA hash algorithum using a pointer
 
     std::cout << "Starting Text: " << msgStart << std::endl;
 
     std::cout << "Final Dynamic Digital Signature Text: ";
-    StringSource( //Turning the final binary value into a string
+    CryptoPP::StringSource( //Turning the final binary value into a string
         msgDigest,
         true,
-        new Redirector(encoder)); 
-    std::cout << std::endl;
+        new CryptoPP::Redirector(encoder)); 
+    
+    std::cout << DDS << std::endl;
 
     return 0;
 }
