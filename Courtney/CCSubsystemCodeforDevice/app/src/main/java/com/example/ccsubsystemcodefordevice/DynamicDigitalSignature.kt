@@ -42,7 +42,7 @@ class DynamicDigitalSignature : ComponentActivity() {
 fun DDS(modifier: Modifier = Modifier) {
     Surface(color = Color.LightGray) {
         //Setting up the SHA-256 Protocol
-        val fromDevice = "Demonstration" //Example Text for Testing
+        val fromDevice = "FinalPresentationDemo" //Example Text for Testing
         val md = MessageDigest.getInstance("SHA-256") //Setting up the instance for SHA
 
         //Doing the SHA-256 Protocol - turns the device string into a byte array first.

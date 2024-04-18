@@ -54,7 +54,7 @@ fun AESEncryption(modifier: Modifier = Modifier) {
         //Pre-Set variables (intake) for the AES Encryption (Key and IV)
         val keyStr = "AESEncrpytionKey" //SecretKey from the Diffie-Hellman Key Exchange
         val ivStr = "InitalizationVec" //byteArrayOf(0x09, 0x1b, 0x17, 0x02, 0x6e, 0x24, 0x23, 0x08, 0x19, 0x0d, 0x4a, 0x10, 0x77, 0x46, 0x7e, 0x32)
-        val zHardware = "DemonstrationTxt" //Text to encrypt
+        val zHardware = "Demonstration" //Text to encrypt
         val zHardwareByte = zHardware.toByteArray(Charsets.UTF_8)
 
         //Specs - used in the initiation of the AES - confines the IV and key to the necessary specification for AES
