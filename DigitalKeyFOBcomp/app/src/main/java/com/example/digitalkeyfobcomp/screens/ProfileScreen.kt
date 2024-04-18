@@ -123,7 +123,15 @@ fun ProfileScreen(
             ) {
                 TopAppBar(
                     title = {
-                        Text(text = "Digital Key FOB", fontWeight = FontWeight.Bold)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Text(text = "Digital Key FOB |", fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            LEDIndicator(isOn = bluetoothState.isConnected) // LED indicator for Bluetooth connection
+
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     actions = {
