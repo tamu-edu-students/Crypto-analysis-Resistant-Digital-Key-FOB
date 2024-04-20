@@ -148,13 +148,16 @@ fun FaqScreen(navController: NavController,
                         ExpandableCard("How do I get started?", "Register your vehicle and pair it with the app by following the provided instructions. Once linked, simply approach your vehicle and use the app to unlock or start it.")
                     }
                     item {
+                        ExpandableCard("How does the signature pad work?", "The app utilizes a unique signature pad feature to generate a random number, which is then used to ensure the uniqueness of the vehicle ID.")
+                    }
+                    item {
                         ExpandableCard("Is my data secure?", "We prioritize the security of your vehicles. The app implements robust encryption methods to ensure that your vehicle access data remains secure and inaccessible to unauthorized parties.")
                     }
                     item {
                         ExpandableCard("What devices are supported?", "The app is compatible with Android operating systems. It's optimized for the latest smartphone models to ensure a reliable and consistent experience.")
                     }
                     item {
-                        ExpandableCard("How can I contact support?", "For any assistance, questions, or concerns, you can contact our support team at support@example.com. Our dedicated support staff is ready to assist with any issues you might encounter while using the app.")
+                        ExpandableCard("How can I contact support?", "For any assistance, questions, or concerns, you can contact our support team at digitalkeyfob@gmail.com. Our dedicated support staff is ready to assist with any issues you might encounter while using the app.")
                     }
 
                     // Add more FAQ questions as needed

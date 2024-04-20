@@ -183,6 +183,20 @@ fun ControlScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Row (
+                        modifier = Modifier.width(300.dp).padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text("Selected Vehicle: ", color = Color.Black, fontWeight = FontWeight.Bold)
+                        Text(rememberedProfile, color = Color.Black, fontWeight = FontWeight.Bold)
+                    }
+                }
                 // Create LED-like indicators for unlocked/locked and engine on/off states
                 Row {
                     Card(
