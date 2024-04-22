@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -42,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -179,6 +181,9 @@ fun ProfileScreen(
                     value = state.name,
                     onValueChange = { onEvent(ProfileEvent.SetName(it)) },
                     placeholder = { Text("Enter New Profile Name") },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        keyboardType = KeyboardType.Text // Restricts keyboard to normal characters
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -226,7 +231,7 @@ fun ProfileScreen(
                             if (profile != null) {
                                 profileDuplicateCheck = profile.name
                             }
-                            if (state.name != "" && state.name != profileDuplicateCheck) {
+                            if (state.name != "" && state.name != profileDuplicateCheck && '|' !in state.name) {
                                 currentbitmap = signaturePadAdapter?.getSignatureBitmap()  // saving bitmap value to variable to pass to hash function
 
                                 signatureSigned = signaturePadAdapter?.isEmpty == false // Check if signature pad is empty, default value = false
@@ -264,7 +269,7 @@ fun ProfileScreen(
                             }else{
                                 Toast.makeText( // user prompt for profile creation if missing profile text
                                     context,
-                                    "Please enter a unique and non-duplicate profile name",
+                                    "Please enter a unique and profile name. Special symbol | is not allowed",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
