@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -172,19 +173,24 @@ fun ProfileScreen(
                 var saveAddress = ""
                 var saveName = ""
                 var registrationBoolean = false
-                TextField( // Profile text input
+                Box(
                     modifier = Modifier
-                        .border(width = 2.dp, color = Color.Black)
-                        .background(color = Color.White)
-                        ,
-                    singleLine = true,
-                    value = state.name,
-                    onValueChange = { onEvent(ProfileEvent.SetName(it)) },
-                    placeholder = { Text("Enter New Profile Name") },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Text // Restricts keyboard to normal characters
-                    ),
-                )
+                        .width(300.dp) // Limiting width to 200dp
+                ) {
+                    TextField(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .border(width = 2.dp, color = Color.Black)
+                            .background(color = Color.White),
+                        singleLine = true,
+                        value = state.name,
+                        onValueChange = { onEvent(ProfileEvent.SetName(it)) },
+                        placeholder = { Text("Enter New Profile Name") },
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Text // Restricts keyboard to normal characters
+                        ),
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -225,56 +231,58 @@ fun ProfileScreen(
                         onClick = { // add profile button
 
                             keyboardController?.hide()
-                        coroutineScope.launch {
-                            val profile = viewModel.getProfileByName(state.name)
+                            coroutineScope.launch {
+                                val profile = viewModel.getProfileByName(state.name)
 
-                            if (profile != null) {
-                                profileDuplicateCheck = profile.name
-                            }
-                            if (state.name != "" && state.name != profileDuplicateCheck && '|' !in state.name) {
-                                currentbitmap = signaturePadAdapter?.getSignatureBitmap()  // saving bitmap value to variable to pass to hash function
+                                if (profile != null) {
+                                    profileDuplicateCheck = profile.name
+                                }
 
-                                signatureSigned = signaturePadAdapter?.isEmpty == false // Check if signature pad is empty, default value = false
+                                if (state.name.isNotEmpty() && state.name != profileDuplicateCheck && '|' !in state.name) {
+                                    if (state.name.length in 5..14) { // Check if the length of the name is between 5 and 15 characters
+                                        currentbitmap = signaturePadAdapter?.getSignatureBitmap()
+                                        signatureSigned = signaturePadAdapter?.isEmpty == false
 
-                                if (currentbitmap != null) { // Comparing currentbitmap to null to make sure there is bitmaptype value
+                                        if (currentbitmap != null) {
+                                            bitmapHash = ZHardware(bitmapToHash(currentbitmap!!))
 
-                                    bitmapHash = ZHardware(bitmapToHash(currentbitmap!!)) // Passing to hash function and checking if null
-
-                                    if(signatureSigned) { // Check for true/false signatureSigned
-
-                                        if(bluetoothState.isConnected) {
-                                            Toast.makeText( // user prompt for profile creation if missing signature
-                                                context,
-                                                "Device Already Connected",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                            if (signatureSigned) {
+                                                if (bluetoothState.isConnected) {
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Device Already Connected",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                } else {
+                                                    openDialog.value = true
+                                                    onEvent(ProfileEvent.Setsigid(bitmapHash))
+                                                    signaturePadAdapter?.clear()
+                                                    signatureSigned = false
+                                                }
+                                            } else {
+                                                Toast.makeText(
+                                                    context,
+                                                    "Please Sign Signature pad",
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
                                         }
-                                        else {
-                                            openDialog.value = true
-                                            onEvent(ProfileEvent.Setsigid(bitmapHash)) // setting sigid to bitmaphash for profile creation
-                                            signaturePadAdapter?.clear() // clearing signature pad
-                                            signatureSigned =
-                                                false // resetting signature signed value
-                                        }
-
-                                    }else{
-                                        Toast.makeText( // user prompt for profile creation if missing signature
+                                    } else {
+                                        Toast.makeText(
                                             context,
-                                            "Please Sign Signature pad",
+                                            "Profile name must be between 5 and 14 characters long",
                                             Toast.LENGTH_LONG
                                         ).show()
                                     }
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Please enter a unique profile name. Special symbol '|' is not allowed",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
-
-                            }else{
-                                Toast.makeText( // user prompt for profile creation if missing profile text
-                                    context,
-                                    "Please enter a unique and profile name. Special symbol | is not allowed",
-                                    Toast.LENGTH_LONG
-                                ).show()
                             }
 
-                        }
 
                     }) {
                         Text("Add Profile")

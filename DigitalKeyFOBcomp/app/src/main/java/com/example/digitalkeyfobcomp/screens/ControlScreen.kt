@@ -233,7 +233,7 @@ fun ControlScreen(
                             Toast
                                 .makeText(
                                     context,
-                                    "Mode0$message$rememberedProfile",
+                                    "Command Sent",
                                     Toast.LENGTH_SHORT
                                 )
                                 .show()
@@ -279,7 +279,7 @@ fun ControlScreen(
                                 message = booleanToInt(selectedCarModes.locked)
                                 blueViewModel.sendMessage("Mode1$message", DeviceKey, rememberedProfile)
                                 Toast
-                                    .makeText(context, "Mode1$message$rememberedProfile", Toast.LENGTH_SHORT)
+                                    .makeText(context, "Command Sent", Toast.LENGTH_SHORT)
                                     .show()
                             } else {
                                 Toast

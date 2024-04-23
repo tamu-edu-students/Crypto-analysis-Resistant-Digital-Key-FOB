@@ -18,6 +18,7 @@ import com.example.digitalkeyfobcomp.Encryption.DHKEAfter
 import com.example.digitalkeyfobcomp.Encryption.DHKEBefore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,7 +38,10 @@ import java.math.BigInteger
 import java.security.PublicKey
 import java.util.*
 
-
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.CancellationException
+import java.util.concurrent.TimeUnit
 // Suppress lint warning about missing Bluetooth permissions, as they are handled at runtime
 @SuppressLint("MissingPermission")
 class AndroidBluetoothController(
@@ -208,16 +212,15 @@ class AndroidBluetoothController(
     override fun connectToDevice(device: BluetoothDeviceDomain): Flow<ConnectionResult> {
         return flow {
             // Check if the necessary Bluetooth connect permission is granted
-            if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+            if (!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
                 throw SecurityException("No BLUETOOTH_CONNECT permission")
             }
 
             // Create a Bluetooth socket to the specified remote device
             currentClientSocket = bluetoothAdapter
                 ?.getRemoteDevice(device.address)
-                ?.createRfcommSocketToServiceRecord(
-                    UUID.fromString(SERVICE_UUID)
-                )
+                ?.createRfcommSocketToServiceRecord(UUID.fromString(SERVICE_UUID))
+
             // Stop ongoing device discovery
             stopDiscovery()
 
@@ -226,7 +229,6 @@ class AndroidBluetoothController(
                     // Attempt to connect to the remote device
                     socket.connect()
                     // Emit a connection established result
-
                     emit(ConnectionResult.ConnectionEstablished)
 
                     // Initialize the data transfer service and emit transfer results
@@ -237,7 +239,7 @@ class AndroidBluetoothController(
                                 .map { ConnectionResult.TransferSucceeded(it) }
                         )
                     }
-                } catch(e: IOException) {
+                } catch (e: IOException) {
                     // Close the socket if the connection was interrupted
                     socket.close()
                     currentClientSocket = null
@@ -245,11 +247,63 @@ class AndroidBluetoothController(
                     emit(ConnectionResult.Error("Connection was interrupted"))
                 }
             }
+        }.catch { e ->
+            if (e is CancellationException && e.cause is TimeoutCancellationException) {
+                emit(ConnectionResult.Error("Connection timed out"))
+            } else {
+                throw e
+            }
         }.onCompletion {
             // Close the connection when the flow completes
             closeConnection()
         }.flowOn(Dispatchers.IO)
     }
+
+//    override fun connectToDevice(device: BluetoothDeviceDomain): Flow<ConnectionResult> {
+//        return flow {
+//            // Check if the necessary Bluetooth connect permission is granted
+//            if(!hasPermission(Manifest.permission.BLUETOOTH_CONNECT)) {
+//                throw SecurityException("No BLUETOOTH_CONNECT permission")
+//            }
+//
+//            // Create a Bluetooth socket to the specified remote device
+//            currentClientSocket = bluetoothAdapter
+//                ?.getRemoteDevice(device.address)
+//                ?.createRfcommSocketToServiceRecord(
+//                    UUID.fromString(SERVICE_UUID)
+//                )
+//            // Stop ongoing device discovery
+//            stopDiscovery()
+//
+//            currentClientSocket?.let { socket ->
+//                try {
+//                    // Attempt to connect to the remote device
+//                    socket.connect()
+//                    // Emit a connection established result
+//
+//                    emit(ConnectionResult.ConnectionEstablished)
+//
+//                    // Initialize the data transfer service and emit transfer results
+//                    BluetoothDataTransferService(socket).also {
+//                        dataTransferService = it
+//                        emitAll(
+//                            it.listenForIncomingMessages()
+//                                .map { ConnectionResult.TransferSucceeded(it) }
+//                        )
+//                    }
+//                } catch(e: IOException) {
+//                    // Close the socket if the connection was interrupted
+//                    socket.close()
+//                    currentClientSocket = null
+//                    // Emit an error result
+//                    emit(ConnectionResult.Error("Connection was interrupted"))
+//                }
+//            }
+//        }.onCompletion {
+//            // Close the connection when the flow completes
+//            closeConnection()
+//        }.flowOn(Dispatchers.IO)
+//    }
 
     override fun registerToDevice(device: BluetoothDeviceDomain, additionalData: String): Flow<RegistrationResult> {
         return flow {
