@@ -1,0 +1,12 @@
+Instructions for MCU Code:
+
+>There is a custom Partition Table due to the external library added to the ESP-IDF components library
+>In the menuconfig (should already be configured but just in case)
+	->Toggle Rfft on
+	->Change flash size to 8M
+	->Toggle error checking on
+	->Change partition table to custom and when prompted to specify file type 	'mcu_partition_table.csv'
+
+
+>Unzip 'cryptopp' library and add to 'IDF_PATH/esp-idf/components' 
+(library already has its own 'CMakeLists.txt' file for compilation)
